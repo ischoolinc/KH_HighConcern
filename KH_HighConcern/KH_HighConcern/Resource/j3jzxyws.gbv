@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<ValidateRule Name="高關懷特殊身份註記">
+    <DuplicateDetection>
+        <Detector Name="組合鍵值">
+            <Field Name="學號" />
+            <Field Name="高關懷特殊身份註記" />
+            <Field Name="減免人數" />
+        </Detector>
+    </DuplicateDetection>
+    <FieldList>
+
+  <Field Required="True" Name="學號" Description="學號">
+      <Validate AutoCorrect="False" Description="「學號」不允許空白。" ErrorType="Error" Validator="不可空白" When="" />
+  </Field>
+
+  <Field Required="True" Name="高關懷特殊身份註記" Description="高關懷特殊身份註記">
+      <Validate AutoCorrect="False" Description="「高關懷特殊身份註記」不允許空白。" ErrorType="Error" Validator="不可空白" When="" />
+      <Validate AutoCorrect="False" Description="「高關懷特殊身份註記」只允許「是」。" ErrorType="Error" Validator="是列舉" When="" />
+  </Field>
+
+  <Field Required="True" Name="減免人數" Description="減免人數(1~10整數)">
+      <Validate AutoCorrect="False" Description="「減免人數」不允許空白。" ErrorType="Error" Validator="不可空白" When="" />
+      <Validate AutoCorrect="False" Description="「減免人數」只允許「1~10 整數」。" ErrorType="Error" Validator="Integer10" When="" />
+  </Field>
+    </FieldList>
+    <ValidatorList>  
+	<FieldValidator Name="學號是否存在" Type="HIGHCONCERNSTUDENTNUMBERCHECK"/>    
+        <FieldValidator Name="不可空白" Type="STRINGLENGTH">
+            <MinLength>1</MinLength>
+        </FieldValidator>
+        
+        <FieldValidator Name="Integer10" Type="Integer">
+            <MinValue>1</MinValue>
+            <MaxValue>10</MaxValue>
+        </FieldValidator>
+      <FieldValidator Name="是列舉" Type="Enumeration">
+        <Item Value="是">
+          <Variation>是</Variation>
+        </Item>
+      </FieldValidator>
+    </ValidatorList>
+    <RowValidate>        
+    </RowValidate>
+    <ConditionList />
+</ValidateRule>
