@@ -21,7 +21,30 @@ namespace KH_HighConcern
                _bgLLoadUDT.DoWork+=_bgLLoadUDT_DoWork;
                _bgLLoadUDT.RunWorkerCompleted += _bgLLoadUDT_RunWorkerCompleted;
                _bgLLoadUDT.RunWorkerAsync();
-           
+               Dictionary<string, UDT_HighConcern> _HighConcernDict = new Dictionary<string, UDT_HighConcern>();
+
+               _HighConcernDict = UDTTransfer.GetHighConcernDictAll();
+               ListPaneField HighConcernField = new ListPaneField("高關懷特殊身份");
+               HighConcernField.GetVariable += delegate(object sender, GetVariableEventArgs e)
+               {
+                   if (_HighConcernDict.ContainsKey(e.Key))
+                   {
+                       e.Value = "是";
+                   }
+               };
+               K12.Presentation.NLDPanels.Student.AddListPaneField(HighConcernField);
+
+               ListPaneField HighCountField = new ListPaneField("減免人數");
+               HighCountField.GetVariable += delegate(object sender, GetVariableEventArgs e)
+               {
+                   if (_HighConcernDict.ContainsKey(e.Key))
+                   {
+                       e.Value = _HighConcernDict[e.Key].NumberReduce;
+                   }
+               };
+               K12.Presentation.NLDPanels.Student.AddListPaneField(HighCountField);
+
+               
            }
 
            static void _bgLLoadUDT_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -31,11 +54,22 @@ namespace KH_HighConcern
                Catalog catalog01 = RoleAclSource.Instance["學生"]["功能按鈕"];
                catalog01.Add(new RibbonFeature("KH_HighConcern_ImportHighConcern", "匯入高關懷特殊身份"));
 
+               Catalog catalog02 = RoleAclSource.Instance["學生"]["功能按鈕"];
+               catalog02.Add(new DetailItemFeature(typeof(DetailContent.HighConcernContent)));
+
                RibbonBarItem item01 = K12.Presentation.NLDPanels.Student.RibbonBarItems["資料統計"];
                item01["匯入"]["其它相關匯入"]["匯入高關懷特殊身份"].Enable = UserAcl.Current["KH_HighConcern_ImportHighConcern"].Executable;
                item01["匯入"]["其它相關匯入"]["匯入高關懷特殊身份"].Click += delegate {
-                   new ImportExport.ImportHighConcern().Execute();
+                   new ImportExport.ImportHighConcern().Execute();                 
+                   K12.Presentation.NLDPanels.Student.RefillListPane();
                };
+
+
+               // 資料項目-高關懷特殊身份
+               FeatureAce UserPermission = FISCA.Permission.UserAcl.Current["KH_HighConcern_HighConcernContent"];
+               if (UserPermission.Editable)
+                   K12.Presentation.NLDPanels.Student.AddDetailBulider(new DetailBulider<DetailContent.HighConcernContent>());
+
            }
 
            static void _bgLLoadUDT_DoWork(object sender, DoWorkEventArgs e)

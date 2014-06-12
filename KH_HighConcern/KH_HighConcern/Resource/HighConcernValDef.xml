@@ -1,4 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?> 
+<?xml-stylesheet type="text/xsl" href="format.xsl" ?>
 <ValidateRule Name="高關懷特殊身份註記">
     <DuplicateDetection>
         <Detector Name="組合鍵值">
@@ -9,10 +10,19 @@
     </DuplicateDetection>
     <FieldList>
 
+      <Field Required="false" Name="班級" Description="班級">
+        
+      </Field>
+
+      <Field Required="false" Name="座號" Description="座號">
+        
+      </Field>
+      
   <Field Required="True" Name="學號" Description="學號">
       <Validate AutoCorrect="False" Description="「學號」不允許空白。" ErrorType="Error" Validator="不可空白" When="" />
-  </Field>
-
+    <Validate AutoCorrect="False" Description="「學號」在一般狀態不存在。" ErrorType="Error" Validator="學號是否存在" When="" />
+  </Field>      
+      
   <Field Required="True" Name="高關懷特殊身份註記" Description="高關懷特殊身份註記">
       <Validate AutoCorrect="False" Description="「高關懷特殊身份註記」不允許空白。" ErrorType="Error" Validator="不可空白" When="" />
       <Validate AutoCorrect="False" Description="「高關懷特殊身份註記」只允許「是」。" ErrorType="Error" Validator="是列舉" When="" />

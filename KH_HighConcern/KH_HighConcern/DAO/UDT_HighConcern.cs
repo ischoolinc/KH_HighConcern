@@ -46,6 +46,6 @@ namespace KH_HighConcern.DAO
         /// 減免人數
         ///</summary>
         [Field(Field = "number_reduce", Indexed = false)]
-        public byte NumberReduce { get; set; }
+        public int NumberReduce { get; set; }
     }
 }

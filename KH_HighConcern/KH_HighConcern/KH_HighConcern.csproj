@@ -114,12 +114,23 @@
       <HintPath>Library\FISCA.UDT.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="JHSchool, Version=1.0.4.2, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\JHSchool.dll</HintPath>
+    </Reference>
+    <Reference Include="K12.Data, Version=2.0.0.5, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\K12.Data.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="K12.Presentation, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\K12.Presentation.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -130,6 +141,12 @@
   <ItemGroup>
     <Compile Include="DAO\UDTTransfer.cs" />
     <Compile Include="DAO\UDT_HighConcern.cs" />
+    <Compile Include="DetailContent\HighConcernContent.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DetailContent\HighConcernContent.Designer.cs">
+      <DependentUpon>HighConcernContent.cs</DependentUpon>
+    </Compile>
     <Compile Include="ImportExport\ImportHighConcern.cs" />
     <Compile Include="ImportExport\ValidationRule\FieldValidatorFactory.cs" />
     <Compile Include="ImportExport\ValidationRule\RowValidatorFactory.cs" />
@@ -191,12 +208,22 @@
     <Content Include="Library\FISCA.UDT.pdb" />
     <Content Include="Library\FISCA.UDT.xml" />
     <Content Include="Library\FISCA.xml" />
+    <Content Include="Library\JHSchool.dll" />
+    <Content Include="Library\JHSchool.pdb" />
+    <Content Include="Library\K12.Data.dll" />
+    <Content Include="Library\K12.Data.pdb" />
+    <Content Include="Library\K12.Data.xml" />
     <Content Include="Library\K12.Presentation.dll" />
     <Content Include="Library\K12.Presentation.pdb" />
     <Content Include="Library\K12.Presentation.xml" />
-    <Content Include="Resource\HighConcernValDef.xml" />
+    <Content Include="Resource\HighConcernValDef.xml">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="DetailContent\HighConcernContent.resx">
+      <DependentUpon>HighConcernContent.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
