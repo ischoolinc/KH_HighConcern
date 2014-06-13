@@ -60,7 +60,7 @@ namespace KH_HighConcern
                Catalog catalog01 = RoleAclSource.Instance["學生"]["功能按鈕"];
                catalog01.Add(new RibbonFeature("KH_HighConcern_ImportHighConcern", "匯入高關懷特殊身份"));
 
-               Catalog catalog02 = RoleAclSource.Instance["學生"]["功能按鈕"];
+               Catalog catalog02 = RoleAclSource.Instance["學生"]["資料項目"];
                catalog02.Add(new DetailItemFeature(typeof(DetailContent.HighConcernContent)));
 
                RibbonBarItem item01 = K12.Presentation.NLDPanels.Student.RibbonBarItems["資料統計"];
