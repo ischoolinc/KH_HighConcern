@@ -4,8 +4,6 @@
     <DuplicateDetection>
         <Detector Name="組合鍵值">
             <Field Name="學號" />
-            <Field Name="高關懷特殊身份註記" />
-            <Field Name="減免人數" />
         </Detector>
     </DuplicateDetection>
     <FieldList>

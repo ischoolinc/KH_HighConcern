@@ -44,7 +44,13 @@ namespace KH_HighConcern
                };
                K12.Presentation.NLDPanels.Student.AddListPaneField(HighCountField);
 
-               
+               // 當高關懷特殊身份有更新
+               FISCA.InteractionService.SubscribeEvent("KH_HighConcern_HighConcernContent", (sender, args) =>
+               {
+                   _HighConcernDict = UDTTransfer.GetHighConcernDictAll();
+                   HighConcernField.Reload();
+                   HighCountField.Reload();
+               });
            }
 
            static void _bgLLoadUDT_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -60,8 +66,7 @@ namespace KH_HighConcern
                RibbonBarItem item01 = K12.Presentation.NLDPanels.Student.RibbonBarItems["資料統計"];
                item01["匯入"]["其它相關匯入"]["匯入高關懷特殊身份"].Enable = UserAcl.Current["KH_HighConcern_ImportHighConcern"].Executable;
                item01["匯入"]["其它相關匯入"]["匯入高關懷特殊身份"].Click += delegate {
-                   new ImportExport.ImportHighConcern().Execute();                 
-                   K12.Presentation.NLDPanels.Student.RefillListPane();
+                   new ImportExport.ImportHighConcern().Execute();                   
                };
 
 

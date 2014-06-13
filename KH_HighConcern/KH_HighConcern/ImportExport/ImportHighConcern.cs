@@ -14,6 +14,9 @@ namespace KH_HighConcern.ImportExport
         Dictionary<string, UDT_HighConcern> _HighConcernDict = new Dictionary<string, UDT_HighConcern>();
         Dictionary<string, string> _StudentNumIDDict = new Dictionary<string, string>();
 
+        EventHandler eh;
+        string EventCode = "KH_HighConcern_HighConcernContent";
+
         public override ImportAction GetSupportActions()
         {
             return ImportAction.InsertOrUpdate;
@@ -23,6 +26,8 @@ namespace KH_HighConcern.ImportExport
         {
             this.IsSplit = false;
             this.IsLog = false;
+            //啟動更新事件
+            eh = FISCA.InteractionService.PublishEvent(EventCode);
         }
 
         public override string GetValidateRule()
@@ -64,6 +69,7 @@ namespace KH_HighConcern.ImportExport
                 }
                 // save
                 HighConcernList.SaveAll();
+                eh(this, EventArgs.Empty);
             }       
             return "";
         }
