@@ -30,6 +30,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Campus.Windows, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\Campus.Windows.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="DevComponents.DotNetBar2, Version=9.5.0.1, Culture=neutral, PublicKeyToken=7eb7c3a35b91de04, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\DevComponents.DotNetBar2.dll</HintPath>
@@ -81,10 +86,16 @@
     </Reference>
     <Reference Include="IKHAPI_JH">
       <HintPath>..\..\IKHAPI_JH\IKHAPI_JH\bin\Debug\IKHAPI_JH.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="JHSchool, Version=1.0.4.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\JHSchool.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="JHSchool.Data, Version=2.0.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\JHSchool.Data.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="K12.Data, Version=2.0.0.5, Culture=neutral, processorArchitecture=MSIL">
@@ -110,6 +121,12 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SetClassNameSeatNoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SetClassNameSeatNoForm.Designer.cs">
+      <DependentUpon>SetClassNameSeatNoForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="StudentClassItem.cs" />
     <Compile Include="StudentClassItemContent.cs">
       <SubType>UserControl</SubType>
@@ -119,6 +136,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Library\Campus.Windows.dll" />
+    <Content Include="Library\Campus.Windows.pdb" />
+    <Content Include="Library\Campus.Windows.xml" />
     <Content Include="Library\DevComponents.DotNetBar2.dll" />
     <Content Include="Library\DevComponents.DotNetBar2.xml" />
     <Content Include="Library\FISCA.Authentication.dll" />
@@ -148,6 +168,9 @@
     <Content Include="Library\FISCA.UDT.pdb" />
     <Content Include="Library\FISCA.UDT.xml" />
     <Content Include="Library\FISCA.xml" />
+    <Content Include="Library\JHSchool.Data.dll" />
+    <Content Include="Library\JHSchool.Data.pdb" />
+    <Content Include="Library\JHSchool.Data.xml" />
     <Content Include="Library\JHSchool.dll" />
     <Content Include="Library\JHSchool.pdb" />
     <Content Include="Library\K12.Data.dll" />
@@ -158,6 +181,9 @@
     <Content Include="Library\K12.Presentation.xml" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="SetClassNameSeatNoForm.resx">
+      <DependentUpon>SetClassNameSeatNoForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="StudentClassItemContent.resx">
       <DependentUpon>StudentClassItemContent.cs</DependentUpon>
     </EmbeddedResource>
