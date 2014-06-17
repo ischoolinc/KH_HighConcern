@@ -13,12 +13,12 @@ namespace ClassLock_KH.DAO
         /// 取的被鎖定班級名稱
         /// </summary>
         /// <returns></returns>
-        public static List<string> GetClassLockNameList()
+        public static Dictionary<string,UDT_ClassLock> GetClassLockNameIDDict()
         {
-            List<string> retVal = new List<string>();
+            Dictionary<string, UDT_ClassLock> retVal = new Dictionary<string, UDT_ClassLock>();
             AccessHelper _AccessHelper = new AccessHelper();
             foreach (UDT_ClassLock data in _AccessHelper.Select<UDT_ClassLock>())
-                retVal.Add(data.ClassName);
+                retVal.Add(data.ClassID,data);
             return retVal;
         }
 

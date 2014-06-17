@@ -13,6 +13,12 @@ namespace ClassLock_KH.DAO
     public class UDT_ClassLock : ActiveRecord
     {
         ///<summary>
+        /// 班級編號
+        ///</summary>
+        [Field(Field = "class_id", Indexed = true)]
+        public string ClassID { get; set; }
+        
+        ///<summary>
         /// 班級
         ///</summary>
         [Field(Field = "class_name", Indexed = true)]
