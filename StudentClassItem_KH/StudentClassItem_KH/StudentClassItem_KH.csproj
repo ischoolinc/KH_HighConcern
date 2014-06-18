@@ -134,6 +134,7 @@
     <Compile Include="StudentClassItemContent.Designer.cs">
       <DependentUpon>StudentClassItemContent.cs</DependentUpon>
     </Compile>
+    <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Library\Campus.Windows.dll" />

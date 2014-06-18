@@ -114,6 +114,7 @@
     <Compile Include="DAO\UDT_ClassLock.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Library\DevComponents.DotNetBar2.dll" />

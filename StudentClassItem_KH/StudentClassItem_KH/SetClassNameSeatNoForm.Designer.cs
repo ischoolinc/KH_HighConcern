@@ -98,6 +98,7 @@
             this.cboClassName.Size = new System.Drawing.Size(121, 25);
             this.cboClassName.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.cboClassName.TabIndex = 0;
+            this.cboClassName.SelectedIndexChanged += new System.EventHandler(this.cboClassName_SelectedIndexChanged);
             // 
             // cboSeatNo
             // 

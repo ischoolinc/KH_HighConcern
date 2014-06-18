@@ -53,6 +53,10 @@ namespace ClassLock_KH
                     if (_UDT_ClassLockDict.ContainsKey(cid))
                         data = _UDT_ClassLockDict[cid];
 
+                    K12.Data.ClassRecord classRec = K12.Data.Class.SelectByID(cid);
+                    string grYear = "";
+                    if (classRec.GradeYear.HasValue)
+                        grYear = classRec.GradeYear.Value.ToString();
 
                     if (data == null)
                     {
@@ -61,7 +65,8 @@ namespace ClassLock_KH
                             // 沒有鎖定
                             data = new UDT_ClassLock();
                             data.ClassID = cid;
-                            data.ClassName = K12.Data.Class.SelectByID(cid).Name;
+                            data.ClassName = classRec.Name;
+                            Utility.SendData(classRec.Name, grYear, "", "鎖定");                            
                         }
                     }
                     else
@@ -70,6 +75,7 @@ namespace ClassLock_KH
                         {
                             // 已被鎖定解鎖
                             data.Deleted = true;
+                            Utility.SendData(classRec.Name, grYear, "", "解除鎖定");
                         }
                     }
                     // 儲存 UDT
@@ -79,6 +85,7 @@ namespace ClassLock_KH
                     ClassLockField.Reload();
             };
         }
+                
 
         static void _bgLLoadUDT_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {

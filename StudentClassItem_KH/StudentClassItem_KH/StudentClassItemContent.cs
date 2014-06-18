@@ -103,9 +103,6 @@ namespace StudentClassItem_KH
 
         void BGWork_DoWork(object sender, DoWorkEventArgs e)
         {
-
-      
-       
             objStudent = JHSchool.Data.JHStudent.SelectByID(PrimaryKey);
         }
 
@@ -264,18 +261,20 @@ namespace StudentClassItem_KH
         private void lnkSend_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             SetClassNameSeatNoForm scnsf = new SetClassNameSeatNoForm();
+            string gradeYear="";
+            if(objStudent.Class !=null)
+                if(objStudent.Class.GradeYear.HasValue)
+                    gradeYear=objStudent.Class.GradeYear.Value.ToString();
+
+            Dictionary<string, int> ClassNameDict = Utility.GetClassNameDictByGradeYear(gradeYear);
+
+            scnsf.SetClassNameItems(ClassNameDict.Keys.ToList());
             scnsf.SetClassName(lblClassName.Text);
             scnsf.SetSeatNo(lblSeatNo.Text);
             if (scnsf.ShowDialog() == DialogResult.OK)
             { 
             
             }
-        }
-
-
-        private void SendData()
-        { 
-            
         }
     }
 }

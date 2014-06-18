@@ -30,6 +30,18 @@ namespace StudentClassItem_KH
             _SeatNo = SeatNo;
         }
 
+        public void SetClassNameItems(List<string> nameList)
+        {
+            foreach (string name in nameList)
+                cboClassName.Items.Add(name);
+        }
+
+        public void SetSeatNoItems(List<int> seatList)
+        {
+            foreach (int i in seatList)
+                cboSeatNo.Items.Add(i);
+        }
+
         public string GetClassName()
         {
             return _ClassName;
@@ -66,6 +78,12 @@ namespace StudentClassItem_KH
         private void btnSend_Click(object sender, EventArgs e)
         {
             this.DialogResult = System.Windows.Forms.DialogResult.OK;
+        }
+
+        private void cboClassName_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            cboSeatNo.Items.Clear();
+            SetSeatNoItems(Utility.GetClassSeatNoList(cboClassName.Text));
         }    
     }
 }
