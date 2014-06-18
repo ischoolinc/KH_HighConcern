@@ -8,6 +8,7 @@ using ClassLock_KH.DAO;
 using System.ComponentModel;
 using FISCA;
 using FISCA.Presentation;
+using FISCA.Permission;
 
 namespace ClassLock_KH
 {
@@ -24,6 +25,8 @@ namespace ClassLock_KH
 
             Dictionary<string, UDT_ClassLock> _UDT_ClassLockDict = UDTTransfer.GetClassLockNameIDDict();
 
+            Catalog catalog01 = RoleAclSource.Instance["班級"]["功能按鈕"];
+            catalog01.Add(new RibbonFeature("KH_HighConcern_ClassLock", "班級鎖定/解鎖"));
 
             ListPaneField ClassLockField = new ListPaneField("班級鎖定");
             ClassLockField.GetVariable += delegate(object sender, GetVariableEventArgs e)
@@ -36,11 +39,14 @@ namespace ClassLock_KH
             K12.Presentation.NLDPanels.Class.AddListPaneField(ClassLockField);
 
 
-            K12.Presentation.NLDPanels.Class.ListPaneContexMenu["班級鎖定"].Enable = true;
-            K12.Presentation.NLDPanels.Class.ListPaneContexMenu["班級鎖定"].Click += delegate {
+            K12.Presentation.NLDPanels.Class.SelectedSourceChanged += delegate {
+                // 檢查當有權限並只選一個班才可以使用
+                K12.Presentation.NLDPanels.Class.ListPaneContexMenu["班級鎖定/解鎖"].Enable = UserAcl.Current["KH_HighConcern_ClassLock"].Executable && (K12.Presentation.NLDPanels.Class.SelectedSource.Count == 1);            
+            };
+
+            K12.Presentation.NLDPanels.Class.ListPaneContexMenu["班級鎖定/解鎖"].Click += delegate
+            {
                 // 一次處理一筆
-                if (K12.Presentation.NLDPanels.Class.SelectedSource.Count == 1)
-                { 
                     // 取得 ClassLock UDT
                     UDT_ClassLock data = null;
                     string cid = K12.Presentation.NLDPanels.Class.SelectedSource[0];
@@ -50,7 +56,7 @@ namespace ClassLock_KH
 
                     if (data == null)
                     {
-                        if (FISCA.Presentation.Controls.MsgBox.Show("將自動將班級鎖定並傳送至局端", "班級鎖定", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes)
+                        if (FISCA.Presentation.Controls.MsgBox.Show("將自動將[班級鎖定]並傳送至局端", "班級鎖定", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes)
                         {
                             // 沒有鎖定
                             data = new UDT_ClassLock();
@@ -60,7 +66,7 @@ namespace ClassLock_KH
                     }
                     else
                     {
-                        if (FISCA.Presentation.Controls.MsgBox.Show("將自動將班級解鎖並傳送至局端", "班級解鎖",System.Windows.Forms.MessageBoxButtons.YesNo,System.Windows.Forms.MessageBoxIcon.Warning,System.Windows.Forms.MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes)
+                        if (FISCA.Presentation.Controls.MsgBox.Show("將自動將[班級解鎖]並傳送至局端", "班級解鎖", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes)
                         {
                             // 已被鎖定解鎖
                             data.Deleted = true;
@@ -70,8 +76,7 @@ namespace ClassLock_KH
                     data.Save();
 
                     _UDT_ClassLockDict = UDTTransfer.GetClassLockNameIDDict();
-                    ClassLockField.Reload();    
-                }            
+                    ClassLockField.Reload();
             };
         }
 
