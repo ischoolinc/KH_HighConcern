@@ -13,11 +13,14 @@ namespace StudentClassItem_KH
     {
         private string _ClassName = "";
         private string _SeatNo = "";
+        private DateTime _MeetingDate;
+        private string _Memo = "";
+        Dictionary<string, string> _ClassNameDict;
 
         public SetClassNameSeatNoForm()
         {
             InitializeComponent();
-
+            _ClassNameDict = new Dictionary<string, string>();
         }
 
         public void SetClassName(string ClassName)
@@ -34,6 +37,11 @@ namespace StudentClassItem_KH
         {
             foreach (string name in nameList)
                 cboClassName.Items.Add(name);
+        }
+
+        public void SetClassNameDict(Dictionary<string, string> data)
+        {
+            _ClassNameDict = data;
         }
 
         public void SetSeatNoItems(List<int> seatList)
@@ -54,12 +62,12 @@ namespace StudentClassItem_KH
 
         public string GetMettingDate()
         {
-            return dtMeetting.Value.ToShortDateString();
+            return _MeetingDate.ToShortDateString();
         }
 
         public string GetMemo()
         {
-            return txtMemo.Text;
+            return _Memo;
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -69,19 +77,47 @@ namespace StudentClassItem_KH
 
         private void SetClassNameSeatNoForm_Load(object sender, EventArgs e)
         {
-            this.MinimumSize = this.MaximumSize = this.Size;
-            cboClassName.Text = _ClassName;
-            cboSeatNo.Text = _SeatNo;
+            this.MinimumSize = this.MaximumSize = this.Size;            
             dtMeetting.Value = DateTime.Now;
         }
 
         private void btnSend_Click(object sender, EventArgs e)
         {
-            this.DialogResult = System.Windows.Forms.DialogResult.OK;
+            if (ChkData())
+            {
+                _ClassName = cboClassName.Text;
+                _SeatNo = cboSeatNo.Text;
+                _MeetingDate = dtMeetting.Value;
+                _Memo = txtMemo.Text;
+
+                this.DialogResult = System.Windows.Forms.DialogResult.OK;
+            }
+            else {
+                FISCA.Presentation.Controls.MsgBox.Show("資料有誤無法儲存");
+            }
+        }
+
+        private bool ChkData()
+        {
+            bool pass = true;
+            if (cboClassName.Text.Trim() == "")
+            {
+                pass = false;
+                FISCA.Presentation.Controls.MsgBox.Show("班級必填");
+            }
+
+            if (dtMeetting.IsEmpty)
+            {
+                pass = false;
+                FISCA.Presentation.Controls.MsgBox.Show("編班會議日期必填");
+            }
+
+            return pass;
         }
 
         private void cboClassName_SelectedIndexChanged(object sender, EventArgs e)
         {
+            cboSeatNo.Text = "";
             cboSeatNo.Items.Clear();
             SetSeatNoItems(Utility.GetClassSeatNoList(cboClassName.Text));
         }    

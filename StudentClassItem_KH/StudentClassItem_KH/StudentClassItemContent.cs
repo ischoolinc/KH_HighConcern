@@ -262,18 +262,40 @@ namespace StudentClassItem_KH
         {
             SetClassNameSeatNoForm scnsf = new SetClassNameSeatNoForm();
             string gradeYear="";
-            if(objStudent.Class !=null)
-                if(objStudent.Class.GradeYear.HasValue)
-                    gradeYear=objStudent.Class.GradeYear.Value.ToString();
-
+            string oldClassName = "";
+            if (objStudent.Class != null)
+            {
+                oldClassName = objStudent.Class.Name;
+                if (objStudent.Class.GradeYear.HasValue)
+                    gradeYear = objStudent.Class.GradeYear.Value.ToString();
+            }
             Dictionary<string, int> ClassNameDict = Utility.GetClassNameDictByGradeYear(gradeYear);
 
             scnsf.SetClassNameItems(ClassNameDict.Keys.ToList());
             scnsf.SetClassName(lblClassName.Text);
             scnsf.SetSeatNo(lblSeatNo.Text);
             if (scnsf.ShowDialog() == DialogResult.OK)
-            { 
-            
+            {
+                string className = scnsf.GetClassName();
+                int seatNo;
+
+
+                // 修改學生班、座
+                if (_ClassNameIDDic.ContainsKey(className))
+                {
+                    objStudent.RefClassID = _ClassNameIDDic[className];
+                    if (int.TryParse(scnsf.GetSeatNo(), out seatNo))
+                        objStudent.SeatNo = seatNo;
+                    else
+                        objStudent.SeatNo = null;
+
+                    // 傳送至局端
+                    Utility.SendData("編班", objStudent.IDNumber, objStudent.StudentNumber, objStudent.Name, gradeYear, oldClassName, scnsf.GetSeatNo(), scnsf.GetClassName(), scnsf.GetMettingDate(), scnsf.GetMemo());
+
+
+                    // 更新學生資料
+                    K12.Data.Student.Update(objStudent);
+                }
             }
         }
     }

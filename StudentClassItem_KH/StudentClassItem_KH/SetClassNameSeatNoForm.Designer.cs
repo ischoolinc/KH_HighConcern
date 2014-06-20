@@ -91,6 +91,7 @@
             // 
             this.cboClassName.DisplayMember = "Text";
             this.cboClassName.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cboClassName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboClassName.FormattingEnabled = true;
             this.cboClassName.ItemHeight = 19;
             this.cboClassName.Location = new System.Drawing.Point(54, 51);

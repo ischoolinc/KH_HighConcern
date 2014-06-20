@@ -84,7 +84,7 @@
             this.Controls.Add(this.chkHighConcern);
             this.Controls.Add(this.labelX1);
             this.Name = "HighConcernContent";
-            this.Size = new System.Drawing.Size(550, 145);
+            this.Size = new System.Drawing.Size(550, 70);
             this.ResumeLayout(false);
             this.PerformLayout();
 
