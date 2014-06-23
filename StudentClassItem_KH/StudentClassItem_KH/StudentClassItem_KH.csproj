@@ -84,9 +84,8 @@
       <HintPath>Library\FISCA.UDT.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="IKHAPI_JH">
-      <HintPath>..\..\IKHAPI_JH\IKHAPI_JH\bin\Debug\IKHAPI_JH.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="IRewriteAPI_JH">
+      <HintPath>..\..\..\JHCore\IRewriteAPI_JH\bin\Debug\IRewriteAPI_JH.dll</HintPath>
     </Reference>
     <Reference Include="JHSchool, Version=1.0.4.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -169,6 +168,8 @@
     <Content Include="Library\FISCA.UDT.pdb" />
     <Content Include="Library\FISCA.UDT.xml" />
     <Content Include="Library\FISCA.xml" />
+    <Content Include="Library\IRewriteAPI_JH.dll" />
+    <Content Include="Library\IRewriteAPI_JH.pdb" />
     <Content Include="Library\JHSchool.Data.dll" />
     <Content Include="Library\JHSchool.Data.pdb" />
     <Content Include="Library\JHSchool.Data.xml" />

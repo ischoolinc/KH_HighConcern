@@ -13,7 +13,7 @@ namespace StudentClassItem_KH
         [MainMethod(StartupPriority.FirstAsynchronized)]
         public static void Main()
         {
-            FISCA.InteractionService.RegisterAPI<IKHAPI_JH.DetailItemAPI>(new StudentClassItem());
+            FISCA.InteractionService.RegisterAPI<IRewriteAPI_JH.IStudentClassDetailItemAPI>(new StudentClassItem());
 
             //註冊一個事件引發模組
             EventHandler eh = FISCA.InteractionService.PublishEvent("KH_StudentClassItemContent");

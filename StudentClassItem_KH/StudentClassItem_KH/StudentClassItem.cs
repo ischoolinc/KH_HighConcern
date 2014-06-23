@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using IKHAPI_JH;
+using IRewriteAPI_JH;
+
 namespace StudentClassItem_KH
 {
-    public class StudentClassItem:DetailItemAPI
+    public class StudentClassItem:IStudentClassDetailItemAPI
     {
         public FISCA.Presentation.IDetailBulider CreateBasicInfo()
         {
