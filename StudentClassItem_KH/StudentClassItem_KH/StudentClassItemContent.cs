@@ -270,7 +270,7 @@ namespace StudentClassItem_KH
                     gradeYear = objStudent.Class.GradeYear.Value.ToString();
             }
             Dictionary<string, int> ClassNameDict = Utility.GetClassNameDictByGradeYear(gradeYear);
-
+            _ClassNameIDDic = Utility.GetClassNameIDDictByGradeYear(gradeYear);
             scnsf.SetClassNameItems(ClassNameDict.Keys.ToList());
             scnsf.SetClassName(lblClassName.Text);
             scnsf.SetSeatNo(lblSeatNo.Text);
@@ -290,8 +290,9 @@ namespace StudentClassItem_KH
                         objStudent.SeatNo = null;
 
                     // 傳送至局端
-                    Utility.SendData("編班", objStudent.IDNumber, objStudent.StudentNumber, objStudent.Name, gradeYear, oldClassName, scnsf.GetSeatNo(), scnsf.GetClassName(), scnsf.GetMettingDate(), scnsf.GetMemo());
-
+                    string errMsg=Utility.SendData("編班", objStudent.IDNumber, objStudent.StudentNumber, objStudent.Name, gradeYear, oldClassName, scnsf.GetSeatNo(), scnsf.GetClassName(), scnsf.GetMettingDate(), scnsf.GetMemo());
+                    if (errMsg != "")
+                        FISCA.Presentation.Controls.MsgBox.Show(errMsg);
 
                     // 更新學生資料
                     K12.Data.Student.Update(objStudent);

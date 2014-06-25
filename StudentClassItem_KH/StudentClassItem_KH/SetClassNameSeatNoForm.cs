@@ -89,7 +89,7 @@ namespace StudentClassItem_KH
                 _SeatNo = cboSeatNo.Text;
                 _MeetingDate = dtMeetting.Value;
                 _Memo = txtMemo.Text;
-
+                
                 this.DialogResult = System.Windows.Forms.DialogResult.OK;
             }
             else {

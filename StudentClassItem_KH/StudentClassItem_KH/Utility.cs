@@ -5,6 +5,7 @@ using System.Text;
 using FISCA.Data;
 using System.Data;
 using System.Xml.Linq;
+using FISCA.DSAClient;
 
 namespace StudentClassItem_KH
 {
@@ -27,11 +28,20 @@ namespace StudentClassItem_KH
         public static string SendData(string action,string IDNumber, string StudentNumber, string StudentName, string GradeYear, string ClassName, string SeatNo, string NewClassName, string ScheduleClassDate, string Reason)
         {
             string DSNS = FISCA.Authentication.DSAServices.AccessPoint;
+
+            string AccessPoint = @"http://dev.ischool.com.tw:8080/cs4_beta/kh_manager_center";
+            string Contract = "log";
+            string ServiceName = "_.InsertLog";
+
             string errMsg = "";
             try {
-                XElement XmlReq = new XElement("Request");
-                XmlReq.SetElementValue("DSNS", DSNS);
-                XmlReq.SetElementValue("Action", action);
+
+                XElement xmlRoot = new XElement("Request");
+                XElement s1 = new XElement("SchoolLog");
+                XElement s2 = new XElement("Field");
+
+                s2.SetElementValue("DSNS", DSNS);
+                s2.SetElementValue("Action", action);
                 XElement Content = new XElement("Content");
                 Content.SetElementValue("IDNumber", IDNumber);
                 Content.SetElementValue("StudentNumber", StudentNumber);
@@ -40,9 +50,14 @@ namespace StudentClassItem_KH
                 Content.SetElementValue("SeatNo", SeatNo);
                 Content.SetElementValue("ScheduleClassDate", ScheduleClassDate);
                 Content.SetElementValue("Reason", Reason);
-
-                XmlReq.Add(Content);
-                string strReq = XmlReq.ToString();
+                s2.Add(Content);
+                s1.Add(s2);
+                xmlRoot.Add(s1);
+                XmlHelper reqXML = new XmlHelper(xmlRoot.ToString());
+                FISCA.DSAClient.Connection cn = new FISCA.DSAClient.Connection();
+                cn.Connect(AccessPoint, Contract, DSNS, DSNS);
+                Envelope rsp = cn.SendRequest(ServiceName, new Envelope(reqXML));
+                XElement rspXML = XElement.Parse(rsp.XmlString);
             }
             catch (Exception ex) { errMsg = ex.Message; }
 
@@ -105,6 +120,28 @@ namespace StudentClassItem_KH
                         if (!intVal.Contains(i))
                             retVal.Add(i);
                     }
+                }
+            }
+            return retVal;
+        }
+
+        /// <summary>
+        /// 取得該年級符合班級名稱,ID
+        /// </summary>
+        /// <param name="GradeYear"></param>
+        /// <returns></returns>
+        public static Dictionary<string, string> GetClassNameIDDictByGradeYear(string GradeYear)
+        {
+            Dictionary<string, string> retVal = new Dictionary<string, string>();
+
+            if (!string.IsNullOrEmpty(GradeYear))
+            {
+                QueryHelper qh = new QueryHelper();
+                string query = @"select distinct class.class_name,class.id as classID from class inner join student on class.id=student.ref_class_id  where (class_name not in(select class_name from $kh.automatic.class.lock) and class_name not in(select distinct class_name from $kh.automatic.placement.high.concern)) and class.grade_year=" + GradeYear + " order by class.class_name";
+                DataTable dt = qh.Select(query);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    retVal.Add(dr["class_name"].ToString(), dr["classID"].ToString());
                 }
             }
             return retVal;
