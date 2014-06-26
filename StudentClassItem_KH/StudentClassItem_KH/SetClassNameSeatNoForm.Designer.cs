@@ -54,7 +54,7 @@
             this.lblMsg.Name = "lblMsg";
             this.lblMsg.Size = new System.Drawing.Size(280, 23);
             this.lblMsg.TabIndex = 0;
-            this.lblMsg.Text = "說明：班級修改傳送至局端";
+            this.lblMsg.Text = "說明：班級修改傳送至局端備查";
             this.lblMsg.WordWrap = true;
             // 
             // labelX1

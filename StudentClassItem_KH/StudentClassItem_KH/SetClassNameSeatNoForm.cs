@@ -11,6 +11,7 @@ namespace StudentClassItem_KH
 {
     public partial class SetClassNameSeatNoForm : FISCA.Presentation.Controls.BaseForm
     {
+        private string _oldClassName;
         private string _ClassName = "";
         private string _SeatNo = "";
         private DateTime _MeetingDate;
@@ -26,6 +27,11 @@ namespace StudentClassItem_KH
         public void SetClassName(string ClassName)
         {
             _ClassName = ClassName;
+        }
+
+        public void SetOldClassName(string oClassName)
+        {
+            _oldClassName = oClassName;
         }
 
         public void SetSeatNo(string SeatNo)
@@ -46,6 +52,7 @@ namespace StudentClassItem_KH
 
         public void SetSeatNoItems(List<int> seatList)
         {
+            cboSeatNo.Items.Add("");
             foreach (int i in seatList)
                 cboSeatNo.Items.Add(i);
         }
@@ -89,8 +96,14 @@ namespace StudentClassItem_KH
                 _SeatNo = cboSeatNo.Text;
                 _MeetingDate = dtMeetting.Value;
                 _Memo = txtMemo.Text;
+
+                string msg = "請問是否將班級由「" + _oldClassName + "」調整成「" + _ClassName + "」，並傳送至局端備查?";
                 
-                this.DialogResult = System.Windows.Forms.DialogResult.OK;
+                if (FISCA.Presentation.Controls.MsgBox.Show(msg, "調整確認", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes)
+                    this.DialogResult = System.Windows.Forms.DialogResult.OK;
+                else
+                    this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+                
             }
             else {
                 FISCA.Presentation.Controls.MsgBox.Show("資料有誤無法儲存");

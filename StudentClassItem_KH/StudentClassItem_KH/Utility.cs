@@ -30,6 +30,13 @@ namespace StudentClassItem_KH
             string DSNS = FISCA.Authentication.DSAServices.AccessPoint;
 
             string AccessPoint = @"http://dev.ischool.com.tw:8080/cs4_beta/kh_manager_center";
+
+            if (FISCA.RTContext.IsDiagMode)
+            {
+                string accPoint = FISCA.RTContext.GetConstant("KH_AccessPoint");
+                AccessPoint = accPoint;            
+            }
+            
             string Contract = "log";
             string ServiceName = "_.InsertLog";
 
@@ -101,7 +108,7 @@ namespace StudentClassItem_KH
             {
                 QueryHelper qh = new QueryHelper();
                 List<int> intVal = new List<int>();
-                string query = @"select seat_no from student inner join class on student.ref_class_id=class.id where class.class_name='" + ClassName + "' order by seat_no";
+                string query = @"select seat_no from student inner join class on student.ref_class_id=class.id where student.seat_no is not null and class.class_name='" + ClassName + "' order by seat_no";
                 DataTable dt = qh.Select(query);
                 foreach (DataRow dr in dt.Rows)
                     intVal.Add(int.Parse(dr["seat_no"].ToString()));

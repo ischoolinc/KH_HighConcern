@@ -274,6 +274,7 @@ namespace StudentClassItem_KH
             scnsf.SetClassNameItems(ClassNameDict.Keys.ToList());
             scnsf.SetClassName(lblClassName.Text);
             scnsf.SetSeatNo(lblSeatNo.Text);
+            scnsf.SetOldClassName(oldClassName);
             if (scnsf.ShowDialog() == DialogResult.OK)
             {
                 string className = scnsf.GetClassName();
@@ -296,6 +297,18 @@ namespace StudentClassItem_KH
 
                     // 更新學生資料
                     K12.Data.Student.Update(objStudent);
+
+                    prlp.SetAfterSaveText("班級", lblClassName.Text);
+                    prlp.SetAfterSaveText("座號", lblSeatNo.Text);
+                    prlp.SetAfterSaveText("學號", txtStudentNumber.Text);
+                    prlp.SetActionBy("學籍", "學生班級資訊");
+                    prlp.SetAction("修改學生班級資訊");
+                    prlp.SetDescTitle("學生姓名:" + objStudent.Name + ",學號:" + objStudent.StudentNumber + ",");
+
+                    prlp.SaveLog("", "", "student", PrimaryKey);
+
+                    Student.Instance.SyncDataBackground(PrimaryKey);
+                    
                 }
             }
         }
