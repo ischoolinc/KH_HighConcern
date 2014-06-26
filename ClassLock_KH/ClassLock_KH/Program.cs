@@ -60,7 +60,7 @@ namespace ClassLock_KH
 
                     if (data == null)
                     {
-                        if (FISCA.Presentation.Controls.MsgBox.Show("將自動將[班級鎖定]並傳送至局端", "班級鎖定", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes)
+                        if (FISCA.Presentation.Controls.MsgBox.Show("「班級鎖定」並傳送至局端備查", "班級鎖定", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes)
                         {
                             // 沒有鎖定
                             data = new UDT_ClassLock();
@@ -69,17 +69,21 @@ namespace ClassLock_KH
                             string errMsg=Utility.SendData(classRec.Name, grYear, "", "鎖定");
                             if (errMsg != "")
                                 FISCA.Presentation.Controls.MsgBox.Show(errMsg);
+                            else
+                                FISCA.Presentation.Controls.MsgBox.Show("已鎖定");
                        }
                     }
                     else
                     {
-                        if (FISCA.Presentation.Controls.MsgBox.Show("將自動將[班級解鎖]並傳送至局端", "班級解鎖", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes)
+                        if (FISCA.Presentation.Controls.MsgBox.Show("「班級解鎖」並傳送至局端備查", "班級解鎖", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes)
                         {
                             // 已被鎖定解鎖
                             data.Deleted = true;
                             string errMsg =Utility.SendData(classRec.Name, grYear, "", "解除鎖定");
                             if (errMsg != "")
                                 FISCA.Presentation.Controls.MsgBox.Show(errMsg);
+                            else
+                                FISCA.Presentation.Controls.MsgBox.Show("已解鎖");
                         }
                     }
                     // 儲存 UDT

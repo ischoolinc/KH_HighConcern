@@ -19,6 +19,13 @@ namespace ClassLock_KH
         {
             string DSNS = FISCA.Authentication.DSAServices.AccessPoint;
             string AccessPoint = @"http://dev.ischool.com.tw:8080/cs4_beta/kh_manager_center";
+
+            if (FISCA.RTContext.IsDiagMode)
+            {
+                string accPoint = FISCA.RTContext.GetConstant("KH_AccessPoint");
+                AccessPoint = accPoint;
+            }
+
             string Contract = "log";
             string ServiceName = "_.InsertLog";
 
