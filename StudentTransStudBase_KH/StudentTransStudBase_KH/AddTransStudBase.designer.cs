@@ -52,6 +52,10 @@
             this.labelX21 = new DevComponents.DotNetBar.LabelX();
             this.labelX22 = new DevComponents.DotNetBar.LabelX();
             this.groupPanel2 = new DevComponents.DotNetBar.Controls.GroupPanel();
+            this.txtMemo = new DevComponents.DotNetBar.Controls.TextBoxX();
+            this.labelX24 = new DevComponents.DotNetBar.LabelX();
+            this.dtMeetting = new DevComponents.Editors.DateTimeAdv.DateTimeInput();
+            this.labelX23 = new DevComponents.DotNetBar.LabelX();
             this.cbotStudentNumber = new DevComponents.DotNetBar.Controls.ComboBoxEx();
             this.gpOld = new DevComponents.DotNetBar.Controls.GroupPanel();
             this.groupPanel3 = new DevComponents.DotNetBar.Controls.GroupPanel();
@@ -80,20 +84,16 @@
             this.labelX5 = new DevComponents.DotNetBar.LabelX();
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnBefore = new DevComponents.DotNetBar.ButtonX();
-            this.dtMeetting = new DevComponents.Editors.DateTimeAdv.DateTimeInput();
-            this.labelX23 = new DevComponents.DotNetBar.LabelX();
-            this.txtMemo = new DevComponents.DotNetBar.Controls.TextBoxX();
-            this.labelX24 = new DevComponents.DotNetBar.LabelX();
             this.gpNew.SuspendLayout();
             this.groupPanel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtNewBirthday)).BeginInit();
             this.groupPanel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dtMeetting)).BeginInit();
             this.gpOld.SuspendLayout();
             this.groupPanel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtBirthDate)).BeginInit();
             this.groupPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dtMeetting)).BeginInit();
             this.SuspendLayout();
             // 
             // labelX1
@@ -571,6 +571,109 @@
             this.groupPanel2.StyleMouseOver.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.groupPanel2.TabIndex = 12;
             this.groupPanel2.Text = "班級資料";
+            // 
+            // txtMemo
+            // 
+            // 
+            // 
+            // 
+            this.txtMemo.Border.Class = "TextBoxBorder";
+            this.txtMemo.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtMemo.Location = new System.Drawing.Point(48, 95);
+            this.txtMemo.Multiline = true;
+            this.txtMemo.Name = "txtMemo";
+            this.txtMemo.Size = new System.Drawing.Size(304, 25);
+            this.txtMemo.TabIndex = 14;
+            // 
+            // labelX24
+            // 
+            this.labelX24.AutoSize = true;
+            this.labelX24.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX24.BackgroundStyle.Class = "";
+            this.labelX24.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX24.Location = new System.Drawing.Point(6, 97);
+            this.labelX24.Name = "labelX24";
+            this.labelX24.Size = new System.Drawing.Size(34, 21);
+            this.labelX24.TabIndex = 15;
+            this.labelX24.Text = "備註";
+            // 
+            // dtMeetting
+            // 
+            this.dtMeetting.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.dtMeetting.BackgroundStyle.Class = "DateTimeInputBackground";
+            this.dtMeetting.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.dtMeetting.ButtonDropDown.Shortcut = DevComponents.DotNetBar.eShortcut.AltDown;
+            this.dtMeetting.ButtonDropDown.Visible = true;
+            this.dtMeetting.IsPopupCalendarOpen = false;
+            this.dtMeetting.Location = new System.Drawing.Point(95, 66);
+            // 
+            // 
+            // 
+            this.dtMeetting.MonthCalendar.AnnuallyMarkedDates = new System.DateTime[0];
+            // 
+            // 
+            // 
+            this.dtMeetting.MonthCalendar.BackgroundStyle.BackColor = System.Drawing.SystemColors.Window;
+            this.dtMeetting.MonthCalendar.BackgroundStyle.Class = "";
+            this.dtMeetting.MonthCalendar.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.dtMeetting.MonthCalendar.ClearButtonVisible = true;
+            // 
+            // 
+            // 
+            this.dtMeetting.MonthCalendar.CommandsBackgroundStyle.BackColor2SchemePart = DevComponents.DotNetBar.eColorSchemePart.BarBackground2;
+            this.dtMeetting.MonthCalendar.CommandsBackgroundStyle.BackColorGradientAngle = 90;
+            this.dtMeetting.MonthCalendar.CommandsBackgroundStyle.BackColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.BarBackground;
+            this.dtMeetting.MonthCalendar.CommandsBackgroundStyle.BorderTop = DevComponents.DotNetBar.eStyleBorderType.Solid;
+            this.dtMeetting.MonthCalendar.CommandsBackgroundStyle.BorderTopColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.BarDockedBorder;
+            this.dtMeetting.MonthCalendar.CommandsBackgroundStyle.BorderTopWidth = 1;
+            this.dtMeetting.MonthCalendar.CommandsBackgroundStyle.Class = "";
+            this.dtMeetting.MonthCalendar.CommandsBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.dtMeetting.MonthCalendar.DayNames = new string[] {
+        "日",
+        "一",
+        "二",
+        "三",
+        "四",
+        "五",
+        "六"};
+            this.dtMeetting.MonthCalendar.DisplayMonth = new System.DateTime(2014, 6, 1, 0, 0, 0, 0);
+            this.dtMeetting.MonthCalendar.MarkedDates = new System.DateTime[0];
+            this.dtMeetting.MonthCalendar.MonthlyMarkedDates = new System.DateTime[0];
+            // 
+            // 
+            // 
+            this.dtMeetting.MonthCalendar.NavigationBackgroundStyle.BackColor2SchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground2;
+            this.dtMeetting.MonthCalendar.NavigationBackgroundStyle.BackColorGradientAngle = 90;
+            this.dtMeetting.MonthCalendar.NavigationBackgroundStyle.BackColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground;
+            this.dtMeetting.MonthCalendar.NavigationBackgroundStyle.Class = "";
+            this.dtMeetting.MonthCalendar.NavigationBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.dtMeetting.MonthCalendar.TodayButtonVisible = true;
+            this.dtMeetting.MonthCalendar.WeeklyMarkedDays = new System.DayOfWeek[0];
+            this.dtMeetting.Name = "dtMeetting";
+            this.dtMeetting.Size = new System.Drawing.Size(257, 23);
+            this.dtMeetting.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.dtMeetting.TabIndex = 12;
+            // 
+            // labelX23
+            // 
+            this.labelX23.AutoSize = true;
+            this.labelX23.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX23.BackgroundStyle.Class = "";
+            this.labelX23.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX23.Location = new System.Drawing.Point(8, 69);
+            this.labelX23.Name = "labelX23";
+            this.labelX23.Size = new System.Drawing.Size(87, 21);
+            this.labelX23.TabIndex = 13;
+            this.labelX23.Text = "編班會議日期";
             // 
             // cbotStudentNumber
             // 
@@ -1088,109 +1191,6 @@
             this.btnBefore.Text = "上一步";
             this.btnBefore.Click += new System.EventHandler(this.btnBefore_Click);
             // 
-            // dtMeetting
-            // 
-            this.dtMeetting.BackColor = System.Drawing.Color.Transparent;
-            // 
-            // 
-            // 
-            this.dtMeetting.BackgroundStyle.Class = "DateTimeInputBackground";
-            this.dtMeetting.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.dtMeetting.ButtonDropDown.Shortcut = DevComponents.DotNetBar.eShortcut.AltDown;
-            this.dtMeetting.ButtonDropDown.Visible = true;
-            this.dtMeetting.IsPopupCalendarOpen = false;
-            this.dtMeetting.Location = new System.Drawing.Point(95, 66);
-            // 
-            // 
-            // 
-            this.dtMeetting.MonthCalendar.AnnuallyMarkedDates = new System.DateTime[0];
-            // 
-            // 
-            // 
-            this.dtMeetting.MonthCalendar.BackgroundStyle.BackColor = System.Drawing.SystemColors.Window;
-            this.dtMeetting.MonthCalendar.BackgroundStyle.Class = "";
-            this.dtMeetting.MonthCalendar.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.dtMeetting.MonthCalendar.ClearButtonVisible = true;
-            // 
-            // 
-            // 
-            this.dtMeetting.MonthCalendar.CommandsBackgroundStyle.BackColor2SchemePart = DevComponents.DotNetBar.eColorSchemePart.BarBackground2;
-            this.dtMeetting.MonthCalendar.CommandsBackgroundStyle.BackColorGradientAngle = 90;
-            this.dtMeetting.MonthCalendar.CommandsBackgroundStyle.BackColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.BarBackground;
-            this.dtMeetting.MonthCalendar.CommandsBackgroundStyle.BorderTop = DevComponents.DotNetBar.eStyleBorderType.Solid;
-            this.dtMeetting.MonthCalendar.CommandsBackgroundStyle.BorderTopColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.BarDockedBorder;
-            this.dtMeetting.MonthCalendar.CommandsBackgroundStyle.BorderTopWidth = 1;
-            this.dtMeetting.MonthCalendar.CommandsBackgroundStyle.Class = "";
-            this.dtMeetting.MonthCalendar.CommandsBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.dtMeetting.MonthCalendar.DayNames = new string[] {
-        "日",
-        "一",
-        "二",
-        "三",
-        "四",
-        "五",
-        "六"};
-            this.dtMeetting.MonthCalendar.DisplayMonth = new System.DateTime(2014, 6, 1, 0, 0, 0, 0);
-            this.dtMeetting.MonthCalendar.MarkedDates = new System.DateTime[0];
-            this.dtMeetting.MonthCalendar.MonthlyMarkedDates = new System.DateTime[0];
-            // 
-            // 
-            // 
-            this.dtMeetting.MonthCalendar.NavigationBackgroundStyle.BackColor2SchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground2;
-            this.dtMeetting.MonthCalendar.NavigationBackgroundStyle.BackColorGradientAngle = 90;
-            this.dtMeetting.MonthCalendar.NavigationBackgroundStyle.BackColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground;
-            this.dtMeetting.MonthCalendar.NavigationBackgroundStyle.Class = "";
-            this.dtMeetting.MonthCalendar.NavigationBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.dtMeetting.MonthCalendar.TodayButtonVisible = true;
-            this.dtMeetting.MonthCalendar.WeeklyMarkedDays = new System.DayOfWeek[0];
-            this.dtMeetting.Name = "dtMeetting";
-            this.dtMeetting.Size = new System.Drawing.Size(257, 23);
-            this.dtMeetting.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.dtMeetting.TabIndex = 12;
-            // 
-            // labelX23
-            // 
-            this.labelX23.AutoSize = true;
-            this.labelX23.BackColor = System.Drawing.Color.Transparent;
-            // 
-            // 
-            // 
-            this.labelX23.BackgroundStyle.Class = "";
-            this.labelX23.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX23.Location = new System.Drawing.Point(8, 69);
-            this.labelX23.Name = "labelX23";
-            this.labelX23.Size = new System.Drawing.Size(81, 20);
-            this.labelX23.TabIndex = 13;
-            this.labelX23.Text = "編班會議日期";
-            // 
-            // txtMemo
-            // 
-            // 
-            // 
-            // 
-            this.txtMemo.Border.Class = "TextBoxBorder";
-            this.txtMemo.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.txtMemo.Location = new System.Drawing.Point(48, 95);
-            this.txtMemo.Multiline = true;
-            this.txtMemo.Name = "txtMemo";
-            this.txtMemo.Size = new System.Drawing.Size(304, 25);
-            this.txtMemo.TabIndex = 14;
-            // 
-            // labelX24
-            // 
-            this.labelX24.AutoSize = true;
-            this.labelX24.BackColor = System.Drawing.Color.Transparent;
-            // 
-            // 
-            // 
-            this.labelX24.BackgroundStyle.Class = "";
-            this.labelX24.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX24.Location = new System.Drawing.Point(6, 97);
-            this.labelX24.Name = "labelX24";
-            this.labelX24.Size = new System.Drawing.Size(31, 20);
-            this.labelX24.TabIndex = 15;
-            this.labelX24.Text = "備註";
-            // 
             // AddTransStudBase
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -1200,19 +1200,19 @@
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.Name = "AddTransStudBase";
-            this.Text = "轉入學生資料(New)";
+            this.Text = "轉入學生資料";
             this.Load += new System.EventHandler(this.AddTransStudBase_Load);
             this.gpNew.ResumeLayout(false);
             this.groupPanel4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dtNewBirthday)).EndInit();
             this.groupPanel2.ResumeLayout(false);
             this.groupPanel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dtMeetting)).EndInit();
             this.gpOld.ResumeLayout(false);
             this.groupPanel3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dtBirthDate)).EndInit();
             this.groupPanel1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dtMeetting)).EndInit();
             this.ResumeLayout(false);
 
         }

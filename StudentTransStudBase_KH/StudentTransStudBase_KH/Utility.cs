@@ -115,6 +115,7 @@ namespace StudentTransStudBase_KH
                 Content.SetElementValue("NewClassName", NewClassName);
                 Content.SetElementValue("SeatNo", SeatNo);
                 Content.SetElementValue("ScheduleClassDate", ScheduleClassDate);
+                Content.SetElementValue("StudentName", StudentName);
                 Content.SetElementValue("Reason", Reason);
                 s2.Add(Content);
                 s1.Add(s2);

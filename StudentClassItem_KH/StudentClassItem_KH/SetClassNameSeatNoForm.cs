@@ -85,7 +85,11 @@ namespace StudentClassItem_KH
         private void SetClassNameSeatNoForm_Load(object sender, EventArgs e)
         {
             this.MinimumSize = this.MaximumSize = this.Size;            
-            dtMeetting.Value = DateTime.Now;
+            //dtMeetting.Value = DateTime.Now;
+            if (cboClassName.Items.Count > 0)
+            {
+                cboClassName.Text = cboClassName.Items[0].ToString();
+            }
         }
 
         private void btnSend_Click(object sender, EventArgs e)

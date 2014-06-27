@@ -291,7 +291,7 @@ namespace StudentClassItem_KH
                         objStudent.SeatNo = null;
 
                     // 傳送至局端
-                    string errMsg=Utility.SendData("編班", objStudent.IDNumber, objStudent.StudentNumber, objStudent.Name, gradeYear, oldClassName, scnsf.GetSeatNo(), scnsf.GetClassName(), scnsf.GetMettingDate(), scnsf.GetMemo());
+                    string errMsg=Utility.SendData("班級調整", objStudent.IDNumber, objStudent.StudentNumber, objStudent.Name, gradeYear, oldClassName, scnsf.GetSeatNo(), scnsf.GetClassName(), scnsf.GetMettingDate(), scnsf.GetMemo());
                     if (errMsg != "")
                         FISCA.Presentation.Controls.MsgBox.Show(errMsg);
 

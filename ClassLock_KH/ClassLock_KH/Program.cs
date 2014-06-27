@@ -66,7 +66,7 @@ namespace ClassLock_KH
                             data = new UDT_ClassLock();
                             data.ClassID = cid;
                             data.ClassName = classRec.Name;
-                            string errMsg=Utility.SendData(classRec.Name, grYear, "", "鎖定");
+                            string errMsg = Utility.SendData(classRec.Name, grYear, "", "鎖定班級");
                             if (errMsg != "")
                                 FISCA.Presentation.Controls.MsgBox.Show(errMsg);
                             else
@@ -79,7 +79,7 @@ namespace ClassLock_KH
                         {
                             // 已被鎖定解鎖
                             data.Deleted = true;
-                            string errMsg =Utility.SendData(classRec.Name, grYear, "", "解除鎖定");
+                            string errMsg = Utility.SendData(classRec.Name, grYear, "", "解鎖班級");
                             if (errMsg != "")
                                 FISCA.Presentation.Controls.MsgBox.Show(errMsg);
                             else

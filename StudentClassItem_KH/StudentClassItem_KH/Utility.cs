@@ -52,6 +52,7 @@ namespace StudentClassItem_KH
                 XElement Content = new XElement("Content");
                 Content.SetElementValue("IDNumber", IDNumber);
                 Content.SetElementValue("StudentNumber", StudentNumber);
+                Content.SetElementValue("StudentName", StudentName);
                 Content.SetElementValue("ClassName", ClassName);
                 Content.SetElementValue("NewClassName", NewClassName);
                 Content.SetElementValue("SeatNo", SeatNo);
