@@ -47,5 +47,11 @@ namespace KH_HighConcern.DAO
         ///</summary>
         [Field(Field = "number_reduce", Indexed = false)]
         public int NumberReduce { get; set; }
+
+        ///<summary>
+        /// 文號
+        ///</summary>
+        [Field(Field = "doc_no", Indexed = false)]
+        public string DocNo { get; set; }
     }
 }

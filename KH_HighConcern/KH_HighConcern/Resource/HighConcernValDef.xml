@@ -25,10 +25,13 @@
       <Validate AutoCorrect="False" Description="「高關懷特殊身份註記」不允許空白。" ErrorType="Error" Validator="不可空白" When="" />
       <Validate AutoCorrect="False" Description="「高關懷特殊身份註記」只允許「是」。" ErrorType="Error" Validator="是列舉" When="" />
   </Field>
-
-  <Field Required="True" Name="減免人數" Description="減免人數(1~10整數)">
+  <Field Required="True" Name="減免人數" Description="減免人數(0~9整數)">
       <Validate AutoCorrect="False" Description="「減免人數」不允許空白。" ErrorType="Error" Validator="不可空白" When="" />
-      <Validate AutoCorrect="False" Description="「減免人數」只允許「1~10 整數」。" ErrorType="Error" Validator="Integer10" When="" />
+      <Validate AutoCorrect="False" Description="「減免人數」只允許「0~9 整數」。" ErrorType="Error" Validator="Integer10" When="" />
+  </Field>
+    
+    <Field Required="True" Name="文號" Description="高關懷特殊身份文號">
+      <Validate AutoCorrect="False" Description="「文號」不允許空白。" ErrorType="Error" Validator="不可空白" When="" />      
   </Field>
     </FieldList>
     <ValidatorList>  
@@ -37,8 +40,8 @@
             <MinLength>1</MinLength>
         </FieldValidator>        
         <FieldValidator Name="Integer10" Type="Integer">
-            <MinValue>1</MinValue>
-            <MaxValue>10</MaxValue>
+            <MinValue>0</MinValue>
+            <MaxValue>9</MaxValue>
         </FieldValidator>
       <FieldValidator Name="是列舉" Type="Enumeration">
         <Item Value="是">

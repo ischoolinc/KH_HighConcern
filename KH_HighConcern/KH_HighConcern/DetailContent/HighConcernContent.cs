@@ -39,6 +39,7 @@ namespace KH_HighConcern.DetailContent
             // 加入控制項變動檢查            
             _ChangeListener.Add(new CheckBoxXSource(chkHighConcern));
             _ChangeListener.Add(new TextBoxSource(txtCount));
+            _ChangeListener.Add(new TextBoxSource(txtDocNo));
             _ChangeListener.StatusChanged += _ChangeListener_StatusChanged;
             //啟動更新事件
             eh = FISCA.InteractionService.PublishEvent(EventCode);
@@ -83,10 +84,12 @@ namespace KH_HighConcern.DetailContent
 
             chkHighConcern.Checked = false;
             txtCount.Text = "";
+            txtDocNo.Text = "";
             if (_HighConcernDict.Count > 0)
             {
                 chkHighConcern.Checked = _HighConcernDict[PrimaryKey].HighConcern;
                 txtCount.Text = _HighConcernDict[PrimaryKey].NumberReduce.ToString();
+                txtDocNo.Text = _HighConcernDict[PrimaryKey].DocNo;
             }
 
             _ChangeListener.Reset();
@@ -115,15 +118,18 @@ namespace KH_HighConcern.DetailContent
             int bb;
             if (int.TryParse(txtCount.Text, out bb))
             {
-                if(bb>=1 && bb<=10)
+                if(bb>=0 && bb<10)
                     retVal = true;
                 else
-                    _errorP.SetError(txtCount, "減免人數必須介於1~10");
+                    _errorP.SetError(txtCount, "減免人數必須介於0~9");
             }
             else
             {
-                _errorP.SetError(txtCount, "減免人數必須正整數");
+                _errorP.SetError(txtCount, "減免人數必須整數");
             }
+
+            if (txtDocNo.Text.Trim() == "")
+                _errorP.SetError(txtDocNo, "文號必填");
             return retVal;
         }
 
@@ -134,39 +140,59 @@ namespace KH_HighConcern.DetailContent
                 int bb;
                 int.TryParse(txtCount.Text,out bb);
 
-
-                // 檢查當已是高關懷
-                if (_HighConcernDict.ContainsKey(PrimaryKey))
+                // 再次確認畫面
+                if (FISCA.Presentation.Controls.MsgBox.Show("設定是特殊生或高關懷學生，按下「是」確認後，需報局備查。", "高關懷學生", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
                 {
-                    // 有勾選更新人數，沒有勾選刪除，因為沒存在必要
-                    if (chkHighConcern.Checked)
-                    {                
-                        _HighConcernDict[PrimaryKey].NumberReduce = bb;
+                    string IDNumber = "", StudentNumber = "", StudentName = "", ClassName = "", SeatNo = "", NumberReduce = "", DocNo = "";
+
+                    IDNumber = _StudRec.IDNumber;
+                    StudentNumber = _StudRec.StudentNumber;
+                    StudentName = _StudRec.Name;
+                    if (_StudRec.SeatNo.HasValue)
+                        SeatNo = _StudRec.SeatNo.Value.ToString();
+                    if (_StudRec.Class != null)
+                        ClassName = _StudRec.Class.Name;
+                    NumberReduce = bb.ToString();
+                    DocNo = txtDocNo.Text;
+
+                    // 檢查當已是高關懷
+                    if (_HighConcernDict.ContainsKey(PrimaryKey))
+                    {
+                        // 有勾選更新人數，沒有勾選刪除，因為沒存在必要
+                        if (chkHighConcern.Checked)
+                        {
+                            
+                            _HighConcernDict[PrimaryKey].NumberReduce = bb;
+                            _HighConcernDict[PrimaryKey].DocNo = txtDocNo.Text;
+                        }
+                        else
+                        {
+                            txtCount.Text = "";
+                            txtDocNo.Text = "";
+                            _HighConcernDict[PrimaryKey].Deleted = true;
+                        }
+                        _HighConcernDict[PrimaryKey].Save();
+
                     }
                     else
                     {
-                        txtCount.Text = "";
-                        _HighConcernDict[PrimaryKey].Deleted = true;                        
+                        UDT_HighConcern newData = new UDT_HighConcern();
+                        newData.StudentNumber = StudentNumber;
+                        newData.SeatNo = SeatNo;
+                        newData.ClassName = ClassName;
+                        newData.DocNo = txtDocNo.Text;
+                        newData.RefStudentID = PrimaryKey;
+                        newData.HighConcern = true;
+                        newData.NumberReduce = bb;
+                        newData.DocNo = txtDocNo.Text;
+                        newData.Save();
                     }
-                    _HighConcernDict[PrimaryKey].Save();
-                }
-                else
-                {
-                    UDT_HighConcern newData = new UDT_HighConcern();
-                    newData.StudentNumber = _StudRec.StudentNumber;
-                    if (_StudRec.SeatNo.HasValue)
-                        newData.SeatNo = _StudRec.SeatNo.Value.ToString();
-                    else
-                        newData.SeatNo = "";
-                    if (_StudRec.Class != null)
-                        newData.ClassName = _StudRec.Class.Name;
-                    else
-                        newData.ClassName = "";
-
-                    newData.RefStudentID = PrimaryKey;
-                    newData.HighConcern = true;
-                    newData.NumberReduce = bb;
-                    newData.Save();
+                    // 傳送至局端
+                    string errMsg = Utility.SendData("高關懷學生", IDNumber, StudentNumber, StudentName, ClassName, SeatNo, DocNo, NumberReduce);
+                    if (errMsg != "")
+                    {
+                        FISCA.Presentation.Controls.MsgBox.Show(errMsg);
+                    }
                 }
                 this.CancelButtonVisible = false;
                 this.SaveButtonVisible = false;                
@@ -178,6 +204,13 @@ namespace KH_HighConcern.DetailContent
         {
             _errorP.SetError(txtCount, "");
             if (txtCount.Text != "")
+                chkHighConcern.Checked = true;
+        }
+
+        private void txtDocNo_TextChanged(object sender, EventArgs e)
+        {
+            _errorP.SetError(txtDocNo, "");
+            if (txtDocNo.Text != "")
                 chkHighConcern.Checked = true;
         }
     }

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using FISCA.Permission;
 using FISCA.Presentation;
+using System.Windows.Forms;
 
 namespace KH_HighConcern
 {
@@ -34,7 +35,7 @@ namespace KH_HighConcern
                };
                K12.Presentation.NLDPanels.Student.AddListPaneField(HighConcernField);
 
-               ListPaneField HighCountField = new ListPaneField("減免人數");
+               ListPaneField HighCountField = new ListPaneField("高關懷減免人數");
                HighCountField.GetVariable += delegate(object sender, GetVariableEventArgs e)
                {
                    if (_HighConcernDict.ContainsKey(e.Key))
@@ -44,12 +45,23 @@ namespace KH_HighConcern
                };
                K12.Presentation.NLDPanels.Student.AddListPaneField(HighCountField);
 
+               ListPaneField HighDocNoField = new ListPaneField("高關懷文號");
+               HighDocNoField.GetVariable += delegate(object sender, GetVariableEventArgs e)
+               {
+                   if (_HighConcernDict.ContainsKey(e.Key))
+                   {
+                       e.Value = _HighConcernDict[e.Key].DocNo;
+                   }
+               };
+               K12.Presentation.NLDPanels.Student.AddListPaneField(HighDocNoField);
+
                // 當高關懷特殊身份有更新
                FISCA.InteractionService.SubscribeEvent("KH_HighConcern_HighConcernContent", (sender, args) =>
                {
                    _HighConcernDict = UDTTransfer.GetHighConcernDictAll();
                    HighConcernField.Reload();
                    HighCountField.Reload();
+                   HighDocNoField.Reload();
                });
            }
 
@@ -66,7 +78,10 @@ namespace KH_HighConcern
                RibbonBarItem item01 = K12.Presentation.NLDPanels.Student.RibbonBarItems["資料統計"];
                item01["匯入"]["其它相關匯入"]["匯入高關懷特殊身份"].Enable = UserAcl.Current["KH_HighConcern_ImportHighConcern"].Executable;
                item01["匯入"]["其它相關匯入"]["匯入高關懷特殊身份"].Click += delegate {
-                   new ImportExport.ImportHighConcern().Execute();                   
+                   if (FISCA.Presentation.Controls.MsgBox.Show("匯入高關懷學生，按下「是」確認後，需報局備查。", "匯入高關懷學生", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
+                   {
+                       new ImportExport.ImportHighConcern().Execute();
+                   }                   
                };
 
 
