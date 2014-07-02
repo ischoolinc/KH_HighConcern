@@ -30,5 +30,18 @@ namespace ClassLock_KH.DAO
             FISCA.UDT.SchemaManager Manager = new SchemaManager(new DSConnection(FISCA.Authentication.DSAServices.DefaultDataSource));
             Manager.SyncSchema(new UDT_ClassLock());
         }
+
+        /// <summary>
+        /// 全部班級解鎖
+        /// </summary>
+        public static void UnlockAllClass()
+        {
+            AccessHelper _AccessHelper = new AccessHelper();
+            List<UDT_ClassLock> dataList = _AccessHelper.Select<UDT_ClassLock>();
+            foreach (UDT_ClassLock data in dataList)
+                data.Deleted = true;
+
+            dataList.SaveAll();
+        }
     }
 }
