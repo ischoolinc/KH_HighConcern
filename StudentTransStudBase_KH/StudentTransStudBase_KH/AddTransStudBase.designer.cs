@@ -28,7 +28,6 @@
         private void InitializeComponent()
         {
             this.labelX1 = new DevComponents.DotNetBar.LabelX();
-            this.cboClass = new DevComponents.DotNetBar.Controls.ComboBoxEx();
             this.labelX2 = new DevComponents.DotNetBar.LabelX();
             this.cboSeatNo = new DevComponents.DotNetBar.Controls.ComboBoxEx();
             this.labelX3 = new DevComponents.DotNetBar.LabelX();
@@ -52,10 +51,6 @@
             this.labelX21 = new DevComponents.DotNetBar.LabelX();
             this.labelX22 = new DevComponents.DotNetBar.LabelX();
             this.groupPanel2 = new DevComponents.DotNetBar.Controls.GroupPanel();
-            this.txtMemo = new DevComponents.DotNetBar.Controls.TextBoxX();
-            this.labelX24 = new DevComponents.DotNetBar.LabelX();
-            this.dtMeetting = new DevComponents.Editors.DateTimeAdv.DateTimeInput();
-            this.labelX23 = new DevComponents.DotNetBar.LabelX();
             this.cbotStudentNumber = new DevComponents.DotNetBar.Controls.ComboBoxEx();
             this.gpOld = new DevComponents.DotNetBar.Controls.GroupPanel();
             this.groupPanel3 = new DevComponents.DotNetBar.Controls.GroupPanel();
@@ -84,11 +79,13 @@
             this.labelX5 = new DevComponents.DotNetBar.LabelX();
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnBefore = new DevComponents.DotNetBar.ButtonX();
+            this.labelX23 = new DevComponents.DotNetBar.LabelX();
+            this.cboGradeYear = new DevComponents.DotNetBar.Controls.ComboBoxEx();
+            this.lblNewClassName = new DevComponents.DotNetBar.LabelX();
             this.gpNew.SuspendLayout();
             this.groupPanel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtNewBirthday)).BeginInit();
             this.groupPanel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dtMeetting)).BeginInit();
             this.gpOld.SuspendLayout();
             this.groupPanel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtBirthDate)).BeginInit();
@@ -98,30 +95,18 @@
             // 
             // labelX1
             // 
+            this.labelX1.AutoSize = true;
             this.labelX1.BackColor = System.Drawing.Color.Transparent;
             // 
             // 
             // 
             this.labelX1.BackgroundStyle.Class = "";
             this.labelX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX1.Location = new System.Drawing.Point(6, 3);
+            this.labelX1.Location = new System.Drawing.Point(175, 4);
             this.labelX1.Name = "labelX1";
-            this.labelX1.Size = new System.Drawing.Size(42, 23);
+            this.labelX1.Size = new System.Drawing.Size(31, 20);
             this.labelX1.TabIndex = 0;
             this.labelX1.Text = "班級";
-            // 
-            // cboClass
-            // 
-            this.cboClass.DisplayMember = "Text";
-            this.cboClass.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cboClass.FormattingEnabled = true;
-            this.cboClass.ItemHeight = 17;
-            this.cboClass.Location = new System.Drawing.Point(48, 3);
-            this.cboClass.Name = "cboClass";
-            this.cboClass.Size = new System.Drawing.Size(304, 23);
-            this.cboClass.TabIndex = 9;
-            this.cboClass.SelectedIndexChanged += new System.EventHandler(this.cboClass_SelectedIndexChanged);
-            this.cboClass.TextChanged += new System.EventHandler(this.cboClassName_TextChanged);
             // 
             // labelX2
             // 
@@ -169,7 +154,7 @@
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSave.BackColor = System.Drawing.Color.Transparent;
             this.btnSave.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnSave.Location = new System.Drawing.Point(338, 368);
+            this.btnSave.Location = new System.Drawing.Point(338, 309);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(60, 23);
             this.btnSave.TabIndex = 20;
@@ -185,7 +170,7 @@
             this.gpNew.Controls.Add(this.groupPanel2);
             this.gpNew.Location = new System.Drawing.Point(8, 12);
             this.gpNew.Name = "gpNew";
-            this.gpNew.Size = new System.Drawing.Size(396, 345);
+            this.gpNew.Size = new System.Drawing.Size(396, 287);
             // 
             // 
             // 
@@ -526,19 +511,17 @@
             // 
             this.groupPanel2.CanvasColor = System.Drawing.SystemColors.Control;
             this.groupPanel2.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
-            this.groupPanel2.Controls.Add(this.txtMemo);
-            this.groupPanel2.Controls.Add(this.labelX24);
-            this.groupPanel2.Controls.Add(this.dtMeetting);
+            this.groupPanel2.Controls.Add(this.lblNewClassName);
+            this.groupPanel2.Controls.Add(this.cboGradeYear);
             this.groupPanel2.Controls.Add(this.labelX23);
             this.groupPanel2.Controls.Add(this.labelX1);
             this.groupPanel2.Controls.Add(this.cbotStudentNumber);
-            this.groupPanel2.Controls.Add(this.cboClass);
             this.groupPanel2.Controls.Add(this.labelX3);
             this.groupPanel2.Controls.Add(this.labelX2);
             this.groupPanel2.Controls.Add(this.cboSeatNo);
             this.groupPanel2.Location = new System.Drawing.Point(9, 156);
             this.groupPanel2.Name = "groupPanel2";
-            this.groupPanel2.Size = new System.Drawing.Size(376, 156);
+            this.groupPanel2.Size = new System.Drawing.Size(376, 93);
             // 
             // 
             // 
@@ -572,109 +555,6 @@
             this.groupPanel2.TabIndex = 12;
             this.groupPanel2.Text = "班級資料";
             // 
-            // txtMemo
-            // 
-            // 
-            // 
-            // 
-            this.txtMemo.Border.Class = "TextBoxBorder";
-            this.txtMemo.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.txtMemo.Location = new System.Drawing.Point(48, 95);
-            this.txtMemo.Multiline = true;
-            this.txtMemo.Name = "txtMemo";
-            this.txtMemo.Size = new System.Drawing.Size(304, 25);
-            this.txtMemo.TabIndex = 14;
-            // 
-            // labelX24
-            // 
-            this.labelX24.AutoSize = true;
-            this.labelX24.BackColor = System.Drawing.Color.Transparent;
-            // 
-            // 
-            // 
-            this.labelX24.BackgroundStyle.Class = "";
-            this.labelX24.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX24.Location = new System.Drawing.Point(6, 97);
-            this.labelX24.Name = "labelX24";
-            this.labelX24.Size = new System.Drawing.Size(34, 21);
-            this.labelX24.TabIndex = 15;
-            this.labelX24.Text = "備註";
-            // 
-            // dtMeetting
-            // 
-            this.dtMeetting.BackColor = System.Drawing.Color.Transparent;
-            // 
-            // 
-            // 
-            this.dtMeetting.BackgroundStyle.Class = "DateTimeInputBackground";
-            this.dtMeetting.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.dtMeetting.ButtonDropDown.Shortcut = DevComponents.DotNetBar.eShortcut.AltDown;
-            this.dtMeetting.ButtonDropDown.Visible = true;
-            this.dtMeetting.IsPopupCalendarOpen = false;
-            this.dtMeetting.Location = new System.Drawing.Point(95, 66);
-            // 
-            // 
-            // 
-            this.dtMeetting.MonthCalendar.AnnuallyMarkedDates = new System.DateTime[0];
-            // 
-            // 
-            // 
-            this.dtMeetting.MonthCalendar.BackgroundStyle.BackColor = System.Drawing.SystemColors.Window;
-            this.dtMeetting.MonthCalendar.BackgroundStyle.Class = "";
-            this.dtMeetting.MonthCalendar.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.dtMeetting.MonthCalendar.ClearButtonVisible = true;
-            // 
-            // 
-            // 
-            this.dtMeetting.MonthCalendar.CommandsBackgroundStyle.BackColor2SchemePart = DevComponents.DotNetBar.eColorSchemePart.BarBackground2;
-            this.dtMeetting.MonthCalendar.CommandsBackgroundStyle.BackColorGradientAngle = 90;
-            this.dtMeetting.MonthCalendar.CommandsBackgroundStyle.BackColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.BarBackground;
-            this.dtMeetting.MonthCalendar.CommandsBackgroundStyle.BorderTop = DevComponents.DotNetBar.eStyleBorderType.Solid;
-            this.dtMeetting.MonthCalendar.CommandsBackgroundStyle.BorderTopColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.BarDockedBorder;
-            this.dtMeetting.MonthCalendar.CommandsBackgroundStyle.BorderTopWidth = 1;
-            this.dtMeetting.MonthCalendar.CommandsBackgroundStyle.Class = "";
-            this.dtMeetting.MonthCalendar.CommandsBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.dtMeetting.MonthCalendar.DayNames = new string[] {
-        "日",
-        "一",
-        "二",
-        "三",
-        "四",
-        "五",
-        "六"};
-            this.dtMeetting.MonthCalendar.DisplayMonth = new System.DateTime(2014, 6, 1, 0, 0, 0, 0);
-            this.dtMeetting.MonthCalendar.MarkedDates = new System.DateTime[0];
-            this.dtMeetting.MonthCalendar.MonthlyMarkedDates = new System.DateTime[0];
-            // 
-            // 
-            // 
-            this.dtMeetting.MonthCalendar.NavigationBackgroundStyle.BackColor2SchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground2;
-            this.dtMeetting.MonthCalendar.NavigationBackgroundStyle.BackColorGradientAngle = 90;
-            this.dtMeetting.MonthCalendar.NavigationBackgroundStyle.BackColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground;
-            this.dtMeetting.MonthCalendar.NavigationBackgroundStyle.Class = "";
-            this.dtMeetting.MonthCalendar.NavigationBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.dtMeetting.MonthCalendar.TodayButtonVisible = true;
-            this.dtMeetting.MonthCalendar.WeeklyMarkedDays = new System.DayOfWeek[0];
-            this.dtMeetting.Name = "dtMeetting";
-            this.dtMeetting.Size = new System.Drawing.Size(257, 23);
-            this.dtMeetting.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.dtMeetting.TabIndex = 12;
-            // 
-            // labelX23
-            // 
-            this.labelX23.AutoSize = true;
-            this.labelX23.BackColor = System.Drawing.Color.Transparent;
-            // 
-            // 
-            // 
-            this.labelX23.BackgroundStyle.Class = "";
-            this.labelX23.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX23.Location = new System.Drawing.Point(8, 69);
-            this.labelX23.Name = "labelX23";
-            this.labelX23.Size = new System.Drawing.Size(87, 21);
-            this.labelX23.TabIndex = 13;
-            this.labelX23.Text = "編班會議日期";
-            // 
             // cbotStudentNumber
             // 
             this.cbotStudentNumber.DisplayMember = "Text";
@@ -696,7 +576,7 @@
             this.gpOld.Controls.Add(this.groupPanel1);
             this.gpOld.Location = new System.Drawing.Point(5, 12);
             this.gpOld.Name = "gpOld";
-            this.gpOld.Size = new System.Drawing.Size(389, 345);
+            this.gpOld.Size = new System.Drawing.Size(389, 292);
             // 
             // 
             // 
@@ -1051,7 +931,7 @@
             this.groupPanel1.Controls.Add(this.labelX5);
             this.groupPanel1.Location = new System.Drawing.Point(3, 156);
             this.groupPanel1.Name = "groupPanel1";
-            this.groupPanel1.Size = new System.Drawing.Size(376, 156);
+            this.groupPanel1.Size = new System.Drawing.Size(376, 93);
             // 
             // 
             // 
@@ -1175,7 +1055,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel1.Location = new System.Drawing.Point(397, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(410, 400);
+            this.panel1.Size = new System.Drawing.Size(410, 341);
             this.panel1.TabIndex = 12;
             // 
             // btnBefore
@@ -1184,17 +1064,58 @@
             this.btnBefore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnBefore.BackColor = System.Drawing.Color.Transparent;
             this.btnBefore.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnBefore.Location = new System.Drawing.Point(268, 368);
+            this.btnBefore.Location = new System.Drawing.Point(268, 309);
             this.btnBefore.Name = "btnBefore";
             this.btnBefore.Size = new System.Drawing.Size(60, 23);
             this.btnBefore.TabIndex = 21;
             this.btnBefore.Text = "上一步";
             this.btnBefore.Click += new System.EventHandler(this.btnBefore_Click);
             // 
+            // labelX23
+            // 
+            this.labelX23.AutoSize = true;
+            this.labelX23.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX23.BackgroundStyle.Class = "";
+            this.labelX23.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX23.Location = new System.Drawing.Point(6, 4);
+            this.labelX23.Name = "labelX23";
+            this.labelX23.Size = new System.Drawing.Size(31, 20);
+            this.labelX23.TabIndex = 12;
+            this.labelX23.Text = "年級";
+            // 
+            // cboGradeYear
+            // 
+            this.cboGradeYear.DisplayMember = "Text";
+            this.cboGradeYear.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cboGradeYear.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboGradeYear.FormattingEnabled = true;
+            this.cboGradeYear.ItemHeight = 17;
+            this.cboGradeYear.Location = new System.Drawing.Point(48, 3);
+            this.cboGradeYear.Name = "cboGradeYear";
+            this.cboGradeYear.Size = new System.Drawing.Size(63, 23);
+            this.cboGradeYear.TabIndex = 13;
+            this.cboGradeYear.SelectedIndexChanged += new System.EventHandler(this.cboGradeYear_SelectedIndexChanged);
+            // 
+            // lblNewClassName
+            // 
+            this.lblNewClassName.BackColor = System.Drawing.Color.White;
+            // 
+            // 
+            // 
+            this.lblNewClassName.BackgroundStyle.Class = "";
+            this.lblNewClassName.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.lblNewClassName.Location = new System.Drawing.Point(218, 3);
+            this.lblNewClassName.Name = "lblNewClassName";
+            this.lblNewClassName.Size = new System.Drawing.Size(134, 23);
+            this.lblNewClassName.TabIndex = 14;
+            // 
             // AddTransStudBase
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(807, 400);
+            this.ClientSize = new System.Drawing.Size(807, 341);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.gpOld);
             this.DoubleBuffered = true;
@@ -1207,7 +1128,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dtNewBirthday)).EndInit();
             this.groupPanel2.ResumeLayout(false);
             this.groupPanel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dtMeetting)).EndInit();
             this.gpOld.ResumeLayout(false);
             this.groupPanel3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dtBirthDate)).EndInit();
@@ -1220,7 +1140,6 @@
         #endregion
 
         private DevComponents.DotNetBar.LabelX labelX1;
-        private DevComponents.DotNetBar.Controls.ComboBoxEx cboClass;
         private DevComponents.DotNetBar.LabelX labelX2;
         private DevComponents.DotNetBar.Controls.ComboBoxEx cboSeatNo;
         private DevComponents.DotNetBar.LabelX labelX3;
@@ -1272,9 +1191,8 @@
         private DevComponents.DotNetBar.LabelX labelX22;
         private System.Windows.Forms.Panel panel1;
         private DevComponents.DotNetBar.ButtonX btnBefore;
-        private DevComponents.DotNetBar.Controls.TextBoxX txtMemo;
-        private DevComponents.DotNetBar.LabelX labelX24;
-        private DevComponents.Editors.DateTimeAdv.DateTimeInput dtMeetting;
+        private DevComponents.DotNetBar.LabelX lblNewClassName;
+        private DevComponents.DotNetBar.Controls.ComboBoxEx cboGradeYear;
         private DevComponents.DotNetBar.LabelX labelX23;
     }
 }

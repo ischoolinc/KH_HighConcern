@@ -29,21 +29,21 @@ namespace StudentTransStudBase_KH
             //           Errors.Icon = Properties.Resources.warning;
             
             cboNewNationality.Items.AddRange(DALTransfer1.GetNationalities().ToArray());
-            cboClass.Items.Add(new KeyValuePair<string, string>("", "<空白>"));
+            //cboClass.Items.Add(new KeyValuePair<string, string>("", "<空白>"));
 
             // 
 
-            foreach (KeyValuePair<string, string> classItem in Utility.GetClassNameIDDict())
-            {
-                cboClass.Items.Add(classItem);
-            }
+            //foreach (KeyValuePair<string, string> classItem in Utility.GetClassNameIDDict())
+            //{
+            //    cboClass.Items.Add(classItem);
+            //}
 
 
-            cboClass.DisplayMember = "Value";
-            cboClass.ValueMember = "Key";
+            //cboClass.DisplayMember = "Value";
+            //cboClass.ValueMember = "Key";
 
-            cboClass.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            cboClass.AutoCompleteSource = AutoCompleteSource.ListItems;
+            //cboClass.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            //cboClass.AutoCompleteSource = AutoCompleteSource.ListItems;
 
             cboNewGender.Items.AddRange(new string[] { "男", "女" });
 
@@ -63,10 +63,12 @@ namespace StudentTransStudBase_KH
                 txtTel.Text = txtNewTel.Text = _StudentPhone.Contact;
                 //txtEngName.Text = txtNewEngName.Text = _student.na
                 if (_student.Class != null)
-                    lblClassName.Text = cboClass.Text = _student.Class.Name;
+                    lblClassName.Text =  _student.Class.Name;
                 if (_student.SeatNo.HasValue)
                     lblSeatNo.Text = cboSeatNo.Text = _student.SeatNo.Value.ToString();
                 lblStudentNum.Text = cbotStudentNumber.Text = _student.StudentNumber;
+
+                lblNewClassName.Text = "";
             }
 
             //依照status不同調整畫面大小
@@ -81,9 +83,9 @@ namespace StudentTransStudBase_KH
             else
             {
                 gpOld.Visible = true;
-                this.Size = new Size(823, 438);
+                this.Size = new Size(823, 379);
             }
-            setClassNo();
+           // setClassNo();
             reLoadStudNumItems();
             this.MaximumSize = this.MinimumSize = this.Size;
             //AddTransBackgroundManager.AddTransStudBaseObj = this;
@@ -104,13 +106,7 @@ namespace StudentTransStudBase_KH
                 {
                     MsgBox.Show("姓名必填");
                     return;
-                }
-
-                if (dtMeetting.IsEmpty)
-                {
-                    MsgBox.Show("編班日期必填");
-                    return;
-                }
+                }            
 
                 if (string.IsNullOrEmpty(cbotStudentNumber.Text))
                 {
@@ -157,7 +153,7 @@ namespace StudentTransStudBase_KH
                     }
                 }
 
-                string msg = "請問是否將班級由「" + lblClassName.Text + "」調整成「" + cboClass.Text + "」，並傳送至局端備查?";
+                string msg = "請問是否將班級由「" + lblClassName.Text + "」調整成「" + lblNewClassName.Text + "」，並傳送至局端備查?";
 
                 if (FISCA.Presentation.Controls.MsgBox.Show(msg, "調整確認", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes)
                 { }
@@ -182,7 +178,7 @@ namespace StudentTransStudBase_KH
 
                 foreach (JHSchool.Data.JHClassRecord cr in JHSchool.Data.JHClass.SelectAll())
                 {
-                    if (cboClass.Text == cr.Name)
+                    if (lblNewClassName.Text == cr.Name)
                     {
                         _student.RefClassID = cr.ID;
                         break;
@@ -215,7 +211,7 @@ namespace StudentTransStudBase_KH
                 JHSchool.Data.JHPhone.Update(_StudentPhone);
 
                 // 傳送至局端
-                string errMsg = Utility.SendData("班級調整", _student.IDNumber, _student.StudentNumber, _student.Name, strGradeYear, lblClassName.Text, cboSeatNo.Text, cboClass.Text, dtMeetting.Value.ToShortDateString(), txtMemo.Text);
+                string errMsg = Utility.SendData("班級調整", _student.IDNumber, _student.StudentNumber, _student.Name, strGradeYear, lblClassName.Text, cboSeatNo.Text, lblNewClassName.Text, "", "");
                 if (errMsg != "")
                     FISCA.Presentation.Controls.MsgBox.Show(errMsg);
 
@@ -261,7 +257,7 @@ namespace StudentTransStudBase_KH
         {
             cbotStudentNumber.Items.Clear();
             cbotStudentNumber.Items.Add(lblStudentNum.Text);
-            cbotStudentNumber.Items.Add(JHPermrec.UpdateRecord.DAL.DALTransfer2.GetGradeYearLastStudentNumber(cboClass.Text));
+            cbotStudentNumber.Items.Add(JHPermrec.UpdateRecord.DAL.DALTransfer2.GetGradeYearLastStudentNumber(lblNewClassName.Text));
             if (lblStudentNum.Text != "")
                 cbotStudentNumber.Items.Add("");
         }
@@ -271,7 +267,7 @@ namespace StudentTransStudBase_KH
         {
             cboSeatNo.Items.Clear();
             cboSeatNo.Items.Add("");
-            foreach (int no in Utility.GetClassSeatNoList(cboClass.Text))
+            foreach (int no in Utility.GetClassSeatNoList(lblNewClassName.Text))
                 cboSeatNo.Items.Add(no);
             //cboSeatNo.Items.AddRange(JHPermrec.UpdateRecord.DAL.DALTransfer2.GetClassNullNoList(cboClass.Text).ToArray());
         }
@@ -321,7 +317,17 @@ namespace StudentTransStudBase_KH
 
         private void AddTransStudBase_Load(object sender, EventArgs e)
         {
+            // 取的班級年級
+            List<string> grList = Utility.GetGradeYearList();
+            cboGradeYear.Items.AddRange(grList.ToArray());
+        }
 
+        private void cboGradeYear_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            lblNewClassName.Text = Utility.GetClassNameFirst(cboGradeYear.Text);
+            cboSeatNo.Text = "";
+            // 班級座號
+            setClassNo();
         }
     }
 }

@@ -16,12 +16,12 @@ namespace StudentTransStudBase_KH
         /// </summary>
         /// <param name="GradeYear"></param>
         /// <returns></returns>
-        public static Dictionary<string, string> GetClassNameIDDict()
+        public static Dictionary<string, string> GetClassNameIDDict(string GradeYear)
         {
             Dictionary<string, string> retVal = new Dictionary<string, string>();
 
                 QueryHelper qh = new QueryHelper();
-                string query = @"select distinct class.class_name,class.id as classID from class inner join student on class.id=student.ref_class_id  where (class_name not in(select class_name from $kh.automatic.class.lock) and class_name not in(select distinct class_name from $kh.automatic.placement.high.concern)) order by class.class_name";
+                string query = @"select distinct class.class_name,class.id as classID from class inner join student on class.id=student.ref_class_id  where class.grade_year="+GradeYear+" and student.status=1 and (class_name not in(select class_name from $kh.automatic.class.lock) and class_name not in(select distinct class_name from $kh.automatic.placement.high.concern)) order by class.class_name";
                 DataTable dt = qh.Select(query);
                 foreach (DataRow dr in dt.Rows)
                 {
@@ -31,6 +31,25 @@ namespace StudentTransStudBase_KH
             return retVal;
         }
 
+        /// <summary>
+        /// 取得符合班級名稱
+        /// </summary>
+        /// <param name="GradeYear"></param>
+        /// <returns></returns>
+        public static string GetClassNameFirst(string GradeYear)
+        {
+            string retVal = "";
+
+            QueryHelper qh = new QueryHelper();
+            string query = @"select distinct class.class_name,class.id as classID from class inner join student on class.id=student.ref_class_id  where class.grade_year=" + GradeYear + " and student.status=1 and (class_name not in(select class_name from $kh.automatic.class.lock) and class_name not in(select distinct class_name from $kh.automatic.placement.high.concern)) order by class.class_name";
+            DataTable dt = qh.Select(query);
+            foreach (DataRow dr in dt.Rows)
+            {
+                retVal= dr["class_name"].ToString();
+                break;
+            }
+            return retVal;
+        }
 
         /// <summary>
         /// 取得班級可使用座號
@@ -131,6 +150,21 @@ namespace StudentTransStudBase_KH
             return errMsg;
         }
 
-     
+
+        /// <summary>
+        /// 取得班級年級(有學生且狀態為一般)
+        /// </summary>
+        /// <returns></returns>
+        public static List<string> GetGradeYearList()
+        {
+            List<string> retVal = new List<string>();
+            QueryHelper qh = new QueryHelper();
+            string query = @"select distinct class.grade_year from class inner join student on class.id=student.ref_class_id where student.status=1 order by class.grade_year";
+            DataTable dt = qh.Select(query);
+            foreach (DataRow dr in dt.Rows)
+                retVal.Add(dr[0].ToString());
+
+            return retVal;
+        }
     }
 }

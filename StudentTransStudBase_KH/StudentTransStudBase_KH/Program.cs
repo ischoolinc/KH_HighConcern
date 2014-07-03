@@ -7,9 +7,7 @@ using FISCA.Permission;
 using FISCA.Presentation;
 
 namespace StudentTransStudBase_KH
-{
-    
-    
+{   
     public class Program
     {
         [MainMethod(StartupPriority.FirstAsynchronized)]
