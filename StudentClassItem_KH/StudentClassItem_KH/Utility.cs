@@ -84,7 +84,7 @@ namespace StudentClassItem_KH
             if (!string.IsNullOrEmpty(GradeYear))
             {
                 QueryHelper qh = new QueryHelper();
-                string query = @"select class.class_name,count(student.id) as studCot from class inner join student on class.id=student.ref_class_id  where (class_name not in(select class_name from $kh.automatic.class.lock) and class_name not in(select distinct class_name from $kh.automatic.placement.high.concern)) and class.grade_year=" + GradeYear + " group by class.class_name order by count(student.id),class.class_name";
+                string query = @"select class.class_name,count(student.id) as studCot from class inner join student on class.id=student.ref_class_id  where student.status=1 and (class_name not in(select class_name from $kh.automatic.class.lock) and class_name not in(select distinct class_name from $kh.automatic.placement.high.concern)) and class.grade_year=" + GradeYear + " group by class.class_name order by count(student.id),class.class_name";
                 DataTable dt = qh.Select(query);
                 foreach (DataRow dr in dt.Rows)
                 {
@@ -153,6 +153,57 @@ namespace StudentClassItem_KH
                 }
             }
             return retVal;
+        }
+
+        /// <summary>
+        /// 查詢傳送記錄
+        /// </summary>
+        /// <param name="beginDate"></param>
+        /// <param name="endDate"></param>
+        /// <returns></returns>
+        public static XElement QuerySendData(DateTime beginDate, DateTime endDate)
+        {
+            XElement elmMsg = null;
+
+             string DSNS = FISCA.Authentication.DSAServices.AccessPoint;
+
+            string AccessPoint = @"http://dev.ischool.com.tw:8080/cs4_beta/kh_manager_center";
+
+            if (FISCA.RTContext.IsDiagMode)
+            {
+                string accPoint = FISCA.RTContext.GetConstant("KH_AccessPoint");
+                AccessPoint = accPoint;            
+            }
+            
+            string Contract = "log";
+            string ServiceName = "_.QueryLog";
+            
+            try
+            {
+
+                XElement xmlRoot = new XElement("Request");
+                XElement s1 = new XElement("Field");
+                s1.SetElementValue("All", "");
+                XElement s2 = new XElement("Condition");
+                s2.SetElementValue("Dsns", DSNS);
+                s2.SetElementValue("StartDate", beginDate.ToShortDateString());
+                s2.SetElementValue("EndDate", endDate.ToShortDateString());
+                xmlRoot.Add(s1);
+                xmlRoot.Add(s2);
+
+                XmlHelper reqXML = new XmlHelper(xmlRoot.ToString());
+                FISCA.DSAClient.Connection cn = new FISCA.DSAClient.Connection();
+                cn.Connect(AccessPoint, Contract, DSNS, DSNS);
+                Envelope rsp = cn.SendRequest(ServiceName, new Envelope(reqXML));
+                XElement rspXML = XElement.Parse(rsp.XmlString);
+            }
+            catch (Exception ex)
+            {
+                elmMsg = new XElement("Error");
+                elmMsg.SetElementValue("Message", ex.Message);
+            }
+
+            return elmMsg;
         }
     }
 }

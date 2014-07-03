@@ -101,7 +101,11 @@ namespace StudentClassItem_KH
                 _MeetingDate = dtMeetting.Value;
                 _Memo = txtMemo.Text;
 
-                string msg = "請問是否將班級由「" + _oldClassName + "」調整成「" + _ClassName + "」，並傳送至局端備查?";
+                if (_ClassNameDict.ContainsKey(cboClassName.Text))
+                    _ClassName = _ClassNameDict[cboClassName.Text];
+
+
+                string msg = "請問是否將班級由「" + _oldClassName + "」調整成「" + _ClassName + "」，按下「是」確認後，需報局備查。";
                 
                 if (FISCA.Presentation.Controls.MsgBox.Show(msg, "調整確認", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes)
                     this.DialogResult = System.Windows.Forms.DialogResult.OK;
@@ -126,7 +130,7 @@ namespace StudentClassItem_KH
             if (dtMeetting.IsEmpty)
             {
                 pass = false;
-                FISCA.Presentation.Controls.MsgBox.Show("編班會議日期必填");
+                FISCA.Presentation.Controls.MsgBox.Show("編班委員會會議日期必填");
             }
 
             return pass;

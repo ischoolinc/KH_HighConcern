@@ -81,7 +81,7 @@
             // 
             this.labelX2.BackgroundStyle.Class = "";
             this.labelX2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX2.Location = new System.Drawing.Point(188, 53);
+            this.labelX2.Location = new System.Drawing.Point(218, 53);
             this.labelX2.Name = "labelX2";
             this.labelX2.Size = new System.Drawing.Size(34, 21);
             this.labelX2.TabIndex = 2;
@@ -96,7 +96,7 @@
             this.cboClassName.ItemHeight = 19;
             this.cboClassName.Location = new System.Drawing.Point(54, 51);
             this.cboClassName.Name = "cboClassName";
-            this.cboClassName.Size = new System.Drawing.Size(121, 25);
+            this.cboClassName.Size = new System.Drawing.Size(158, 25);
             this.cboClassName.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.cboClassName.TabIndex = 0;
             this.cboClassName.SelectedIndexChanged += new System.EventHandler(this.cboClassName_SelectedIndexChanged);
@@ -107,7 +107,7 @@
             this.cboSeatNo.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cboSeatNo.FormattingEnabled = true;
             this.cboSeatNo.ItemHeight = 19;
-            this.cboSeatNo.Location = new System.Drawing.Point(232, 51);
+            this.cboSeatNo.Location = new System.Drawing.Point(262, 51);
             this.cboSeatNo.Name = "cboSeatNo";
             this.cboSeatNo.Size = new System.Drawing.Size(61, 25);
             this.cboSeatNo.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -124,9 +124,9 @@
             this.labelX3.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX3.Location = new System.Drawing.Point(13, 95);
             this.labelX3.Name = "labelX3";
-            this.labelX3.Size = new System.Drawing.Size(87, 21);
+            this.labelX3.Size = new System.Drawing.Size(127, 21);
             this.labelX3.TabIndex = 5;
-            this.labelX3.Text = "編班會議日期";
+            this.labelX3.Text = "編班委員會會議日期";
             // 
             // dtMeetting
             // 
@@ -139,7 +139,7 @@
             this.dtMeetting.ButtonDropDown.Shortcut = DevComponents.DotNetBar.eShortcut.AltDown;
             this.dtMeetting.ButtonDropDown.Visible = true;
             this.dtMeetting.IsPopupCalendarOpen = false;
-            this.dtMeetting.Location = new System.Drawing.Point(106, 93);
+            this.dtMeetting.Location = new System.Drawing.Point(137, 93);
             // 
             // 
             // 
@@ -213,7 +213,7 @@
             this.txtMemo.Location = new System.Drawing.Point(54, 134);
             this.txtMemo.Multiline = true;
             this.txtMemo.Name = "txtMemo";
-            this.txtMemo.Size = new System.Drawing.Size(239, 25);
+            this.txtMemo.Size = new System.Drawing.Size(269, 25);
             this.txtMemo.TabIndex = 3;
             // 
             // btnSend
@@ -222,7 +222,7 @@
             this.btnSend.AutoSize = true;
             this.btnSend.BackColor = System.Drawing.Color.Transparent;
             this.btnSend.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnSend.Location = new System.Drawing.Point(137, 171);
+            this.btnSend.Location = new System.Drawing.Point(165, 174);
             this.btnSend.Name = "btnSend";
             this.btnSend.Size = new System.Drawing.Size(75, 25);
             this.btnSend.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -236,7 +236,7 @@
             this.btnExit.AutoSize = true;
             this.btnExit.BackColor = System.Drawing.Color.Transparent;
             this.btnExit.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnExit.Location = new System.Drawing.Point(218, 171);
+            this.btnExit.Location = new System.Drawing.Point(246, 174);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(75, 25);
             this.btnExit.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -248,7 +248,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(313, 204);
+            this.ClientSize = new System.Drawing.Size(340, 204);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnSend);
             this.Controls.Add(this.txtMemo);
