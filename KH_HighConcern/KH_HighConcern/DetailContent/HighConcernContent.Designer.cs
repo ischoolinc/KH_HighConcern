@@ -63,6 +63,7 @@
             this.chkHighConcern.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.chkHighConcern.TabIndex = 2;
             this.chkHighConcern.Text = "是特殊生或高關懷學生";
+            this.chkHighConcern.CheckedChanged += new System.EventHandler(this.chkHighConcern_CheckedChanged);
             // 
             // txtCount
             // 

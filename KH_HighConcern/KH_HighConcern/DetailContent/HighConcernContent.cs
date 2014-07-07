@@ -115,13 +115,20 @@ namespace KH_HighConcern.DetailContent
         private bool chkData()
         {
             bool retVal = false;
+
+            if (chkHighConcern.Checked == false)
+                return true;
+
             int bb;
             if (int.TryParse(txtCount.Text, out bb))
             {
-                if(bb>=0 && bb<10)
+                if (bb >= 0 && bb < 10)
                     retVal = true;
                 else
+                {
                     _errorP.SetError(txtCount, "減免人數必須介於0~9");
+                    retVal = false;
+                }
             }
             else
             {
@@ -129,7 +136,10 @@ namespace KH_HighConcern.DetailContent
             }
 
             if (txtDocNo.Text.Trim() == "")
+            {
                 _errorP.SetError(txtDocNo, "文號必填");
+                retVal = false;
+            }
             return retVal;
         }
 
@@ -138,11 +148,13 @@ namespace KH_HighConcern.DetailContent
             if (chkData())
             {
                 int bb;
-                int.TryParse(txtCount.Text,out bb);
+                int.TryParse(txtCount.Text, out bb);
 
                 // 再次確認畫面
                 if (FISCA.Presentation.Controls.MsgBox.Show("設定是特殊生或高關懷學生，按下「是」確認後，需報局備查。", "高關懷學生", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
                 {
+                    _ChangeListener.SuspendListen();
+
                     string IDNumber = "", StudentNumber = "", StudentName = "", ClassName = "", SeatNo = "", NumberReduce = "", DocNo = "";
 
                     IDNumber = _StudRec.IDNumber;
@@ -161,7 +173,7 @@ namespace KH_HighConcern.DetailContent
                         // 有勾選更新人數，沒有勾選刪除，因為沒存在必要
                         if (chkHighConcern.Checked)
                         {
-                            
+
                             _HighConcernDict[PrimaryKey].NumberReduce = bb;
                             _HighConcernDict[PrimaryKey].DocNo = txtDocNo.Text;
                         }
@@ -193,10 +205,12 @@ namespace KH_HighConcern.DetailContent
                     {
                         FISCA.Presentation.Controls.MsgBox.Show(errMsg);
                     }
+                    this.CancelButtonVisible = false;
+                    this.SaveButtonVisible = false;
+                    eh(this, EventArgs.Empty);
+                    _ChangeListener.Reset();
+                    _ChangeListener.ResumeListen();
                 }
-                this.CancelButtonVisible = false;
-                this.SaveButtonVisible = false;                
-                eh(this, EventArgs.Empty);
             }
         }
 
@@ -212,6 +226,17 @@ namespace KH_HighConcern.DetailContent
             _errorP.SetError(txtDocNo, "");
             if (txtDocNo.Text != "")
                 chkHighConcern.Checked = true;
+        }
+
+        private void chkHighConcern_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkHighConcern.Checked == false)
+            {
+                txtCount.Text = "";
+                txtDocNo.Text = "";
+                _errorP.SetError(txtCount, "");
+                _errorP.SetError(txtDocNo, "");
+            }
         }
     }
 }
