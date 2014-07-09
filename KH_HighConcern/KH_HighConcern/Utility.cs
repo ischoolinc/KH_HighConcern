@@ -13,7 +13,7 @@ namespace KH_HighConcern
         {
             string DSNS = FISCA.Authentication.DSAServices.AccessPoint;
 
-            string AccessPoint = @"http://dev.ischool.com.tw:8080/cs4_beta/kh_manager_center";
+            string AccessPoint = @"j.kh.edu.tw";
 
             if (FISCA.RTContext.IsDiagMode)
             {

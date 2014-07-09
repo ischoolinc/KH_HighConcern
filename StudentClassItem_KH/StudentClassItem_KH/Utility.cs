@@ -29,7 +29,7 @@ namespace StudentClassItem_KH
         {
             string DSNS = FISCA.Authentication.DSAServices.AccessPoint;
 
-            string AccessPoint = @"http://dev.ischool.com.tw:8080/cs4_beta/kh_manager_center";
+            string AccessPoint = @"j.kh.edu.tw";
 
             if (FISCA.RTContext.IsDiagMode)
             {
@@ -167,7 +167,7 @@ namespace StudentClassItem_KH
 
              string DSNS = FISCA.Authentication.DSAServices.AccessPoint;
 
-            string AccessPoint = @"http://dev.ischool.com.tw:8080/cs4_beta/kh_manager_center";
+             string AccessPoint = @"j.kh.edu.tw";
 
             if (FISCA.RTContext.IsDiagMode)
             {

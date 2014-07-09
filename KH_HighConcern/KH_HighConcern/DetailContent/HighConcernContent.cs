@@ -200,7 +200,7 @@ namespace KH_HighConcern.DetailContent
                         newData.Save();
                     }
                     // 傳送至局端
-                    string errMsg = Utility.SendData("高關懷學生", IDNumber, StudentNumber, StudentName, ClassName, SeatNo, DocNo, NumberReduce);
+                    string errMsg = Utility.SendData("變更特殊身分", IDNumber, StudentNumber, StudentName, ClassName, SeatNo, DocNo, NumberReduce);
                     if (errMsg != "")
                     {
                         FISCA.Presentation.Controls.MsgBox.Show(errMsg);

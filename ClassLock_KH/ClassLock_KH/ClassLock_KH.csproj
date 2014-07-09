@@ -121,6 +121,12 @@
     <Compile Include="SendDataForm.Designer.cs">
       <DependentUpon>SendDataForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="SendDataView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SendDataView.Designer.cs">
+      <DependentUpon>SendDataView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -162,6 +168,9 @@
   <ItemGroup>
     <EmbeddedResource Include="SendDataForm.resx">
       <DependentUpon>SendDataForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SendDataView.resx">
+      <DependentUpon>SendDataView.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

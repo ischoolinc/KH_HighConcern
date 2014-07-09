@@ -86,7 +86,7 @@ namespace KH_HighConcern.ImportExport
                         }
                         
                         // 傳送至局端
-                        Utility.SendData("高關懷學生", IDNumber, StudentNumber, StudentName, ClassName, SeatNo, DocNo, NumberReduce);
+                        Utility.SendData("變更特殊身分", IDNumber, StudentNumber, StudentName, ClassName, SeatNo, DocNo, NumberReduce);
                     }                    
                 }
                 // save

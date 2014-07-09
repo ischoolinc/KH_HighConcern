@@ -211,7 +211,7 @@ namespace StudentTransStudBase_KH
                 JHSchool.Data.JHPhone.Update(_StudentPhone);
 
                 // 傳送至局端
-                string errMsg = Utility.SendData("班級調整", _student.IDNumber, _student.StudentNumber, _student.Name, strGradeYear, lblClassName.Text, cboSeatNo.Text, lblNewClassName.Text, "", "");
+                string errMsg = Utility.SendData("自動轉入", _student.IDNumber, _student.StudentNumber, _student.Name, strGradeYear, lblClassName.Text, cboSeatNo.Text, lblNewClassName.Text, "", "");
                 if (errMsg != "")
                     FISCA.Presentation.Controls.MsgBox.Show(errMsg);
 
