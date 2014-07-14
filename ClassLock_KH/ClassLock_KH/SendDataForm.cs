@@ -12,6 +12,11 @@ namespace ClassLock_KH
     public partial class SendDataForm : FISCA.Presentation.Controls.BaseForm
     {
         private string _strDate = "";
+
+        private string _strComment = "";
+
+        private string _strDocNo = "";
+
         public SendDataForm()
         {
             InitializeComponent();
@@ -32,6 +37,13 @@ namespace ClassLock_KH
             }
             
             _strDate = dtDate.Value.ToShortDateString();
+
+            if (!string.IsNullOrEmpty(txtComment.Text))
+                _strComment = txtComment.Text;
+
+            if (!string.IsNullOrEmpty(txtDocNo.Text))
+                _strDocNo = txtDocNo.Text;
+
             this.DialogResult = System.Windows.Forms.DialogResult.Yes;            
         }
 
@@ -48,5 +60,24 @@ namespace ClassLock_KH
         {
             return _strDate;
         }
+
+        /// <summary>
+        /// 取得備註
+        /// </summary>
+        /// <returns></returns>
+        public string GetComment()
+        {
+            return _strComment;
+        }
+
+        /// <summary>
+        /// 取得文號
+        /// </summary>
+        /// <returns></returns>
+        public string GetDocNo()
+        {
+            return _strDocNo;
+        }
+
     }
 }

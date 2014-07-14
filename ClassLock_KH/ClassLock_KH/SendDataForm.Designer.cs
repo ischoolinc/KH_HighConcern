@@ -32,6 +32,10 @@
             this.dtDate = new DevComponents.Editors.DateTimeAdv.DateTimeInput();
             this.btnSend = new DevComponents.DotNetBar.ButtonX();
             this.btnExit = new DevComponents.DotNetBar.ButtonX();
+            this.txtComment = new DevComponents.DotNetBar.Controls.TextBoxX();
+            this.labelX2 = new DevComponents.DotNetBar.LabelX();
+            this.labelX3 = new DevComponents.DotNetBar.LabelX();
+            this.txtDocNo = new DevComponents.DotNetBar.Controls.TextBoxX();
             ((System.ComponentModel.ISupportInitialize)(this.dtDate)).BeginInit();
             this.SuspendLayout();
             // 
@@ -116,7 +120,7 @@
             this.btnSend.AutoSize = true;
             this.btnSend.BackColor = System.Drawing.Color.Transparent;
             this.btnSend.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnSend.Location = new System.Drawing.Point(145, 64);
+            this.btnSend.Location = new System.Drawing.Point(145, 132);
             this.btnSend.Name = "btnSend";
             this.btnSend.Size = new System.Drawing.Size(75, 25);
             this.btnSend.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -130,7 +134,7 @@
             this.btnExit.AutoSize = true;
             this.btnExit.BackColor = System.Drawing.Color.Transparent;
             this.btnExit.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnExit.Location = new System.Drawing.Point(239, 64);
+            this.btnExit.Location = new System.Drawing.Point(239, 132);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(75, 25);
             this.btnExit.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -138,11 +142,70 @@
             this.btnExit.Text = "離開";
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
+            // txtComment
+            // 
+            // 
+            // 
+            // 
+            this.txtComment.Border.Class = "TextBoxBorder";
+            this.txtComment.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtComment.Location = new System.Drawing.Point(145, 54);
+            this.txtComment.Name = "txtComment";
+            this.txtComment.Size = new System.Drawing.Size(169, 25);
+            this.txtComment.TabIndex = 4;
+            this.txtComment.WatermarkText = "請填入體育班或美術班等";
+            // 
+            // labelX2
+            // 
+            this.labelX2.AutoSize = true;
+            this.labelX2.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX2.BackgroundStyle.Class = "";
+            this.labelX2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX2.Location = new System.Drawing.Point(96, 56);
+            this.labelX2.Name = "labelX2";
+            this.labelX2.Size = new System.Drawing.Size(34, 21);
+            this.labelX2.TabIndex = 5;
+            this.labelX2.Text = "備註";
+            // 
+            // labelX3
+            // 
+            this.labelX3.AutoSize = true;
+            this.labelX3.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX3.BackgroundStyle.Class = "";
+            this.labelX3.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX3.Location = new System.Drawing.Point(96, 91);
+            this.labelX3.Name = "labelX3";
+            this.labelX3.Size = new System.Drawing.Size(34, 21);
+            this.labelX3.TabIndex = 6;
+            this.labelX3.Text = "文號";
+            // 
+            // txtDocNo
+            // 
+            // 
+            // 
+            // 
+            this.txtDocNo.Border.Class = "TextBoxBorder";
+            this.txtDocNo.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtDocNo.Location = new System.Drawing.Point(145, 89);
+            this.txtDocNo.Name = "txtDocNo";
+            this.txtDocNo.Size = new System.Drawing.Size(169, 25);
+            this.txtDocNo.TabIndex = 7;
+            // 
             // SendDataForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(337, 102);
+            this.ClientSize = new System.Drawing.Size(337, 166);
+            this.Controls.Add(this.txtDocNo);
+            this.Controls.Add(this.labelX3);
+            this.Controls.Add(this.labelX2);
+            this.Controls.Add(this.txtComment);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnSend);
             this.Controls.Add(this.dtDate);
@@ -163,5 +226,9 @@
         private DevComponents.Editors.DateTimeAdv.DateTimeInput dtDate;
         private DevComponents.DotNetBar.ButtonX btnSend;
         private DevComponents.DotNetBar.ButtonX btnExit;
+        private DevComponents.DotNetBar.Controls.TextBoxX txtComment;
+        private DevComponents.DotNetBar.LabelX labelX2;
+        private DevComponents.DotNetBar.LabelX labelX3;
+        private DevComponents.DotNetBar.Controls.TextBoxX txtDocNo;
     }
 }

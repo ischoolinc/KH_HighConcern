@@ -70,7 +70,7 @@ namespace ClassLock_KH
                     string classNames = string.Join(",", ClassNameList.ToArray());
 
 
-                    string errMsg = Utility.SendData(classNames, "", "", "解除鎖定班級", "");
+                    string errMsg = Utility.SendData(classNames, "", "", "解除鎖定班級", "","","");
                     if (errMsg != "")
                         FISCA.Presentation.Controls.MsgBox.Show(errMsg);
                     else
@@ -101,18 +101,22 @@ namespace ClassLock_KH
                     {
                         // 編班委員會會議日期
                         string strDate = "";
+                        string strComment = "";
+                        string strDocNo = "";
 
                         SendDataForm sdf = new SendDataForm();
                         if (sdf.ShowDialog() == System.Windows.Forms.DialogResult.Yes)
                         {
                             strDate = sdf.GetSendDate();
+                            strComment = sdf.GetComment();
+                            strDocNo = sdf.GetDocNo();
                             if (FISCA.Presentation.Controls.MsgBox.Show("「班級鎖定」，按下「是」確認後，需報局備查。", "班級鎖定", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes)
                             {
                                 // 沒有鎖定
                                 data = new UDT_ClassLock();
                                 data.ClassID = cid;
                                 data.ClassName = classRec.Name;
-                                string errMsg = Utility.SendData(classRec.Name, grYear, "", "鎖定班級", strDate);
+                                string errMsg = Utility.SendData(classRec.Name, grYear, "", "鎖定班級", strDate,strComment,strDocNo);
                                 if (errMsg != "")
                                     FISCA.Presentation.Controls.MsgBox.Show(errMsg);
                                 else
@@ -126,7 +130,7 @@ namespace ClassLock_KH
                         {
                             // 已被鎖定解鎖
                             data.Deleted = true;
-                            string errMsg = Utility.SendData(classRec.Name, grYear, "", "解除鎖定班級", "");
+                            string errMsg = Utility.SendData(classRec.Name, grYear, "", "解除鎖定班級", "","","");
                             if (errMsg != "")
                                 FISCA.Presentation.Controls.MsgBox.Show(errMsg);
                             else
