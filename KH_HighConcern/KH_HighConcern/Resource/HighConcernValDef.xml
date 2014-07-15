@@ -8,13 +8,13 @@
     </DuplicateDetection>
     <FieldList>
 
-      <Field Required="false" Name="班級" Description="班級">
+      <!--<Field Required="false" Name="班級" Description="班級">
         
       </Field>
 
       <Field Required="false" Name="座號" Description="座號">
         
-      </Field>
+      </Field>-->
       
   <Field Required="True" Name="學號" Description="學號">
       <Validate AutoCorrect="False" Description="「學號」不允許空白。" ErrorType="Error" Validator="不可空白" When="" />

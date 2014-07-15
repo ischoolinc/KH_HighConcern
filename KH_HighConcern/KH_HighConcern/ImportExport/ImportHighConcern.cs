@@ -42,6 +42,7 @@ namespace KH_HighConcern.ImportExport
             if (_Option.Action == ImportAction.InsertOrUpdate)
             {
                 List<UDT_HighConcern> HighConcernList = new List<UDT_HighConcern>();
+                List<logStud> logStudList = new List<logStud>();
                 foreach(IRowStream row in Rows)
                 {
                     string IDNumber = "", StudentNumber = "", StudentName = "", ClassName = "", SeatNo = "", NumberReduce = "", DocNo = "";
@@ -86,10 +87,24 @@ namespace KH_HighConcern.ImportExport
                         }
                         
                         // 傳送至局端
-                        Utility.SendData("匯入特殊身分", IDNumber, StudentNumber, StudentName, ClassName, SeatNo, DocNo, NumberReduce);
+                        logStud ls= new logStud ();
+                        ls.IDNumber = IDNumber;
+                        ls.StudentNumber = StudentNumber;
+                        ls.StudentName = StudentName;
+                        ls.ClassName = ClassName;
+                        ls.SeatNo = SeatNo;
+                        ls.DocNo = DocNo;
+                        ls.NumberReduce = NumberReduce;
+                        logStudList.Add(ls);
+
+                        //Utility.SendData("匯入特殊身分", IDNumber, StudentNumber, StudentName, ClassName, SeatNo, DocNo, NumberReduce);
                     }                    
                 }
                 // save
+                if (logStudList.Count > 0)
+                {
+                    Utility.SendDataList("匯入特殊身分", logStudList);
+                }
                 HighConcernList.SaveAll();
                 eh(this, EventArgs.Empty);
             }       

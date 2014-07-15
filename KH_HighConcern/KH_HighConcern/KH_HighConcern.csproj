@@ -149,6 +149,7 @@
       <DependentUpon>HighConcernContent.cs</DependentUpon>
     </Compile>
     <Compile Include="ImportExport\ImportHighConcern.cs" />
+    <Compile Include="ImportExport\logStud.cs" />
     <Compile Include="ImportExport\ValidationRule\FieldValidatorFactory.cs" />
     <Compile Include="ImportExport\ValidationRule\RowValidatorFactory.cs" />
     <Compile Include="ImportExport\ValidationRule\StudentNumberCheck.cs" />
