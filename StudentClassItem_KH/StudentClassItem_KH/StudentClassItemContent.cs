@@ -263,32 +263,36 @@ namespace StudentClassItem_KH
             SetClassNameSeatNoForm scnsf = new SetClassNameSeatNoForm();
             string gradeYear="";
             string oldClassName = "";
+
+            // 有班級
             if (objStudent.Class != null)
             {
+                // 不能修改年級，依學生本身班級年級
+                scnsf.setCboGradeYearEnable(false);
+                // 原班級名稱
                 oldClassName = objStudent.Class.Name;
+                // 填入年級
                 if (objStudent.Class.GradeYear.HasValue)
                     gradeYear = objStudent.Class.GradeYear.Value.ToString();
+                scnsf.SetCboGradeYearText(gradeYear);
             }
-            Dictionary<string, int> ClassNameDict = Utility.GetClassNameDictByGradeYear(gradeYear);
-            Dictionary<string, string> AClassNameCot = new Dictionary<string, string>();
-            foreach (string name in ClassNameDict.Keys)
-                AClassNameCot.Add(name+"(" + ClassNameDict[name] + ")", name);
+            else
+            {
+                scnsf.setCboGradeYearEnable(true);
+                // 放入可選年級
+                scnsf.SetCboGradeYearItems(Utility.GetGradeYearList());
+            }
+            
 
-            _ClassNameIDDic = Utility.GetClassNameIDDictByGradeYear(gradeYear);
-
-            List<string> nCLassName = AClassNameCot.Keys.ToList();
-            scnsf.SetClassNameItems(nCLassName);
-            if (nCLassName.Count > 0)
-                scnsf.SetClassName(nCLassName[0]);
-
-            scnsf.SetSeatNo(lblSeatNo.Text);
             scnsf.SetOldClassName(oldClassName);
-            scnsf.SetClassNameDict(AClassNameCot);
+           
             if (scnsf.ShowDialog() == DialogResult.OK)
             {
-                string className = "";
+                string className = "",FirstClassName="";
                 className = scnsf.GetClassName();
-                              
+                FirstClassName = scnsf.GetFirstClassName();
+
+                _ClassNameIDDic = scnsf.GetClassNameDict();
                 int seatNo;
 
                 // 修改學生班、座
@@ -301,7 +305,7 @@ namespace StudentClassItem_KH
                         objStudent.SeatNo = null;
 
                     // 傳送至局端
-                    string errMsg = Utility.SendData("調整班級", objStudent.IDNumber, objStudent.StudentNumber, objStudent.Name, gradeYear, oldClassName, scnsf.GetSeatNo(), className, scnsf.GetMettingDate(), scnsf.GetMemo());
+                    string errMsg = Utility.SendData("調整班級", objStudent.IDNumber, objStudent.StudentNumber, objStudent.Name, gradeYear, oldClassName, scnsf.GetSeatNo(), className, scnsf.GetMettingDate(), scnsf.GetMemo(),FirstClassName);
                     if (errMsg != "")
                         FISCA.Presentation.Controls.MsgBox.Show(errMsg);
 

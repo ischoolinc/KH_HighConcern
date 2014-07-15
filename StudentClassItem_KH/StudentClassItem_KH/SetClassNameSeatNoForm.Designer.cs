@@ -39,11 +39,14 @@
             this.txtMemo = new DevComponents.DotNetBar.Controls.TextBoxX();
             this.btnSend = new DevComponents.DotNetBar.ButtonX();
             this.btnExit = new DevComponents.DotNetBar.ButtonX();
+            this.cboGradeYear = new DevComponents.DotNetBar.Controls.ComboBoxEx();
+            this.labelX5 = new DevComponents.DotNetBar.LabelX();
             ((System.ComponentModel.ISupportInitialize)(this.dtMeetting)).BeginInit();
             this.SuspendLayout();
             // 
             // lblMsg
             // 
+            this.lblMsg.AutoSize = true;
             this.lblMsg.BackColor = System.Drawing.Color.Transparent;
             // 
             // 
@@ -52,7 +55,7 @@
             this.lblMsg.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lblMsg.Location = new System.Drawing.Point(13, 13);
             this.lblMsg.Name = "lblMsg";
-            this.lblMsg.Size = new System.Drawing.Size(280, 23);
+            this.lblMsg.Size = new System.Drawing.Size(194, 21);
             this.lblMsg.TabIndex = 0;
             this.lblMsg.Text = "說明：班級修改傳送至局端備查";
             this.lblMsg.WordWrap = true;
@@ -66,7 +69,7 @@
             // 
             this.labelX1.BackgroundStyle.Class = "";
             this.labelX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX1.Location = new System.Drawing.Point(13, 53);
+            this.labelX1.Location = new System.Drawing.Point(137, 51);
             this.labelX1.Name = "labelX1";
             this.labelX1.Size = new System.Drawing.Size(34, 21);
             this.labelX1.TabIndex = 1;
@@ -81,7 +84,7 @@
             // 
             this.labelX2.BackgroundStyle.Class = "";
             this.labelX2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX2.Location = new System.Drawing.Point(218, 53);
+            this.labelX2.Location = new System.Drawing.Point(328, 51);
             this.labelX2.Name = "labelX2";
             this.labelX2.Size = new System.Drawing.Size(34, 21);
             this.labelX2.TabIndex = 2;
@@ -94,11 +97,11 @@
             this.cboClassName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboClassName.FormattingEnabled = true;
             this.cboClassName.ItemHeight = 19;
-            this.cboClassName.Location = new System.Drawing.Point(54, 51);
+            this.cboClassName.Location = new System.Drawing.Point(177, 49);
             this.cboClassName.Name = "cboClassName";
-            this.cboClassName.Size = new System.Drawing.Size(158, 25);
+            this.cboClassName.Size = new System.Drawing.Size(136, 25);
             this.cboClassName.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.cboClassName.TabIndex = 0;
+            this.cboClassName.TabIndex = 1;
             this.cboClassName.SelectedIndexChanged += new System.EventHandler(this.cboClassName_SelectedIndexChanged);
             // 
             // cboSeatNo
@@ -107,11 +110,11 @@
             this.cboSeatNo.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cboSeatNo.FormattingEnabled = true;
             this.cboSeatNo.ItemHeight = 19;
-            this.cboSeatNo.Location = new System.Drawing.Point(262, 51);
+            this.cboSeatNo.Location = new System.Drawing.Point(366, 49);
             this.cboSeatNo.Name = "cboSeatNo";
             this.cboSeatNo.Size = new System.Drawing.Size(61, 25);
             this.cboSeatNo.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.cboSeatNo.TabIndex = 1;
+            this.cboSeatNo.TabIndex = 2;
             // 
             // labelX3
             // 
@@ -184,9 +187,9 @@
             this.dtMeetting.MonthCalendar.TodayButtonVisible = true;
             this.dtMeetting.MonthCalendar.WeeklyMarkedDays = new System.DayOfWeek[0];
             this.dtMeetting.Name = "dtMeetting";
-            this.dtMeetting.Size = new System.Drawing.Size(187, 25);
+            this.dtMeetting.Size = new System.Drawing.Size(292, 25);
             this.dtMeetting.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.dtMeetting.TabIndex = 2;
+            this.dtMeetting.TabIndex = 3;
             // 
             // labelX4
             // 
@@ -213,8 +216,8 @@
             this.txtMemo.Location = new System.Drawing.Point(54, 134);
             this.txtMemo.Multiline = true;
             this.txtMemo.Name = "txtMemo";
-            this.txtMemo.Size = new System.Drawing.Size(269, 25);
-            this.txtMemo.TabIndex = 3;
+            this.txtMemo.Size = new System.Drawing.Size(373, 25);
+            this.txtMemo.TabIndex = 4;
             // 
             // btnSend
             // 
@@ -222,11 +225,11 @@
             this.btnSend.AutoSize = true;
             this.btnSend.BackColor = System.Drawing.Color.Transparent;
             this.btnSend.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnSend.Location = new System.Drawing.Point(165, 174);
+            this.btnSend.Location = new System.Drawing.Point(269, 171);
             this.btnSend.Name = "btnSend";
             this.btnSend.Size = new System.Drawing.Size(75, 25);
             this.btnSend.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.btnSend.TabIndex = 4;
+            this.btnSend.TabIndex = 5;
             this.btnSend.Text = "確定";
             this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
             // 
@@ -236,19 +239,50 @@
             this.btnExit.AutoSize = true;
             this.btnExit.BackColor = System.Drawing.Color.Transparent;
             this.btnExit.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnExit.Location = new System.Drawing.Point(246, 174);
+            this.btnExit.Location = new System.Drawing.Point(350, 171);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(75, 25);
             this.btnExit.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.btnExit.TabIndex = 5;
+            this.btnExit.TabIndex = 6;
             this.btnExit.Text = "取消";
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
+            // 
+            // cboGradeYear
+            // 
+            this.cboGradeYear.DisplayMember = "Text";
+            this.cboGradeYear.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cboGradeYear.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboGradeYear.FormattingEnabled = true;
+            this.cboGradeYear.ItemHeight = 19;
+            this.cboGradeYear.Location = new System.Drawing.Point(54, 49);
+            this.cboGradeYear.Name = "cboGradeYear";
+            this.cboGradeYear.Size = new System.Drawing.Size(61, 25);
+            this.cboGradeYear.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.cboGradeYear.TabIndex = 0;
+            this.cboGradeYear.SelectedIndexChanged += new System.EventHandler(this.cboGradeYear_SelectedIndexChanged);
+            // 
+            // labelX5
+            // 
+            this.labelX5.AutoSize = true;
+            this.labelX5.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX5.BackgroundStyle.Class = "";
+            this.labelX5.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX5.Location = new System.Drawing.Point(13, 51);
+            this.labelX5.Name = "labelX5";
+            this.labelX5.Size = new System.Drawing.Size(34, 21);
+            this.labelX5.TabIndex = 9;
+            this.labelX5.Text = "年級";
             // 
             // SetClassNameSeatNoForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(340, 204);
+            this.ClientSize = new System.Drawing.Size(436, 206);
+            this.Controls.Add(this.cboGradeYear);
+            this.Controls.Add(this.labelX5);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnSend);
             this.Controls.Add(this.txtMemo);
@@ -283,5 +317,7 @@
         private DevComponents.DotNetBar.Controls.TextBoxX txtMemo;
         private DevComponents.DotNetBar.ButtonX btnSend;
         private DevComponents.DotNetBar.ButtonX btnExit;
+        private DevComponents.DotNetBar.Controls.ComboBoxEx cboGradeYear;
+        private DevComponents.DotNetBar.LabelX labelX5;
     }
 }

@@ -16,12 +16,19 @@ namespace StudentClassItem_KH
         private string _SeatNo = "";
         private DateTime _MeetingDate;
         private string _Memo = "";
+        private string _GradeYear = "";
         Dictionary<string, string> _ClassNameDict;
-
+        Dictionary<string, string> _ClassNameMapDict;
         public SetClassNameSeatNoForm()
         {
             InitializeComponent();
             _ClassNameDict = new Dictionary<string, string>();
+            _ClassNameMapDict = new Dictionary<string, string>();
+        }
+
+        public void setCboGradeYearEnable(bool Enable)
+        {
+            cboGradeYear.Enabled = Enable;
         }
 
         public void SetClassName(string ClassName)
@@ -45,10 +52,7 @@ namespace StudentClassItem_KH
                 cboClassName.Items.Add(name);
         }
 
-        public void SetClassNameDict(Dictionary<string, string> data)
-        {
-            _ClassNameDict = data;
-        }
+       
 
         public void SetSeatNoItems(List<int> seatList)
         {
@@ -84,26 +88,51 @@ namespace StudentClassItem_KH
 
         private void SetClassNameSeatNoForm_Load(object sender, EventArgs e)
         {
-            this.MinimumSize = this.MaximumSize = this.Size;            
-            //dtMeetting.Value = DateTime.Now;
+            this.MinimumSize = this.MaximumSize = this.Size;
+
+            cboGradeYear.Text = _GradeYear;
+
             if (cboClassName.Items.Count > 0)
             {
                 cboClassName.Text = cboClassName.Items[0].ToString();
             }
+
+            // 透過年級取得班級
+            if (!string.IsNullOrEmpty(cboGradeYear.Text))
+            {
+                SetClassNameCotItems(cboGradeYear.Text);
+            }
+
         }
+
+        private void SetClassNameCotItems(string GradeYear)
+        {
+            Dictionary<string, int> classCot = Utility.GetClassNameDictByGradeYear(GradeYear);
+            cboClassName.Text = "";
+            cboClassName.Items.Clear();
+            _ClassNameMapDict.Clear();
+            foreach (string name in classCot.Keys)
+            {
+                string nName = name + "(" + classCot[name] + ")";
+                cboClassName.Items.Add(nName);
+                _ClassNameMapDict.Add(nName, name);
+            }
+            _ClassNameDict = Utility.GetClassNameIDDictByGradeYear(GradeYear);            
+        }
+
 
         private void btnSend_Click(object sender, EventArgs e)
         {
             if (ChkData())
             {
-                _ClassName = cboClassName.Text;
+                _ClassName = "";
+                if(_ClassNameMapDict.ContainsKey(cboClassName.Text))
+                    _ClassName = _ClassNameMapDict[cboClassName.Text];
+
                 _SeatNo = cboSeatNo.Text;
                 _MeetingDate = dtMeetting.Value;
                 _Memo = txtMemo.Text;
-
-                if (_ClassNameDict.ContainsKey(cboClassName.Text))
-                    _ClassName = _ClassNameDict[cboClassName.Text];
-
+                
 
                 string msg = "請問是否將班級由「" + _oldClassName + "」調整成「" + _ClassName + "」，按下「是」確認後，需報局備查。";
                 
@@ -140,7 +169,46 @@ namespace StudentClassItem_KH
         {
             cboSeatNo.Text = "";
             cboSeatNo.Items.Clear();
-            SetSeatNoItems(Utility.GetClassSeatNoList(cboClassName.Text));
-        }    
+            string className = "";
+            if (_ClassNameMapDict.ContainsKey(cboClassName.Text))
+                className = _ClassNameMapDict[cboClassName.Text];
+            SetSeatNoItems(Utility.GetClassSeatNoList(className));
+        }
+
+        public string GetFirstClassName()
+        {
+            string retVal = "";
+            if (cboClassName.Items.Count > 0)
+            {
+                string ccName=cboClassName.Items[0].ToString();
+                if (_ClassNameMapDict.ContainsKey(ccName))
+                    retVal = _ClassNameMapDict[ccName];
+            }
+            return retVal;
+        }
+
+        public void SetCboGradeYearItems(List<string> items)
+        {
+            cboGradeYear.Items.AddRange(items.ToArray());
+        }
+
+        public void SetCboGradeYearText(string str)
+        {
+            _GradeYear = str;
+            cboGradeYear.Items.Add(str);
+        }
+
+        private void cboGradeYear_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(cboGradeYear.Text))
+            {
+                SetClassNameCotItems(cboGradeYear.Text);
+            }
+        }
+
+        public Dictionary<string, string> GetClassNameDict()
+        {
+            return _ClassNameDict;
+        }
     }
 }

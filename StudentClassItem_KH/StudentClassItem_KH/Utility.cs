@@ -25,7 +25,7 @@ namespace StudentClassItem_KH
         /// <param name="ScheduleClassDate"></param>
         /// <param name="Reason"></param>
         /// <returns></returns>
-        public static string SendData(string action,string IDNumber, string StudentNumber, string StudentName, string GradeYear, string ClassName, string SeatNo, string NewClassName, string ScheduleClassDate, string Reason)
+        public static string SendData(string action, string IDNumber, string StudentNumber, string StudentName, string GradeYear, string ClassName, string SeatNo, string NewClassName, string ScheduleClassDate, string Reason, string FirstPriorityClassName)
         {
             string DSNS = FISCA.Authentication.DSAServices.AccessPoint;
 
@@ -58,6 +58,7 @@ namespace StudentClassItem_KH
                 Content.SetElementValue("SeatNo", SeatNo);
                 Content.SetElementValue("ScheduleClassDate", ScheduleClassDate);
                 Content.SetElementValue("Reason", Reason);
+                Content.SetElementValue("FirstPriorityClassName", FirstPriorityClassName);
                 s2.Add(Content);
                 s1.Add(s2);
                 xmlRoot.Add(s1);
@@ -73,7 +74,7 @@ namespace StudentClassItem_KH
         }
 
         /// <summary>
-        /// 取得該年級符合班級名稱
+        /// 取得該年級符合班級名稱,人數
         /// </summary>
         /// <param name="GradeYear"></param>
         /// <returns></returns>
@@ -109,7 +110,7 @@ namespace StudentClassItem_KH
             {
                 QueryHelper qh = new QueryHelper();
                 List<int> intVal = new List<int>();
-                string query = @"select seat_no from student inner join class on student.ref_class_id=class.id where student.seat_no is not null and class.class_name='" + ClassName + "' order by seat_no";
+                string query = @"select seat_no from student inner join class on student.ref_class_id=class.id where student.status=1 and student.seat_no is not null and class.class_name='" + ClassName + "' order by seat_no";
                 DataTable dt = qh.Select(query);
                 foreach (DataRow dr in dt.Rows)
                     intVal.Add(int.Parse(dr["seat_no"].ToString()));
@@ -205,5 +206,23 @@ namespace StudentClassItem_KH
 
             return elmMsg;
         }
+
+        /// <summary>
+        /// 取得班級年級(有學生且狀態為一般)
+        /// </summary>
+        /// <returns></returns>
+        public static List<string> GetGradeYearList()
+        {
+            List<string> retVal = new List<string>();
+            QueryHelper qh = new QueryHelper();
+            string query = @"select distinct class.grade_year from class inner join student on class.id=student.ref_class_id where student.status=1 order by class.grade_year";
+            DataTable dt = qh.Select(query);
+            foreach (DataRow dr in dt.Rows)
+                retVal.Add(dr[0].ToString());
+
+            return retVal;
+        }
+
+
     }
 }
