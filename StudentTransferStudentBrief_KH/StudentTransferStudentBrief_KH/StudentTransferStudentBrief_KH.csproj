@@ -49,6 +49,11 @@
       <HintPath>Library\FISCA.Authentication.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="FISCA.Core, Version=1.0.1.5, Culture=neutral, PublicKeyToken=a269f410f9e2a287, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\FISCA.Core.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="FISCA.Data, Version=1.0.0.3, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\FISCA.Data.dll</HintPath>
@@ -100,6 +105,7 @@
     </Reference>
     <Reference Include="StudentTransferCoreImpl">
       <HintPath>..\..\..\StudentTransfer\StudentTransferCoreImpl\bin\debug\StudentTransferCoreImpl.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -114,6 +120,11 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="StudentBrief.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -121,8 +132,10 @@
       <DependentUpon>StudentBrief.cs</DependentUpon>
     </Compile>
     <Compile Include="StudentTransferStudentBriefItem.cs" />
+    <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="jh.xml" />
     <Content Include="Library\Campus.dll" />
     <Content Include="Library\Campus.pdb" />
     <Content Include="Library\DevComponents.DotNetBar2.dll" />
@@ -130,6 +143,9 @@
     <Content Include="Library\FISCA.Authentication.dll" />
     <Content Include="Library\FISCA.Authentication.pdb" />
     <Content Include="Library\FISCA.Authentication.xml" />
+    <Content Include="Library\FISCA.Core.dll" />
+    <Content Include="Library\FISCA.Core.pdb" />
+    <Content Include="Library\FISCA.Core.xml" />
     <Content Include="Library\FISCA.Data.dll" />
     <Content Include="Library\FISCA.Data.pdb" />
     <Content Include="Library\FISCA.Data.xml" />
@@ -162,6 +178,10 @@
     <Content Include="Library\K12.Presentation.xml" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="StudentBrief.resx">
       <DependentUpon>StudentBrief.cs</DependentUpon>
     </EmbeddedResource>

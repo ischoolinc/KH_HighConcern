@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FISCA;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,11 +7,12 @@ using StudentTransferAPI;
 
 namespace StudentTransferStudentBrief_KH
 {
-    public class StudentTransferStudentBriefItem:IStudentTransferStudentBriefAPI
+    public class StudentTransferStudentBriefItem:StudentTransferAPI.IStudentBriefBaseAPI
     {
-        public WizardForm CreateWizardForm(FISCA.ArgDictionary args)
+
+        public StudentTransferAPI.WizardForm CreateForm(ArgDictionary ars)
         {
-            return new StudentBrief(args);
+            return new StudentBrief(ars);
         }
     }
 }

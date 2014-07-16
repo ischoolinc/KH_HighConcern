@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using Campus;
 using FISCA;
 using K12.Data;
 using StudentTransferAPI;
@@ -47,6 +48,8 @@ namespace StudentTransferStudentBrief_KH
 
         private XElement XmlData { get; set; }
 
+        private string _ClassID { get; set; }
+
         public StudentBrief(ArgDictionary args)
             : base(args)
         {
@@ -65,7 +68,7 @@ namespace StudentTransferStudentBrief_KH
             {
                 Record = Arguments[Consts.TransferInRecord] as TransferInRecord;
                 XmlData = Arguments[Consts.XmlData] as XElement;
-                dynamic briefSection = (XmlObject)XmlData.Element("Student");
+                dynamic briefSection = (DynamicXmlObject)XmlData.Element("Student");
                 //取得地址資料
                 dynamic permanentAddress = GetAddressData();
                 //<PermanentAddress>
@@ -130,18 +133,21 @@ namespace StudentTransferStudentBrief_KH
                     cmbTown.DataSource = TownList.Select(y => y.Area).ToList();
                     cmbCounty.DataSource = CountyList;
                     FromTransferData(briefSection, permanentAddress);
-                    cboClass.DataSource = ClassRowSource;
-                    cboClass.ValueMember = "ID";
-                    cboClass.DisplayMember = "Name";
+                    //cboClass.DataSource = ClassRowSource;
+                    //cboClass.ValueMember = "ID";
+                    //cboClass.DisplayMember = "Name";
                     SuspenSelectedValueChanged = false;
+                    cboGradeYear.Text = "";
+                    List<string> grList = Utility.GetGradeYearList();
+                    cboGradeYear.Items.AddRange(grList.ToArray());
 
                     if (SRecord != null)
                     {
                         cboSeatNo.Text = SRecord.SeatNo + "";
                         cboStudentNumber.Text = SRecord.StudentNumber;
 
-                        if (CRecord != null)
-                            cboClass.SelectedIndex = cboClass.FindStringExact(CRecord.Name);
+                        //if (CRecord != null)
+                        //    cboClass.SelectedIndex = cboClass.FindStringExact(CRecord.Name);
                     }
                     ClassRunning.IsRunning = false;
                     ClassRunning.Visible = false;
@@ -172,9 +178,9 @@ namespace StudentTransferStudentBrief_KH
                 temp = temp.Element("Address");
 
             if (temp == null)
-                return new XmlObject("Address");
+                return new DynamicXmlObject("Address");
             else
-                return (XmlObject)temp;
+                return (DynamicXmlObject)temp;
         }
 
         protected override void OnRunningChanged()
@@ -214,7 +220,7 @@ namespace StudentTransferStudentBrief_KH
         #endregion
 
         #region 產生空座號
-        private void FillEmptySeatNos(int? currentSeatNo)
+        private void FillEmptySeatNos(int? currentSeatNo,string ClassID)
         {
             string classId = "0";
 
@@ -222,9 +228,8 @@ namespace StudentTransferStudentBrief_KH
             SeatNoRunning.Visible = true;
 
             HashSet<int> EmptySeatNos = new HashSet<int>();
-
-            if (!string.IsNullOrWhiteSpace(cboClass.SelectedValue + ""))
-                classId = (cboClass.SelectedValue.ToString());
+            
+            classId = ClassID;
 
             Task task = new Task(() =>
             {//非同步讀取空座號資料。
@@ -473,32 +478,32 @@ namespace StudentTransferStudentBrief_KH
                 {
                     paddress = paddress.Element("Address");
 
-                    if (paddress.Element("ZipCode")==null)
+                    if (paddress.Element("ZipCode") == null)
                         paddress.Add(new XElement("ZipCode", txtZipCode.Text));
                     else
                         paddress.Element("ZipCode").Value = txtZipCode.Text;
 
-                    if (paddress.Element("County")==null)
+                    if (paddress.Element("County") == null)
                         paddress.Add(new XElement("County", cmbCounty.Text));
                     else
                         paddress.Element("County").Value = cmbCounty.Text;
 
-                    if (paddress.Element("Town")==null)
+                    if (paddress.Element("Town") == null)
                         paddress.Add(new XElement("Town", cmbTown.Text));
                     else
                         paddress.Element("Town").Value = cmbTown.Text;
 
-                    if (paddress.Element("District")==null)
+                    if (paddress.Element("District") == null)
                         paddress.Add(new XElement("District", txtDistrict.Text));
                     else
                         paddress.Element("District").Value = txtDistrict.Text;
 
-                    if (paddress.Element("Area")==null)
+                    if (paddress.Element("Area") == null)
                         paddress.Add(new XElement("Area", txtArea.Text));
                     else
                         paddress.Element("Area").Value = txtArea.Text;
 
-                    if (paddress.Element("DetailAddress")==null)
+                    if (paddress.Element("DetailAddress") == null)
                         paddress.Add(new XElement("DetailAddress", txtDetail.Text));
                     else
                         paddress.Element("DetailAddress").Value = txtDetail.Text;
@@ -560,10 +565,10 @@ namespace StudentTransferStudentBrief_KH
                     UpdateData(SRecord);
                     string newid = K12.Data.Student.Insert(SRecord);
 
-                    //新竹市的國中，需要多呼叫數位學生證資料同步的 Service。
-                    //新增的狀態下才呼叫，以免重覆呼叫。
-                    if (Program.CurrentMode == Program.Hsinchu)
-                        CallTransferInWS();
+                    ////新竹市的國中，需要多呼叫數位學生證資料同步的 Service。
+                    ////新增的狀態下才呼叫，以免重覆呼叫。
+                    //if (Program.CurrentMode == Program.Hsinchu)
+                    //    CallTransferInWS();
 
                     #region 更新學生地址
                     ARecord = K12.Data.Address.SelectByStudentID(newid);
@@ -590,6 +595,11 @@ namespace StudentTransferStudentBrief_KH
                 Record.ModifiedContent = XmlData.ToString();
                 Record.RefStudentID = Arguments[Consts.StudentID] + "";
                 Record.Save();
+
+                // 傳送至局端
+                string errMsg = Utility.SendData("自動轉入", SRecord.IDNumber, SRecord.StudentNumber, SRecord.Name, cboGender.Text, txtOClass.Text, cboSeatNo.Text, txtClass.Text, "", "");
+                if (errMsg != "")
+                    FISCA.Presentation.Controls.MsgBox.Show(errMsg);
 
                 //設定所有 Processor 的學生編號。
                 foreach (TransferProcessor tp in TransferProcessor.Processors)
@@ -619,13 +629,8 @@ namespace StudentTransferStudentBrief_KH
             else
                 srecord.SeatNo = null;
 
-            if (cboClass.SelectedIndex >= 0)
-            {
-                srecord.RefClassID = (cboClass.SelectedItem as ClassItem).ID;
-                (Arguments[Consts.TransferInGridItem] as StatusForm.TransferInItem).ClassName = (cboClass.SelectedItem as ClassItem).Name;
-            }
-            else
-                srecord.RefClassID = string.Empty;
+                srecord.RefClassID = _ClassID;
+                (Arguments[Consts.TransferInGridItem] as StatusForm.TransferInItem).ClassName = txtClass.Text;
         }
 
         private bool IsIDNumberExists(string selfPrimaryKey, string idNumber)
@@ -643,17 +648,7 @@ namespace StudentTransferStudentBrief_KH
         }
 
         private bool SuspenSelectedValueChanged = false;
-        private void cboClass_SelectedValueChanged(object sender, EventArgs e)
-        {
-            if (SuspenSelectedValueChanged) return;
-
-            FillEmptySeatNos(SRecord != null ? SRecord.SeatNo : null);
-        }
-
-        private void cboClass_TextChanged(object sender, EventArgs e)
-        {
-            cboClass.SelectedIndex = cboClass.FindString(cboClass.Text);
-        }
+       
 
         #region 新竹市專用 WS Call
         private void CallTransferInWS()
@@ -715,5 +710,27 @@ namespace StudentTransferStudentBrief_KH
             return code;
         }
         #endregion
+
+        private void cboGradeYear_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(cboGradeYear.Text))
+            {
+                _ClassID = "";
+                txtClass.Text = "";
+                Dictionary<string, string> grClassDict = Utility.GetClassNameFirst(cboGradeYear.Text);
+
+                foreach (string name in grClassDict.Keys)
+                {
+                    // 取得班級名稱
+                    txtClass.Text = name;
+                    _ClassID = grClassDict[name];
+                    break;
+                }
+
+                cboSeatNo.Text = "";
+                // 取得座號
+                FillEmptySeatNos(SRecord != null ? SRecord.SeatNo : null, _ClassID);
+            }
+        }
     }
 }
