@@ -42,6 +42,7 @@
             this.colReason = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colScDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colSendDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lblMsg = new DevComponents.DotNetBar.LabelX();
             ((System.ComponentModel.ISupportInitialize)(this.dtBeginDate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtEndDate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgData)).BeginInit();
@@ -56,7 +57,7 @@
             // 
             this.labelX1.BackgroundStyle.Class = "";
             this.labelX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX1.Location = new System.Drawing.Point(49, 17);
+            this.labelX1.Location = new System.Drawing.Point(50, 13);
             this.labelX1.Name = "labelX1";
             this.labelX1.Size = new System.Drawing.Size(60, 21);
             this.labelX1.TabIndex = 0;
@@ -71,7 +72,7 @@
             // 
             this.labelX2.BackgroundStyle.Class = "";
             this.labelX2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX2.Location = new System.Drawing.Point(309, 17);
+            this.labelX2.Location = new System.Drawing.Point(310, 13);
             this.labelX2.Name = "labelX2";
             this.labelX2.Size = new System.Drawing.Size(60, 21);
             this.labelX2.TabIndex = 1;
@@ -88,7 +89,7 @@
             this.dtBeginDate.ButtonDropDown.Shortcut = DevComponents.DotNetBar.eShortcut.AltDown;
             this.dtBeginDate.ButtonDropDown.Visible = true;
             this.dtBeginDate.IsPopupCalendarOpen = false;
-            this.dtBeginDate.Location = new System.Drawing.Point(115, 15);
+            this.dtBeginDate.Location = new System.Drawing.Point(116, 11);
             // 
             // 
             // 
@@ -148,7 +149,7 @@
             this.dtEndDate.ButtonDropDown.Shortcut = DevComponents.DotNetBar.eShortcut.AltDown;
             this.dtEndDate.ButtonDropDown.Visible = true;
             this.dtEndDate.IsPopupCalendarOpen = false;
-            this.dtEndDate.Location = new System.Drawing.Point(375, 15);
+            this.dtEndDate.Location = new System.Drawing.Point(376, 11);
             // 
             // 
             // 
@@ -221,10 +222,10 @@
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgData.DefaultCellStyle = dataGridViewCellStyle1;
             this.dgData.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(215)))), ((int)(((byte)(229)))));
-            this.dgData.Location = new System.Drawing.Point(13, 54);
+            this.dgData.Location = new System.Drawing.Point(14, 47);
             this.dgData.Name = "dgData";
             this.dgData.RowTemplate.Height = 24;
-            this.dgData.Size = new System.Drawing.Size(551, 200);
+            this.dgData.Size = new System.Drawing.Size(551, 222);
             this.dgData.TabIndex = 4;
             // 
             // btnQuery
@@ -234,7 +235,7 @@
             this.btnQuery.AutoSize = true;
             this.btnQuery.BackColor = System.Drawing.Color.Transparent;
             this.btnQuery.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnQuery.Location = new System.Drawing.Point(398, 263);
+            this.btnQuery.Location = new System.Drawing.Point(399, 279);
             this.btnQuery.Name = "btnQuery";
             this.btnQuery.Size = new System.Drawing.Size(75, 25);
             this.btnQuery.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -249,7 +250,7 @@
             this.btnExit.AutoSize = true;
             this.btnExit.BackColor = System.Drawing.Color.Transparent;
             this.btnExit.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnExit.Location = new System.Drawing.Point(489, 263);
+            this.btnExit.Location = new System.Drawing.Point(490, 279);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(75, 25);
             this.btnExit.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -264,7 +265,7 @@
             this.btnExport.AutoSize = true;
             this.btnExport.BackColor = System.Drawing.Color.Transparent;
             this.btnExport.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnExport.Location = new System.Drawing.Point(13, 263);
+            this.btnExport.Location = new System.Drawing.Point(14, 279);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(75, 25);
             this.btnExport.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -293,21 +294,40 @@
             // 
             // colScDate
             // 
+            this.colScDate.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.colScDate.HeaderText = "編班委員會議日期";
             this.colScDate.Name = "colScDate";
             this.colScDate.ReadOnly = true;
+            this.colScDate.Width = 90;
             // 
             // colSendDate
             // 
+            this.colSendDate.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.colSendDate.HeaderText = "傳送日期";
             this.colSendDate.Name = "colSendDate";
             this.colSendDate.ReadOnly = true;
+            this.colSendDate.Width = 67;
+            // 
+            // lblMsg
+            // 
+            this.lblMsg.AutoSize = true;
+            this.lblMsg.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.lblMsg.BackgroundStyle.Class = "";
+            this.lblMsg.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.lblMsg.Location = new System.Drawing.Point(95, 281);
+            this.lblMsg.Name = "lblMsg";
+            this.lblMsg.Size = new System.Drawing.Size(60, 21);
+            this.lblMsg.TabIndex = 8;
             // 
             // SendDataView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(578, 293);
+            this.ClientSize = new System.Drawing.Size(578, 315);
+            this.Controls.Add(this.lblMsg);
             this.Controls.Add(this.btnExport);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnQuery);
@@ -319,6 +339,7 @@
             this.DoubleBuffered = true;
             this.Name = "SendDataView";
             this.Text = "查詢傳送局端備查資料";
+            this.Load += new System.EventHandler(this.SendDataView_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dtBeginDate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtEndDate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgData)).EndInit();
@@ -342,5 +363,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colReason;
         private System.Windows.Forms.DataGridViewTextBoxColumn colScDate;
         private System.Windows.Forms.DataGridViewTextBoxColumn colSendDate;
+        private DevComponents.DotNetBar.LabelX lblMsg;
     }
 }
