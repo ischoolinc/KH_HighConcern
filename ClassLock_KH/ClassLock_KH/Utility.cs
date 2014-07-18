@@ -27,7 +27,8 @@ namespace ClassLock_KH
             if (FISCA.RTContext.IsDiagMode)
             {
                 string accPoint = FISCA.RTContext.GetConstant("KH_AccessPoint");
-                AccessPoint = accPoint;
+                if (!string.IsNullOrEmpty(accPoint))
+                    AccessPoint = accPoint;
             }
 
             string Contract = "log";
@@ -82,7 +83,8 @@ namespace ClassLock_KH
             if (FISCA.RTContext.IsDiagMode)
             {
                 string accPoint = FISCA.RTContext.GetConstant("KH_AccessPoint");
-                AccessPoint = accPoint;
+                if (!string.IsNullOrEmpty(accPoint))
+                    AccessPoint = accPoint;
             }
 
             string Contract = "log";

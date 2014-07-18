@@ -39,7 +39,7 @@ namespace StudentTransferStudentBrief_KH
         {
             List<string> retVal = new List<string>();
             QueryHelper qh = new QueryHelper();
-            string query = @"select distinct class.grade_year from class inner join student on class.id=student.ref_class_id where student.status=1 order by class.grade_year";
+            string query = @"select distinct class.grade_year from class inner join student on class.id=student.ref_class_id where student.status=1  and class.grade_year is not null order by class.grade_year";
             DataTable dt = qh.Select(query);
             foreach (DataRow dr in dt.Rows)
                 retVal.Add(dr[0].ToString());
@@ -70,6 +70,7 @@ namespace StudentTransferStudentBrief_KH
             if (FISCA.RTContext.IsDiagMode)
             {
                 string accPoint = FISCA.RTContext.GetConstant("KH_AccessPoint");
+                if (!string.IsNullOrEmpty(accPoint))
                 AccessPoint = accPoint;
             }
 
