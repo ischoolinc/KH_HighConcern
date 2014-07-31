@@ -38,11 +38,11 @@
             this.btnExit = new DevComponents.DotNetBar.ButtonX();
             this.btnExport = new DevComponents.DotNetBar.ButtonX();
             this.lblMsg = new DevComponents.DotNetBar.LabelX();
-            this.colGryear = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colClassName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colReason = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colScDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colSendDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colAction = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colContent = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colR1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colR2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dtBeginDate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtEndDate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgData)).BeginInit();
@@ -208,11 +208,11 @@
             this.dgData.BackgroundColor = System.Drawing.Color.White;
             this.dgData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgData.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colGryear,
-            this.colClassName,
-            this.colReason,
-            this.colScDate,
-            this.colSendDate});
+            this.colDate,
+            this.colAction,
+            this.colContent,
+            this.colR1,
+            this.colR2});
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
@@ -223,10 +223,14 @@
             this.dgData.DefaultCellStyle = dataGridViewCellStyle1;
             this.dgData.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(215)))), ((int)(((byte)(229)))));
             this.dgData.Location = new System.Drawing.Point(14, 47);
+            this.dgData.MultiSelect = false;
             this.dgData.Name = "dgData";
+            this.dgData.ReadOnly = true;
             this.dgData.RowTemplate.Height = 24;
-            this.dgData.Size = new System.Drawing.Size(594, 222);
+            this.dgData.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgData.Size = new System.Drawing.Size(722, 222);
             this.dgData.TabIndex = 4;
+            this.dgData.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.dgData_MouseDoubleClick);
             // 
             // btnQuery
             // 
@@ -235,7 +239,7 @@
             this.btnQuery.AutoSize = true;
             this.btnQuery.BackColor = System.Drawing.Color.Transparent;
             this.btnQuery.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnQuery.Location = new System.Drawing.Point(442, 279);
+            this.btnQuery.Location = new System.Drawing.Point(570, 279);
             this.btnQuery.Name = "btnQuery";
             this.btnQuery.Size = new System.Drawing.Size(75, 25);
             this.btnQuery.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -250,7 +254,7 @@
             this.btnExit.AutoSize = true;
             this.btnExit.BackColor = System.Drawing.Color.Transparent;
             this.btnExit.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnExit.Location = new System.Drawing.Point(533, 279);
+            this.btnExit.Location = new System.Drawing.Point(661, 279);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(75, 25);
             this.btnExit.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -275,6 +279,7 @@
             // 
             // lblMsg
             // 
+            this.lblMsg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblMsg.BackColor = System.Drawing.Color.Transparent;
             // 
             // 
@@ -286,46 +291,43 @@
             this.lblMsg.Size = new System.Drawing.Size(297, 23);
             this.lblMsg.TabIndex = 8;
             // 
-            // colGryear
+            // colDate
             // 
-            this.colGryear.HeaderText = "年級";
-            this.colGryear.Name = "colGryear";
-            this.colGryear.ReadOnly = true;
-            this.colGryear.Width = 70;
+            this.colDate.HeaderText = "日期時間";
+            this.colDate.Name = "colDate";
+            this.colDate.ReadOnly = true;
+            this.colDate.Width = 150;
             // 
-            // colClassName
+            // colAction
             // 
-            this.colClassName.HeaderText = "班級";
-            this.colClassName.Name = "colClassName";
-            this.colClassName.ReadOnly = true;
+            this.colAction.HeaderText = "動作";
+            this.colAction.Name = "colAction";
+            this.colAction.ReadOnly = true;
             // 
-            // colReason
+            // colContent
             // 
-            this.colReason.HeaderText = "內容";
-            this.colReason.Name = "colReason";
-            this.colReason.ReadOnly = true;
+            this.colContent.HeaderText = "摘要";
+            this.colContent.Name = "colContent";
+            this.colContent.ReadOnly = true;
+            this.colContent.Width = 200;
             // 
-            // colScDate
+            // colR1
             // 
-            this.colScDate.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.colScDate.HeaderText = "編班委員會議日期";
-            this.colScDate.Name = "colScDate";
-            this.colScDate.ReadOnly = true;
-            this.colScDate.Width = 90;
+            this.colR1.HeaderText = "審核結果";
+            this.colR1.Name = "colR1";
+            this.colR1.ReadOnly = true;
             // 
-            // colSendDate
+            // colR2
             // 
-            this.colSendDate.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.colSendDate.HeaderText = "傳送日期";
-            this.colSendDate.Name = "colSendDate";
-            this.colSendDate.ReadOnly = true;
-            this.colSendDate.Width = 67;
+            this.colR2.HeaderText = "局端備註";
+            this.colR2.Name = "colR2";
+            this.colR2.ReadOnly = true;
             // 
             // SendDataView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(621, 315);
+            this.ClientSize = new System.Drawing.Size(749, 315);
             this.Controls.Add(this.lblMsg);
             this.Controls.Add(this.btnExport);
             this.Controls.Add(this.btnExit);
@@ -358,10 +360,10 @@
         private DevComponents.DotNetBar.ButtonX btnExit;
         private DevComponents.DotNetBar.ButtonX btnExport;
         private DevComponents.DotNetBar.LabelX lblMsg;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colGryear;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colClassName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colReason;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colScDate;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colSendDate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colDate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colAction;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colContent;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colR1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colR2;
     }
 }

@@ -68,7 +68,29 @@ namespace StudentClassItem_KH
 
         private void LoadDataToDataGrid()
         {
+            /*
+
+Response XML 解析代表：
+Action:動作
+Content:摘要(要判斷是否存在)
+Content>Summary:摘要內容。(匯入更新班級 共 1 筆)
+Detail:詳細內容(要判斷是否存在)
+Detail>Student(是elements，foreach讀取資料)
+Detail>Student>IDNumber:身分證
+Detail>Student>ClassName:原班級
+Detail>Student>StudentNumber:學號
+Detail>Student>NewClassName:新班級
+Detail>Student>SeatNo:座號
+Detail>Student>GradeYear:年級
+Comment:局端備註。
+Verify:審核結果。(空白,t:通過,f:未通過)
+DateTime:日期時間。
+             * 
+            */
             lblMsg.Text = "";
+
+            List<RspMsg> RspMsgList = new List<RspMsg> ();
+              
             int rowCot = 0;
             if (_RspXML != null)
             {
@@ -77,40 +99,140 @@ namespace StudentClassItem_KH
                     {
                         foreach (XElement elm in _RspXML.Element("Body").Element("Response").Elements("SchoolLog"))
                         {
-                            if (elm.Element("Action").Value != "鎖定班級" && elm.Element("Action").Value != "解除鎖定班級")
-                            {
-                                int rowIdx = dgData.Rows.Add();
+                            RspMsg rm = new RspMsg ();
 
                                 if (elm.Element("Action") != null)
-                                    dgData.Rows[rowIdx].Cells[colReason.Index].Value = elm.Element("Action").Value;
+                                     rm.Action= elm.Element("Action").Value;
+
+                                if (elm.Element("Comment") != null)
+                                    rm.Comment = elm.Element("Comment").Value;
+
+                                if (elm.Element("Verify") != null)
+                                {
+                                    rm.Verify = elm.Element("Verify").Value;
+
+                                    if (rm.Verify.Trim() == "t")
+                                        rm.Verify = "通過";
+                                    else if (rm.Verify.Trim() == "f")
+                                        rm.Verify = "未通過";
+                                    else
+                                        rm.Verify = "";
+                                }
 
                                 if (elm.Element("Content") != null)
                                 {
-                                    if (elm.Element("Content").Element("GradeYear") != null)
-                                        dgData.Rows[rowIdx].Cells[colGryear.Index].Value = elm.Element("Content").Element("GradeYear").Value;
+                                    XElement xmlContent = elm.Element("Content");
 
-                                    if (elm.Element("Content").Element("ClassName") != null)
-                                        dgData.Rows[rowIdx].Cells[colClassName.Index].Value = elm.Element("Content").Element("ClassName").Value;
+                                    if (xmlContent.Element("GradeYear") != null)
+                                        rm.Content.Add("GradeYear", xmlContent.Element("GradeYear").Value);
 
-                                    if (elm.Element("Content").Element("ScheduleClassDate") != null)
+                                    if (xmlContent.Element("IDNumber") != null)
+                                        rm.Content.Add("IDNumber", xmlContent.Element("IDNumber").Value);
+
+                                    if (xmlContent.Element("StudentNumber") != null)
+                                        rm.Content.Add("StudentNumber", xmlContent.Element("StudentNumber").Value);
+
+                                    if (xmlContent.Element("StudentName") != null)
+                                        rm.Content.Add("StudentName", xmlContent.Element("StudentName").Value);
+
+                                    if (xmlContent.Element("ClassName") != null)
+                                        rm.Content.Add("ClassName", xmlContent.Element("ClassName").Value);
+
+                                    if (xmlContent.Element("NewClassName") != null)
+                                        rm.Content.Add("NewClassName", xmlContent.Element("NewClassName").Value);
+
+                                    if (xmlContent.Element("SeatNo") != null)
+                                        rm.Content.Add("SeatNo", xmlContent.Element("SeatNo").Value);
+
+                                    if (xmlContent.Element("ScheduleClassDate") != null)
+                                        rm.Content.Add("ScheduleClassDate", xmlContent.Element("ScheduleClassDate").Value);
+
+                                    if (xmlContent.Element("Reason") != null)
+                                        rm.Content.Add("Reason", xmlContent.Element("Reason").Value);
+
+                                    if (xmlContent.Element("FirstPriorityClassName") != null)
+                                        rm.Content.Add("FirstPriorityClassName", xmlContent.Element("FirstPriorityClassName").Value);
+
+                                    if (xmlContent.Element("Summary") != null)
+                                        rm.Content.Add("Summary", xmlContent.Element("Summary").Value);
+
+                                    if (xmlContent.Element("Comment") != null)
+                                        rm.Content.Add("Comment", xmlContent.Element("Comment").Value);
+
+                                    if (xmlContent.Element("DocNo") != null)
+                                        rm.Content.Add("DocNo", xmlContent.Element("DocNo").Value);
+
+                                    if (xmlContent.Element("NumberReduce") != null)
+                                        rm.Content.Add("NumberReduce", xmlContent.Element("NumberReduce").Value);                                   
+                                    
+                                }
+
+                                // 詳細內容    
+                                if (elm.Element("Detail") != null)
+                                {
+                                    foreach (XElement elms1 in elm.Element("Detail").Elements("Student"))
                                     {
-                                        DateTime dd;
-                                        if (DateTime.TryParse(elm.Element("Content").Element("ScheduleClassDate").Value, out dd))
-                                            dgData.Rows[rowIdx].Cells[colScDate.Index].Value = dd;
+                                        RspStud rs = new RspStud();
+
+                                        if (elms1.Element("IDNumber") != null)
+                                            rs.IDNumber = elms1.Element("IDNumber").Value;
+
+                                        if (elms1.Element("ClassName") != null)
+                                            rs.ClassName = elms1.Element("ClassName").Value;
+
+                                        if (elms1.Element("StudentNumber") != null)
+                                            rs.StudentNumber = elms1.Element("StudentNumber").Value;
+
+                                        if (elms1.Element("NewClassName") != null)
+                                            rs.NewClassName = elms1.Element("NewClassName").Value;
+
+                                        if (elms1.Element("SeatNo") != null)
+                                            rs.SeatNo = elms1.Element("SeatNo").Value;
+
+                                        if (elms1.Element("GradeYear") != null)
+                                            rs.GradeYear = elms1.Element("GradeYear").Value;
+
+                                        if (elms1.Element("Reason") != null)
+                                            rs.Reason = elms1.Element("Reason").Value;
+
+                                        rm.Detail.Add(rs);
                                     }
                                 }
-                                if (elm.Element("Timestamp") != null)
-                                    dgData.Rows[rowIdx].Cells[colSendDate.Index].Value = DateTime.Parse(elm.Element("Timestamp").Value);
 
-                                rowCot++;
-                            }
+                                if (elm.Element("Timestamp") != null)
+                                    rm.Date = DateTime.Parse(elm.Element("Timestamp").Value);
+
+                                RspMsgList.Add(rm);
+                                rowCot++;                            
                         }
 
                     }
             }
+
+            // 填資料到畫面
+            if (RspMsgList.Count > 0)
+            {
+                foreach (RspMsg rm in RspMsgList)
+                {
+                    int rowIdx = dgData.Rows.Add();
+                    dgData.Rows[rowIdx].Tag = rm;
+                    dgData.Rows[rowIdx].Cells[colDate.Index].Value = rm.Date;
+                    dgData.Rows[rowIdx].Cells[colAction.Index].Value = rm.Action;
+                    // 摘要需解析
+                    dgData.Rows[rowIdx].Cells[colContent.Index].Value = rm.GetContentString(false);
+
+                    // 審查結果
+                    dgData.Rows[rowIdx].Cells[colR1.Index].Value = rm.Verify;
+                    // 局端備註
+                    dgData.Rows[rowIdx].Cells[colR2.Index].Value = rm.Comment;
+                }
+                
+            }
+
             lblMsg.Text = " 共 " + rowCot + " 筆";
         }
 
+    
         private void btnExport_Click(object sender, EventArgs e)
         {
             ExportData();
@@ -149,5 +271,35 @@ namespace StudentClassItem_KH
             dtEndDate.Value = DateTime.Now;
             dtBeginDate.Value = DateTime.Now.AddDays(-7);
         }
+
+        private void dgData_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+      
+        }
+
+        private void dgData_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (dgData.SelectedRows.Count > 0)
+            {
+                RspMsg data = dgData.SelectedRows[0].Tag as RspMsg;
+                if (data != null)
+                {
+
+                    if (data.Action.Contains("匯入"))
+                    {
+                        SendDataView_s2 sdv2 = new SendDataView_s2(data);
+                        sdv2.ShowDialog();
+                    }
+                    else
+                    {
+                        SendDataView_s1 sdvs1 = new SendDataView_s1(data);
+                        sdvs1.ShowDialog();
+                    }
+                }
+            }
+
+        }
+
+        
     }
 }

@@ -46,13 +46,13 @@ namespace ClassLock_KH
                 K12.Presentation.NLDPanels.Class.ListPaneContexMenu["班級鎖定/解鎖"].Enable = UserAcl.Current["KH_HighConcern_ClassLock"].Executable && (K12.Presentation.NLDPanels.Class.SelectedSource.Count == 1);            
             };
 
-            RibbonBarItem rbSendClassDataView = K12.Presentation.NLDPanels.Class.RibbonBarItems["其它"];
-            rbSendClassDataView["檢視傳送局端備查紀錄"].Enable = UserAcl.Current["KH_HighConcern_SendClassDataView"].Executable;
-            rbSendClassDataView["檢視傳送局端備查紀錄"].Click += delegate
-            {
-                SendDataView sdv = new SendDataView();
-                sdv.ShowDialog();
-            };
+            //RibbonBarItem rbSendClassDataView = K12.Presentation.NLDPanels.Class.RibbonBarItems["其它"];
+            //rbSendClassDataView["檢視傳送局端備查紀錄"].Enable = UserAcl.Current["KH_HighConcern_SendClassDataView"].Executable;
+            //rbSendClassDataView["檢視傳送局端備查紀錄"].Click += delegate
+            //{
+            //    SendDataView sdv = new SendDataView();
+            //    sdv.ShowDialog();
+            //};
 
             RibbonBarItem rbiDelAll = K12.Presentation.NLDPanels.Class.RibbonBarItems["其它"];
             rbiDelAll["全部班級解鎖"].Enable = UserAcl.Current["KH_HighConcern_AllClassUnLock"].Executable;

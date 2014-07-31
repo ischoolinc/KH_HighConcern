@@ -1238,7 +1238,7 @@ namespace StudentImportWizard_KH
                 {
                     string ActionStr="";
                     if (Context.ImportMode == ImportMode.Insert)
-                        ActionStr = " 匯入新增學生";
+                        ActionStr = "匯入新增學生";
                     else
                     {
                         ActionStr = "匯入更新班級";
