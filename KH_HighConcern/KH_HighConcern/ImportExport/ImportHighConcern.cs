@@ -6,6 +6,7 @@ using Campus.DocumentValidator;
 using Campus.Import;
 using KH_HighConcern.DAO;
 using K12.Data;
+using System.Windows.Forms;
 
 namespace KH_HighConcern.ImportExport
 {
@@ -28,6 +29,7 @@ namespace KH_HighConcern.ImportExport
         {
             this.IsSplit = false;
             this.IsLog = false;
+            
             //啟動更新事件
             eh = FISCA.InteractionService.PublishEvent(EventCode);
         }
@@ -36,15 +38,35 @@ namespace KH_HighConcern.ImportExport
         {
             return Properties.Resources.HighConcernValDef;
         }
+      
+
 
         public override string Import(List<IRowStream> Rows)
-        {            
-            if (_Option.Action == ImportAction.InsertOrUpdate)
+        {
+
+            string retStr = "";
+            bool run = false;
+            if (FISCA.Presentation.Controls.MsgBox.Show("匯入高關懷學生，按下「是」確認後，需報局備查。", "匯入高關懷學生", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
+            {
+                run = true;
+            }
+            else
+            {               
+                FISCA.Presentation.Controls.MsgBox.Show("停止匯入高關懷學生，不會變更資料。");                
+            }
+
+            
+            if (_Option.Action == ImportAction.InsertOrUpdate && run)
             {
                 List<UDT_HighConcern> HighConcernList = new List<UDT_HighConcern>();
                 List<logStud> logStudList = new List<logStud>();
+
+                int pIdx = 0;
                 foreach(IRowStream row in Rows)
                 {
+                    pIdx++;
+                    this.ImportProgress = pIdx;
+
                     string IDNumber = "", StudentNumber = "", StudentName = "", ClassName = "", SeatNo = "", NumberReduce = "", DocNo = "";
 
                     StudentNumber = row.GetValue("學號");
@@ -106,9 +128,9 @@ namespace KH_HighConcern.ImportExport
                     Utility.SendDataList("匯入特殊身分", logStudList);
                 }
                 HighConcernList.SaveAll();
-                eh(this, EventArgs.Empty);
-            }       
-            return "";
+                eh(this, EventArgs.Empty);                
+            }
+            return retStr;
         }
 
         /// <summary>

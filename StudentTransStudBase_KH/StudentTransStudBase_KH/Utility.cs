@@ -40,14 +40,29 @@ namespace StudentTransStudBase_KH
         {
             string retVal = "";
 
-            QueryHelper qh = new QueryHelper();
-            string query = @"select class.class_name,count(student.id) as studCot from class inner join student on class.id=student.ref_class_id  where student.status=1 and (class_name not in(select class_name from $kh.automatic.class.lock) and class_name not in(select distinct class_name from $kh.automatic.placement.high.concern)) and class.grade_year=" + GradeYear + " group by class.class_name order by count(student.id),class.class_name";
-            DataTable dt = qh.Select(query);
-            foreach (DataRow dr in dt.Rows)
-            {
-                retVal= dr["class_name"].ToString();
-                break;
-            }
+            /*
+1. 排除鎖定班級
+2. 編班人數少的班級優先(編班人數=班級人數+優先關懷人數)
+3. 若編班人數相同，則無特殊生（高關懷學生）班級優先
+4-1. 若皆無特殊生，則班號小者優先
+4-2. 若有特殊生，則以實際人數少優先
+4-2-1. 若有特殊生且實際人數又相同，則以班號小者優先
+             */
+
+            List<KH_HighConcernCalc.ClassStudent> ClassStudentList = KH_HighConcernCalc.Calc.GetClassStudentList(GradeYear);
+
+            if (ClassStudentList.Count > 0)
+                retVal = ClassStudentList[0].ClassName;           
+
+
+            //QueryHelper qh = new QueryHelper();
+            //string query = @"select class.class_name,count(student.id) as studCot from class inner join student on class.id=student.ref_class_id  where student.status=1 and (class_name not in(select class_name from $kh.automatic.class.lock) and class_name not in(select distinct class_name from $kh.automatic.placement.high.concern)) and class.grade_year=" + GradeYear + " group by class.class_name order by count(student.id),class.class_name";
+            //DataTable dt = qh.Select(query);
+            //foreach (DataRow dr in dt.Rows)
+            //{
+            //    retVal= dr["class_name"].ToString();
+            //    break;
+            //}
             return retVal;
         }
 

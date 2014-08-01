@@ -106,6 +106,12 @@ namespace StudentTransStudBase_KH
                 {
                     MsgBox.Show("姓名必填");
                     return;
+                }
+
+                if (lblNewClassName.Text.Trim() == "")
+                {
+                    MsgBox.Show("班級必填");
+                    return;
                 }            
 
                 if (string.IsNullOrEmpty(cbotStudentNumber.Text))
@@ -113,125 +119,129 @@ namespace StudentTransStudBase_KH
                     Errors.SetError(cbotStudentNumber, "學號空白!");
                 }
 
-                string sid = string.Empty;
-                if (_status == AddTransStudStatus.Added)
-                {
-                    JHSchool.Data.JHStudentRecord NewStudRec = new JHSchool.Data.JHStudentRecord();
-                    NewStudRec.Name = txtNewName.Text;
-                    NewStudRec.Gender = cboNewGender.Text;
-                    NewStudRec.IDNumber = txtNewSSN.Text;
-                    sid = JHSchool.Data.JHStudent.Insert(NewStudRec);
-                    _StudentPhone = JHSchool.Data.JHPhone.SelectByStudentID(sid);
-                    _StudentPhone.Contact = txtNewTel.Text;
-                }
 
-                //if (StudCheckTool.CheckStudIDNumberSame(txtNewSSN.Text, sid))
-                //{
-                //    FISCA.Presentation.Controls.MsgBox.Show("身分證號重複請檢查");
-                //    return;
-                //}
-
-                Dictionary<string, int> chkSum = new Dictionary<string, int>();
-                foreach (JHSchool.Data.JHStudentRecord studRec in JHSchool.Data.JHStudent.SelectAll())
-                {
-                    if(studRec.Status == K12.Data.StudentRecord.StudentStatus.一般 )
-                    if (!string.IsNullOrEmpty(studRec.StudentNumber))
-                    {
-                        if (chkSum.ContainsKey(studRec.StudentNumber))
-                            chkSum[studRec.StudentNumber]++;
-                        else
-                            chkSum.Add(studRec.StudentNumber, 1);
-                    }
-                }
-
-                if (chkSum.ContainsKey(cbotStudentNumber.Text))
-                {
-                    if (chkSum[cbotStudentNumber.Text] > 1)
-                    {
-                        FISCA.Presentation.Controls.MsgBox.Show("學號重複請檢查");
-                        return;
-                    }
-                }
 
                 string msg = "請問是否將班級由「" + lblClassName.Text + "」調整成「" + lblNewClassName.Text + "」，並傳送至局端備查?";
 
+                bool chkSend = false;
+
                 if (FISCA.Presentation.Controls.MsgBox.Show(msg, "調整確認", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes)
-                { }
-                else
-                    return;
-
-                if (!string.IsNullOrEmpty(sid))
-                    _student = JHSchool.Data.JHStudent.SelectByID(sid);
-
-                //_student.Name = txtNewName.Text;
-
-                _student.IDNumber = txtNewSSN.Text;
-                DateTime dt;
-                if (DateTime.TryParse(dtNewBirthday.Text, out dt))
-                    _student.Birthday = dt;
-
-                //_student.Gender = cboNewGender.Text;
-                _student.Nationality = cboNewNationality.Text;
-                _student.BirthPlace = txtNewBirthPlace.Text;
-                //_StudentPhone.Contact = txtNewTel.Text;
-                //_student.EnglishName = txtNewEngName.Text;
-
-                foreach (JHSchool.Data.JHClassRecord cr in JHSchool.Data.JHClass.SelectAll())
                 {
-                    if (lblNewClassName.Text == cr.Name)
+                    chkSend = true;                
+                }
+
+                if (chkSend)
+                {
+                    string sid = string.Empty;
+                    if (_status == AddTransStudStatus.Added)
                     {
-                        _student.RefClassID = cr.ID;
-                        break;
+
+                        JHSchool.Data.JHStudentRecord NewStudRec = new JHSchool.Data.JHStudentRecord();
+                        NewStudRec.Name = txtNewName.Text;
+                        NewStudRec.Gender = cboNewGender.Text;
+                        NewStudRec.IDNumber = txtNewSSN.Text;
+                        sid = JHSchool.Data.JHStudent.Insert(NewStudRec);
+                        _StudentPhone = JHSchool.Data.JHPhone.SelectByStudentID(sid);
+                        _StudentPhone.Contact = txtNewTel.Text;
                     }
+
+                    //if (StudCheckTool.CheckStudIDNumberSame(txtNewSSN.Text, sid))
+                    //{
+                    //    FISCA.Presentation.Controls.MsgBox.Show("身分證號重複請檢查");
+                    //    return;
+                    //}
+
+                    Dictionary<string, int> chkSum = new Dictionary<string, int>();
+                    foreach (JHSchool.Data.JHStudentRecord studRec in JHSchool.Data.JHStudent.SelectAll())
+                    {
+                        if (studRec.Status == K12.Data.StudentRecord.StudentStatus.一般)
+                            if (!string.IsNullOrEmpty(studRec.StudentNumber))
+                            {
+                                if (chkSum.ContainsKey(studRec.StudentNumber))
+                                    chkSum[studRec.StudentNumber]++;
+                                else
+                                    chkSum.Add(studRec.StudentNumber, 1);
+                            }
+                    }
+
+                    if (chkSum.ContainsKey(cbotStudentNumber.Text))
+                    {
+                        if (chkSum[cbotStudentNumber.Text] > 1)
+                        {
+                            FISCA.Presentation.Controls.MsgBox.Show("學號重複請檢查");
+                            return;
+                        }
+                    }
+
+
+                    if (!string.IsNullOrEmpty(sid))
+                        _student = JHSchool.Data.JHStudent.SelectByID(sid);
+
+                    //_student.Name = txtNewName.Text;
+
+                    _student.IDNumber = txtNewSSN.Text;
+                    DateTime dt;
+                    if (DateTime.TryParse(dtNewBirthday.Text, out dt))
+                        _student.Birthday = dt;
+
+                    //_student.Gender = cboNewGender.Text;
+                    _student.Nationality = cboNewNationality.Text;
+                    _student.BirthPlace = txtNewBirthPlace.Text;
+                    //_StudentPhone.Contact = txtNewTel.Text;
+                    //_student.EnglishName = txtNewEngName.Text;
+
+                    foreach (JHSchool.Data.JHClassRecord cr in JHSchool.Data.JHClass.SelectAll())
+                    {
+                        if (lblNewClassName.Text == cr.Name)
+                        {
+                            _student.RefClassID = cr.ID;
+                            break;
+                        }
+                    }
+
+                    if (string.IsNullOrEmpty(cboSeatNo.Text))
+                        _student.SeatNo = null;
+                    else
+                    {
+                        int no;
+                        int.TryParse(cboSeatNo.Text, out no);
+                        _student.SeatNo = no;
+                    }
+                    _student.StudentNumber = cbotStudentNumber.Text;
+
+
+                    string strGradeYear = "";
+
+                    if (_student.Class != null)
+                        if (_student.Class.GradeYear.HasValue)
+                            strGradeYear = _student.Class.GradeYear.Value.ToString();
+
+                    JHSchool.Data.JHStudent.Update(_student);
+                    JHSchool.Data.JHPhone.Update(_StudentPhone);
+
+                    // 傳送至局端
+                    string errMsg = Utility.SendData("自動轉入", _student.IDNumber, _student.StudentNumber, _student.Name, strGradeYear, lblClassName.Text, cboSeatNo.Text, lblNewClassName.Text, "", "");
+                    if (errMsg != "")
+                        FISCA.Presentation.Controls.MsgBox.Show(errMsg);
+
+                    //log
+                    JHSchool.PermRecLogProcess prlp = new JHSchool.PermRecLogProcess();
+                    if (_status == AddTransStudStatus.Added)
+                        prlp.SaveLog("學生.轉入異動", "新增班級資料", "修改轉入與班級資料.");
+                    else
+                        prlp.SaveLog("學生.轉入異動", "修改班級資料", "修改轉入與班級資料.");
+
+                    AddTransBackgroundManager.SetStudent(_student);
+
+                    AddTransManagerForm atmf = new AddTransManagerForm();
+                    this.Visible = false;
+                    atmf.StartPosition = FormStartPosition.CenterParent;
+                    atmf.ShowDialog(FISCA.Presentation.MotherForm.Form);
+                    this.Close();
+                    JHSchool.Student.Instance.SyncAllBackground();
+                    JHSchool.Data.JHStudent.RemoveAll();
+                    JHSchool.Data.JHStudent.SelectAll();
                 }
-
-                if (string.IsNullOrEmpty(cboSeatNo.Text))
-                    _student.SeatNo = null;
-                else
-                {
-                    int no;
-                    int.TryParse(cboSeatNo.Text, out no);
-                    _student.SeatNo = no;
-                }
-                _student.StudentNumber = cbotStudentNumber.Text;
-
-
-                if (_status == AddTransStudStatus.Added)
-                {
-
-                }
-
-                string strGradeYear="";
-
-                if (_student.Class != null)
-                    if (_student.Class.GradeYear.HasValue)
-                        strGradeYear = _student.Class.GradeYear.Value.ToString();
-
-                JHSchool.Data.JHStudent.Update(_student);
-                JHSchool.Data.JHPhone.Update(_StudentPhone);
-
-                // 傳送至局端
-                string errMsg = Utility.SendData("自動轉入", _student.IDNumber, _student.StudentNumber, _student.Name, strGradeYear, lblClassName.Text, cboSeatNo.Text, lblNewClassName.Text, "", "");
-                if (errMsg != "")
-                    FISCA.Presentation.Controls.MsgBox.Show(errMsg);
-
-                //log
-                JHSchool.PermRecLogProcess prlp = new JHSchool.PermRecLogProcess();
-                if (_status == AddTransStudStatus.Added)
-                    prlp.SaveLog("學生.轉入異動", "新增班級資料", "修改轉入與班級資料.");
-                else
-                    prlp.SaveLog("學生.轉入異動", "修改班級資料", "修改轉入與班級資料.");
-
-                AddTransBackgroundManager.SetStudent(_student);
-
-                AddTransManagerForm atmf = new AddTransManagerForm();
-                this.Visible = false;
-                atmf.StartPosition = FormStartPosition.CenterParent;
-                atmf.ShowDialog(FISCA.Presentation.MotherForm.Form);
-                this.Close();
-                JHSchool.Student.Instance.SyncAllBackground();
-                JHSchool.Data.JHStudent.RemoveAll();
-                JHSchool.Data.JHStudent.SelectAll();
             }
             catch(Exception ex)
             {

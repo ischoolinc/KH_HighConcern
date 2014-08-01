@@ -20,14 +20,20 @@ namespace StudentTransferStudentBrief_KH
         {
             Dictionary<string, string> retVal = new Dictionary<string, string>();
 
-            QueryHelper qh = new QueryHelper();
-            string query = @"select class.class_name,count(student.id) as studCot,class.id from class inner join student on class.id=student.ref_class_id  where student.status=1 and (class_name not in(select class_name from $kh.automatic.class.lock) and class_name not in(select distinct class_name from $kh.automatic.placement.high.concern)) and class.grade_year=" + GradeYear + " group by class.class_name,class.id order by count(student.id),class.class_name,class.id limit 1";
-            DataTable dt = qh.Select(query);
-            foreach (DataRow dr in dt.Rows)
+            //QueryHelper qh = new QueryHelper();
+            //string query = @"select class.class_name,count(student.id) as studCot,class.id from class inner join student on class.id=student.ref_class_id  where student.status=1 and (class_name not in(select class_name from $kh.automatic.class.lock) and class_name not in(select distinct class_name from $kh.automatic.placement.high.concern)) and class.grade_year=" + GradeYear + " group by class.class_name,class.id order by count(student.id),class.class_name,class.id limit 1";
+            //DataTable dt = qh.Select(query);
+            //foreach (DataRow dr in dt.Rows)
+            //{
+
+            List<KH_HighConcernCalc.ClassStudent> ClassStudentList = KH_HighConcernCalc.Calc.GetClassStudentList(GradeYear);
+
+            foreach (KH_HighConcernCalc.ClassStudent cs in ClassStudentList)
             {
-                retVal.Add(dr["class_name"].ToString(), dr["id"].ToString()); ;
+                retVal.Add(cs.ClassName, cs.ClassID); 
                 break;
             }
+            
             return retVal;
         }
 

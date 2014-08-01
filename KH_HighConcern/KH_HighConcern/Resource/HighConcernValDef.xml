@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?> 
 <?xml-stylesheet type="text/xsl" href="format.xsl" ?>
-<ValidateRule Name="高關懷特殊身份註記">
+<ValidateRule Name="高關懷特殊身分註記">
     <DuplicateDetection>
         <Detector Name="組合鍵值">
             <Field Name="學號" />
@@ -21,16 +21,16 @@
     <Validate AutoCorrect="False" Description="「學號」在一般狀態不存在。" ErrorType="Error" Validator="學號是否存在" When="" />
   </Field>      
       
-  <Field Required="True" Name="高關懷特殊身份註記" Description="高關懷特殊身份註記">
-      <Validate AutoCorrect="False" Description="「高關懷特殊身份註記」不允許空白。" ErrorType="Error" Validator="不可空白" When="" />
-      <Validate AutoCorrect="False" Description="「高關懷特殊身份註記」只允許「是」。" ErrorType="Error" Validator="是列舉" When="" />
+  <Field Required="True" Name="高關懷特殊身分註記" Description="高關懷特殊身分註記">
+      <Validate AutoCorrect="False" Description="「高關懷特殊身分註記」不允許空白。" ErrorType="Error" Validator="不可空白" When="" />
+      <Validate AutoCorrect="False" Description="「高關懷特殊身分註記」只允許「是」。" ErrorType="Error" Validator="是列舉" When="" />
   </Field>
   <Field Required="True" Name="減免人數" Description="減免人數(0~9整數)">
       <Validate AutoCorrect="False" Description="「減免人數」不允許空白。" ErrorType="Error" Validator="不可空白" When="" />
       <Validate AutoCorrect="False" Description="「減免人數」只允許「0~9 整數」。" ErrorType="Error" Validator="Integer10" When="" />
   </Field>
     
-    <Field Required="True" Name="文號" Description="高關懷特殊身份文號">
+    <Field Required="True" Name="文號" Description="高關懷特殊身分文號">
       <Validate AutoCorrect="False" Description="「文號」不允許空白。" ErrorType="Error" Validator="不可空白" When="" />      
   </Field>
     </FieldList>

@@ -232,6 +232,12 @@
       <DependentUpon>StudentClassItemContent.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\KH_HighConcernCalc\KH_HighConcernCalc\KH_HighConcernCalc.csproj">
+      <Project>{8bb13d31-4959-4dc1-a9ff-4bf8a4731bb6}</Project>
+      <Name>KH_HighConcernCalc</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

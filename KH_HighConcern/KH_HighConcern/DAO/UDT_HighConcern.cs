@@ -37,7 +37,7 @@ namespace KH_HighConcern.DAO
         public string StudentNumber { get; set; }
 
         ///<summary>
-        /// 高關懷特殊身份註記
+        /// 高關懷特殊身分註記
         ///</summary>
         [Field(Field = "high_concern", Indexed = false)]
         public bool HighConcern { get; set; }

@@ -25,7 +25,7 @@ namespace KH_HighConcern
                Dictionary<string, UDT_HighConcern> _HighConcernDict = new Dictionary<string, UDT_HighConcern>();
 
                _HighConcernDict = UDTTransfer.GetHighConcernDictAll();
-               ListPaneField HighConcernField = new ListPaneField("高關懷特殊身份");
+               ListPaneField HighConcernField = new ListPaneField("高關懷特殊身分");
                HighConcernField.GetVariable += delegate(object sender, GetVariableEventArgs e)
                {
                    if (_HighConcernDict.ContainsKey(e.Key))
@@ -55,7 +55,7 @@ namespace KH_HighConcern
                };
                K12.Presentation.NLDPanels.Student.AddListPaneField(HighDocNoField);
 
-               // 當高關懷特殊身份有更新
+               // 當高關懷特殊身分有更新
                FISCA.InteractionService.SubscribeEvent("KH_HighConcern_HighConcernContent", (sender, args) =>
                {
                    _HighConcernDict = UDTTransfer.GetHighConcernDictAll();
@@ -68,24 +68,21 @@ namespace KH_HighConcern
            static void _bgLLoadUDT_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
            {
 
-               // 匯入高關懷特殊身份
+               // 匯入高關懷特殊身分
                Catalog catalog01 = RoleAclSource.Instance["學生"]["功能按鈕"];
-               catalog01.Add(new RibbonFeature("KH_HighConcern_ImportHighConcern", "匯入高關懷特殊身份"));
+               catalog01.Add(new RibbonFeature("KH_HighConcern_ImportHighConcern", "匯入高關懷特殊身分"));
 
                Catalog catalog02 = RoleAclSource.Instance["學生"]["資料項目"];
                catalog02.Add(new DetailItemFeature(typeof(DetailContent.HighConcernContent)));
 
                RibbonBarItem item01 = K12.Presentation.NLDPanels.Student.RibbonBarItems["資料統計"];
-               item01["匯入"]["其它相關匯入"]["匯入高關懷特殊身份"].Enable = UserAcl.Current["KH_HighConcern_ImportHighConcern"].Executable;
-               item01["匯入"]["其它相關匯入"]["匯入高關懷特殊身份"].Click += delegate {
-                   if (FISCA.Presentation.Controls.MsgBox.Show("匯入高關懷學生，按下「是」確認後，需報局備查。", "匯入高關懷學生", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
-                   {
+               item01["匯入"]["其它相關匯入"]["匯入高關懷特殊身分"].Enable = UserAcl.Current["KH_HighConcern_ImportHighConcern"].Executable;
+               item01["匯入"]["其它相關匯入"]["匯入高關懷特殊身分"].Click += delegate {
                        new ImportExport.ImportHighConcern().Execute();
-                   }                   
                };
 
 
-               // 資料項目-高關懷特殊身份
+               // 資料項目-高關懷特殊身分
                FeatureAce UserPermission = FISCA.Permission.UserAcl.Current["KH_HighConcern_HighConcernContent"];
                if (UserPermission.Editable)
                    K12.Presentation.NLDPanels.Student.AddDetailBulider(new DetailBulider<DetailContent.HighConcernContent>());

@@ -11,7 +11,7 @@ using Campus.Windows;
 
 namespace KH_HighConcern.DetailContent
 {
-     [FISCA.Permission.FeatureCode("KH_HighConcern_HighConcernContent", "高關懷特殊身份")]
+     [FISCA.Permission.FeatureCode("KH_HighConcern_HighConcernContent", "高關懷特殊身分")]
     public partial class HighConcernContent : FISCA.Presentation.DetailContent
     {
         EventHandler eh;
@@ -31,7 +31,7 @@ namespace KH_HighConcern.DetailContent
             sidList = new List<string>();
             _errorP = new ErrorProvider();
             InitializeComponent();            
-            this.Group = "高關懷特殊身份";
+            this.Group = "高關懷特殊身分";
             _bgWorker = new BackgroundWorker();
             _bgWorker.DoWork += _bgWorker_DoWork;
             _bgWorker.RunWorkerCompleted += _bgWorker_RunWorkerCompleted;
@@ -151,7 +151,7 @@ namespace KH_HighConcern.DetailContent
                 int.TryParse(txtCount.Text, out bb);
 
                 // 再次確認畫面
-                if (FISCA.Presentation.Controls.MsgBox.Show("設定是特殊生或高關懷學生，按下「是」確認後，需報局備查。", "高關懷學生", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
+                if (FISCA.Presentation.Controls.MsgBox.Show("變更高關懷特殊身份，按下「是」確認後，需報局備查。", "高關懷學生", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
                 {
                     _ChangeListener.SuspendListen();
 
