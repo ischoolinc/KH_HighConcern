@@ -35,7 +35,8 @@ namespace StudentClassItem_KH
             {
                 txtDate.Text = _RspMsg.Date.ToString();
                 txtAction.Text = _RspMsg.Action;
-                txtComment.Text = _RspMsg.Comment;
+                //txtComment.Text = _RspMsg.Comment;
+                txtComment.Text = _RspMsg.GetComment();
                 txtContent.Text = _RspMsg.GetContentString(true);
 
                 if (_RspMsg.Detail.Count > 0)
@@ -46,7 +47,7 @@ namespace StudentClassItem_KH
                         dt.Columns.Add("身分證");
                         dt.Columns.Add("學號");
                         dt.Columns.Add("姓名");
-                        dt.Columns.Add("年級");
+                        //dt.Columns.Add("年級");
                         dt.Columns.Add("班級");
                         dt.Columns.Add("座號");
 
@@ -56,7 +57,7 @@ namespace StudentClassItem_KH
                             dr["身分證"] = rs.IDNumber;
                             dr["學號"] = rs.StudentNumber;
                             dr["姓名"] = rs.Name;
-                            dr["年級"] = rs.GradeYear;
+                            //dr["年級"] = rs.GradeYear;
                             dr["班級"] = rs.ClassName;
                             dr["座號"] = rs.SeatNo;
                             dt.Rows.Add(dr);
@@ -69,7 +70,7 @@ namespace StudentClassItem_KH
                         dt.Columns.Add("身分證");
                         dt.Columns.Add("學號");
                         dt.Columns.Add("姓名");
-                        dt.Columns.Add("年級");
+                        //dt.Columns.Add("年級");
                         dt.Columns.Add("班級");
                         dt.Columns.Add("新班級");
                         //dt.Columns.Add("理由");
@@ -80,7 +81,7 @@ namespace StudentClassItem_KH
                             dr["身分證"] = rs.IDNumber;
                             dr["學號"] = rs.StudentNumber;
                             dr["姓名"] = rs.Name;
-                            dr["年級"] = rs.GradeYear;
+                            //dr["年級"] = rs.GradeYear;
                             dr["班級"] = rs.ClassName;
                             dr["新班級"] = rs.NewClassName;
                             //dr["理由"] = rs.Reason;

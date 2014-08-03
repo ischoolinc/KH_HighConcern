@@ -43,6 +43,19 @@ namespace StudentClassItem_KH
         public List<RspStud> Detail = new List<RspStud>();
 
         /// <summary>
+        /// 解析取得校端傳送備註
+        /// </summary>
+        /// <returns></returns>
+        public string GetComment()
+        {
+            string retVal = "";
+            if (Content.ContainsKey("Comment"))
+                retVal = Content["Comment"];
+
+            return retVal;
+        }
+
+        /// <summary>
         ///  取得 Content 組合
         /// </summary>
         /// <returns></returns>
@@ -61,6 +74,13 @@ namespace StudentClassItem_KH
                         retList.Add(Content["Summary"]);
                     break;
                 case "解除鎖定班級":
+                    retList.Add(selAction);
+                    if (Content.ContainsKey("ClassName"))
+                        retList.Add("班級「" + Content["ClassName"] + "」");
+
+                    if (Content.ContainsKey("GradeYear"))
+                        retList.Add("年級「" +Content["GradeYear"]+ "」");
+                    break;
                 case "鎖定班級":
                     retList.Add(selAction);
                     if (Content.ContainsKey("ClassName"))
@@ -94,6 +114,8 @@ namespace StudentClassItem_KH
                         retList.Add("座號「" + Content["SeatNo"] + "」");
                     if (Content.ContainsKey("NumberReduce"))
                         retList.Add("減免人數「" + Content["NumberReduce"] + "」");
+                    if (Content.ContainsKey("DocNo"))
+                        retList.Add("文號「" + Content["DocNo"] + "」");
                     break;
 
                 case "調整班級":
@@ -129,7 +151,7 @@ namespace StudentClassItem_KH
                         retList.Add("班級「" + Content["ClassName"] + "」");
                     if (Content.ContainsKey("SeatNo"))
                         retList.Add("座號「" + Content["SeatNo"] + "」");
-                    break;
+                    break;           
             }
 
             if (newLine)

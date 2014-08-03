@@ -40,7 +40,8 @@ namespace StudentClassItem_KH
             {
                 txtDate.Text = _RspMsg.Date.ToString();
                 txtAction.Text = _RspMsg.Action;
-                txtMemo.Text = _RspMsg.Comment;
+                //txtMemo.Text = _RspMsg.Comment;
+                txtMemo.Text = _RspMsg.GetComment();
                 txtContent.Text = _RspMsg.GetContentString(true);
             }        
         } 
