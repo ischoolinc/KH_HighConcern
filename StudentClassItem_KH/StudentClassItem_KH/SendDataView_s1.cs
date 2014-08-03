@@ -28,6 +28,10 @@ namespace StudentClassItem_KH
         private void SendDataView_s1_Load(object sender, EventArgs e)
         {
             LoadData();
+            txtAction.ReadOnly = true;
+            txtContent.ReadOnly = true;
+            txtDate.ReadOnly = true;
+            txtMemo.ReadOnly = true;
         }
 
         private void LoadData()

@@ -69,8 +69,8 @@ namespace StudentClassItem_KH
                     if (Content.ContainsKey("GradeYear"))
                         retList.Add("年級「" +Content["GradeYear"]+ "」");
 
-                    if (Content.ContainsKey("Reason"))
-                        retList.Add("理由「" + Content["Reason"] + "」");
+                    ////if (Content.ContainsKey("Reason"))
+                    ////    retList.Add("理由「" + Content["Reason"] + "」");
 
                     if (Content.ContainsKey("Comment"))
                         retList.Add("備註「" + Content["Comment"] + "」");
@@ -109,8 +109,8 @@ namespace StudentClassItem_KH
                     if (Content.ContainsKey("StudentNumber"))
                         retList.Add("學號「" + Content["StudentNumber"] + "」");
 
-                    if (Content.ContainsKey("Reason"))
-                        retList.Add("理由「" + Content["Reason"] + "」");
+                    //if (Content.ContainsKey("Reason"))
+                    //    retList.Add("理由「" + Content["Reason"] + "」");
 
                     if (Content.ContainsKey("FirstPriorityClassName"))
                         retList.Add("第一優先順班級「" + Content["FirstPriorityClassName"] + "」");

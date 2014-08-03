@@ -27,11 +27,12 @@ namespace StudentClassItem_KH
         [MainMethod()]
         public static void Start()
         {
-            Catalog catalog01 = RoleAclSource.Instance["學生"]["功能按鈕"];
+            Catalog catalog01 = RoleAclSource.Instance["局端"]["功能按鈕"];
             catalog01.Add(new RibbonFeature("KH_HighConcern_SendStudentDataView", "檢視傳送局端備查紀錄"));
-            RibbonBarItem rbSendClassDataView = K12.Presentation.NLDPanels.Student.RibbonBarItems["其它"];
-            rbSendClassDataView["檢視傳送局端備查紀錄"].Enable = UserAcl.Current["KH_HighConcern_SendStudentDataView"].Executable;
-            rbSendClassDataView["檢視傳送局端備查紀錄"].Click += delegate
+//            RibbonBarItem rbSendClassDataView = K12.Presentation.NLDPanels.Student.RibbonBarItems["其它"];
+            FISCA.Presentation.RibbonBarItem rbSendClassDataView = FISCA.Presentation.MotherForm.RibbonBarItems["局端", "管理"];
+            rbSendClassDataView["高雄市局端"]["檢視傳送局端備查紀錄"].Enable = UserAcl.Current["KH_HighConcern_SendStudentDataView"].Executable;
+            rbSendClassDataView["高雄市局端"]["檢視傳送局端備查紀錄"].Click += delegate
             {
                 SendDataView sdv = new SendDataView();
                 sdv.ShowDialog();

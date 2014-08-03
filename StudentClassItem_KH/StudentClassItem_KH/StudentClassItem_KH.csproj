@@ -43,6 +43,7 @@
     <Reference Include="DevComponents.DotNetBar2, Version=9.5.0.1, Culture=neutral, PublicKeyToken=7eb7c3a35b91de04, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\DevComponents.DotNetBar2.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="FISCA, Version=2.5.0.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -95,7 +96,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="IRewriteAPI_JH">
-      <HintPath>..\..\..\JHCore\IRewriteAPI_JH\bin\Debug\IRewriteAPI_JH.dll</HintPath>
+      <HintPath>..\..\..\JHCore\IRewriteAPI_JH\obj\Debug\IRewriteAPI_JH.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="JHSchool, Version=1.0.4.2, Culture=neutral, processorArchitecture=MSIL">

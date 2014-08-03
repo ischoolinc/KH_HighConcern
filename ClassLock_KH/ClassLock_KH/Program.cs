@@ -24,11 +24,25 @@ namespace ClassLock_KH
             _bgLLoadUDT.RunWorkerAsync();
 
             Dictionary<string, UDT_ClassLock> _UDT_ClassLockDict = UDTTransfer.GetClassLockNameIDDict();
+            Dictionary<string, KH_HighConcernCalc.ClassStudent> _ClassStudentDict = KH_HighConcernCalc.Calc.GetClassStudentAllIDDict();
 
             Catalog catalog01 = RoleAclSource.Instance["班級"]["功能按鈕"];
             catalog01.Add(new RibbonFeature("KH_HighConcern_ClassLock", "班級鎖定/解鎖"));
             catalog01.Add(new RibbonFeature("KH_HighConcern_AllClassUnLock", "全部班級解鎖"));
             catalog01.Add(new RibbonFeature("KH_HighConcern_SendClassDataView", "檢視傳送局端備查紀錄"));
+
+            ListPaneField ClassLockStudentCountField = new ListPaneField("編班人數");
+            ClassLockStudentCountField.GetVariable += delegate(object sender, GetVariableEventArgs e)
+            {
+                if (_ClassStudentDict.ContainsKey(e.Key))
+                {
+                    if (_ClassStudentDict.ContainsKey(e.Key))
+                        e.Value = _ClassStudentDict[e.Key].ClassStudentCount;
+                }
+            };
+            K12.Presentation.NLDPanels.Class.AddListPaneField(ClassLockStudentCountField);
+
+
 
             ListPaneField ClassLockField = new ListPaneField("班級鎖定");
             ClassLockField.GetVariable += delegate(object sender, GetVariableEventArgs e)
@@ -39,6 +53,16 @@ namespace ClassLock_KH
                 }
             };
             K12.Presentation.NLDPanels.Class.AddListPaneField(ClassLockField);
+
+            ListPaneField ClassLockCommentField = new ListPaneField("鎖定備註");
+            ClassLockCommentField.GetVariable += delegate(object sender, GetVariableEventArgs e)
+            {
+                if (_UDT_ClassLockDict.ContainsKey(e.Key))
+                {
+                    e.Value = _UDT_ClassLockDict[e.Key].Comment;
+                }
+            };
+            K12.Presentation.NLDPanels.Class.AddListPaneField(ClassLockCommentField);
 
 
             K12.Presentation.NLDPanels.Class.SelectedSourceChanged += delegate {
@@ -79,9 +103,17 @@ namespace ClassLock_KH
                     // 重新整理
                     _UDT_ClassLockDict = UDTTransfer.GetClassLockNameIDDict();
                     ClassLockField.Reload();
+                    ClassLockCommentField.Reload();
+                    ClassLockStudentCountField.Reload();
                 }
             };
 
+            // 當高關懷特殊身分有更新
+            FISCA.InteractionService.SubscribeEvent("KH_HighConcern_HighConcernContent", (sender, args) =>
+            {
+                _ClassStudentDict = KH_HighConcernCalc.Calc.GetClassStudentAllIDDict();
+                ClassLockStudentCountField.Reload();
+            });
 
             K12.Presentation.NLDPanels.Class.ListPaneContexMenu["班級鎖定/解鎖"].Click += delegate
             {
@@ -116,6 +148,10 @@ namespace ClassLock_KH
                                 data = new UDT_ClassLock();
                                 data.ClassID = cid;
                                 data.ClassName = classRec.Name;
+                                data.Comment = strComment;
+                                data.DocNo = strDocNo;
+                                data.DateStr = strDate;
+
                                 string errMsg = Utility.SendData(classRec.Name, grYear, "", "鎖定班級", strDate,strComment,strDocNo);
                                 if (errMsg != "")
                                     FISCA.Presentation.Controls.MsgBox.Show(errMsg);
@@ -143,6 +179,8 @@ namespace ClassLock_KH
                         data.Save();
                         _UDT_ClassLockDict = UDTTransfer.GetClassLockNameIDDict();
                         ClassLockField.Reload();
+                        ClassLockCommentField.Reload();
+                        ClassLockStudentCountField.Reload();
                     }
             };
         }

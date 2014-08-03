@@ -23,5 +23,24 @@ namespace ClassLock_KH.DAO
         ///</summary>
         [Field(Field = "class_name", Indexed = true)]
         public string ClassName { get; set; }
+
+        ///<summary>
+        /// 鎖定備註
+        ///</summary>
+        [Field(Field = "Comment", Indexed = false)]
+        public string Comment { get; set; }
+
+        ///<summary>
+        /// 文號
+        ///</summary>
+        [Field(Field = "doc_no", Indexed = false)]
+        public string DocNo { get; set; }
+
+        ///<summary>
+        /// 編班委員會日期
+        ///</summary>
+        [Field(Field = "date_str", Indexed = false)]
+        public string DateStr { get; set; }
+
     }
 }

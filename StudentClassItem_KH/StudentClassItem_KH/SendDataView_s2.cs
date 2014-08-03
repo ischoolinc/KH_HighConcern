@@ -22,6 +22,11 @@ namespace StudentClassItem_KH
         private void SendDataView_s2_Load(object sender, EventArgs e)
         {
             LoadData();
+            txtAction.ReadOnly = true;
+            txtComment.ReadOnly = true;
+            txtContent.ReadOnly = true;
+            txtDate.ReadOnly = true;
+            dgDetail.ReadOnly = true;
         }
 
         private void LoadData()
@@ -67,7 +72,7 @@ namespace StudentClassItem_KH
                         dt.Columns.Add("年級");
                         dt.Columns.Add("班級");
                         dt.Columns.Add("新班級");
-                        dt.Columns.Add("理由");
+                        //dt.Columns.Add("理由");
 
                         foreach (RspStud rs in _RspMsg.Detail)
                         {
@@ -78,7 +83,7 @@ namespace StudentClassItem_KH
                             dr["年級"] = rs.GradeYear;
                             dr["班級"] = rs.ClassName;
                             dr["新班級"] = rs.NewClassName;
-                            dr["理由"] = rs.Reason;
+                            //dr["理由"] = rs.Reason;
                             dt.Rows.Add(dr);
                         }
                         
@@ -115,6 +120,11 @@ namespace StudentClassItem_KH
             wb.Worksheets[0].AutoFitColumns();
             Utility.CompletedXls("匯出局端備查資料-詳細內容", wb);
             btnExport.Enabled = true;
+        }
+
+        private void dgDetail_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

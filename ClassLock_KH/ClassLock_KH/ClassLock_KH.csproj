@@ -42,6 +42,7 @@
     <Reference Include="DevComponents.DotNetBar2, Version=9.5.0.1, Culture=neutral, PublicKeyToken=7eb7c3a35b91de04, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\StudentClassItem_KH\StudentClassItem_KH\Library\DevComponents.DotNetBar2.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="FISCA, Version=2.5.0.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -179,6 +180,12 @@
     <EmbeddedResource Include="SendDataView.resx">
       <DependentUpon>SendDataView.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\KH_HighConcernCalc\KH_HighConcernCalc\KH_HighConcernCalc.csproj">
+      <Project>{8BB13D31-4959-4DC1-A9FF-4BF8A4731BB6}</Project>
+      <Name>KH_HighConcernCalc</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
