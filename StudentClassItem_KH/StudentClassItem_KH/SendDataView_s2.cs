@@ -99,7 +99,12 @@ namespace StudentClassItem_KH
         {
             btnExport.Enabled = false;
             Aspose.Cells.Workbook wb = new Aspose.Cells.Workbook();
-            int colIdx = 0;
+
+            wb.Worksheets[0].Cells[0, 0].PutValue("日期");
+            wb.Worksheets[0].Cells[0, 1].PutValue("動作");
+            wb.Worksheets[0].Cells[0, 2].PutValue("備註");
+            wb.Worksheets[0].Cells[0, 3].PutValue("摘要內容");
+            int colIdx = 4;
             foreach (DataGridViewColumn dgvc in dgDetail.Columns)
             {
                 wb.Worksheets[0].Cells[0, colIdx].PutValue(dgvc.HeaderText);
@@ -109,7 +114,12 @@ namespace StudentClassItem_KH
             int rowIdx = 1;
             foreach (DataGridViewRow dgvr in dgDetail.Rows)
             {
-                colIdx = 0;
+                wb.Worksheets[0].Cells[rowIdx, 0].PutValue(txtDate.Text);
+                wb.Worksheets[0].Cells[rowIdx, 1].PutValue(txtAction.Text);
+                wb.Worksheets[0].Cells[rowIdx, 2].PutValue(txtComment.Text);
+                wb.Worksheets[0].Cells[rowIdx, 3].PutValue(txtContent.Text);
+
+                colIdx = 4;
                 foreach (DataGridViewCell dgvc in dgvr.Cells)
                 {
                     if (dgvc.Value != null)

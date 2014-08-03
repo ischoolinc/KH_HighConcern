@@ -209,6 +209,9 @@ DateTime:日期時間。
                     }
             }
 
+            // 依日期排序 日期新到舊
+            RspMsgList = (from data in RspMsgList orderby data.Date descending select data).ToList();
+
             // 填資料到畫面
             if (RspMsgList.Count > 0)
             {

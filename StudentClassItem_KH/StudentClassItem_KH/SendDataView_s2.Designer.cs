@@ -227,7 +227,7 @@
             this.btnExport.Size = new System.Drawing.Size(91, 25);
             this.btnExport.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.btnExport.TabIndex = 29;
-            this.btnExport.Text = "匯出詳細內容";
+            this.btnExport.Text = "匯出";
             this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
             // 
             // SendDataView_s2
