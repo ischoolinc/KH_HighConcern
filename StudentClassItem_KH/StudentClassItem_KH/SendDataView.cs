@@ -192,6 +192,10 @@ DateTime:日期時間。
                                         if (elms1.Element("GradeYear") != null)
                                             rs.GradeYear = elms1.Element("GradeYear").Value;
 
+                                        if (elms1.Element("StudentName") != null)
+                                            rs.Name = elms1.Element("StudentName").Value;
+
+
                                         if (elms1.Element("Reason") != null)
                                             rs.Reason = elms1.Element("Reason").Value;
 

@@ -42,7 +42,7 @@ namespace StudentClassItem_KH
                 if (_RspMsg.Detail.Count > 0)
                 {
                     DataTable dt = new DataTable();
-                    if (_RspMsg.Action.Contains("新生") || _RspMsg.Action.Contains("特殊"))
+                    if (_RspMsg.Action.Contains("新增") || _RspMsg.Action.Contains("特殊"))
                     {
                         dt.Columns.Add("身分證");
                         dt.Columns.Add("學號");
@@ -136,6 +136,11 @@ namespace StudentClassItem_KH
         private void dgDetail_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        private void buttonX1_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

@@ -1203,6 +1203,9 @@ namespace StudentImportWizard_KH
                     if (Context.SourceReader.Columns.ContainsKey("身分證號"))
                         ls.IDNumber = Context.SourceReader.GetValue("身分證號");
 
+                    if (Context.SourceReader.Columns.ContainsKey("姓名"))
+                        ls.StudentName = Context.SourceReader.GetValue("姓名");
+
                     if (Context.SourceReader.Columns.ContainsKey("年級"))
                         ls.GradeYear = Context.SourceReader.GetValue("年級");
 

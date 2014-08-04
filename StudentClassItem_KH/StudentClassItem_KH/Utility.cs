@@ -208,8 +208,8 @@ namespace StudentClassItem_KH
                 s1.SetElementValue("All", "");
                 XElement s2 = new XElement("Condition");
                 s2.SetElementValue("Dsns", DSNS);
-                s2.SetElementValue("StartDate", beginDate.ToShortDateString());
-                s2.SetElementValue("EndDate", endDate.ToShortDateString());
+                s2.SetElementValue("StartDate", string.Format("{0:yyyy-MM-dd}", beginDate));
+                s2.SetElementValue("EndDate", string.Format("{0:yyyy-MM-dd}", endDate.AddDays(1)));
                 xmlRoot.Add(s1);
                 xmlRoot.Add(s2);
 

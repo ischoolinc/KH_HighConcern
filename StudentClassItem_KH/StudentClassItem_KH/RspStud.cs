@@ -16,7 +16,7 @@ namespace StudentClassItem_KH
         public string IDNumber { get; set; }
 
         /// <summary>
-        /// 名稱
+        /// 姓名
         /// </summary>
         public string Name { get; set; }
 
