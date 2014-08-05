@@ -462,6 +462,13 @@ namespace StudentTransferStudentBrief_KH
                     return null;
                 }
 
+                errors.SetError(txtClass, "");
+                if (string.IsNullOrWhiteSpace(txtClass.Text))
+                {
+                    errors.SetError(txtClass, "班級必填!");
+                    return null;
+                }
+
                 //將資料寫回 XmlData。
                 XElement student = XmlData.Element("Student");
                 student.Element("Name").Value = txtName.Text;
