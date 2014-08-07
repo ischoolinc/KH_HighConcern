@@ -133,23 +133,14 @@ namespace StudentTransStudBase_KH
                 if (chkSend)
                 {
                     string sid = string.Empty;
-                    if (_status == AddTransStudStatus.Added)
-                    {
-
-                        JHSchool.Data.JHStudentRecord NewStudRec = new JHSchool.Data.JHStudentRecord();
-                        NewStudRec.Name = txtNewName.Text;
-                        NewStudRec.Gender = cboNewGender.Text;
-                        NewStudRec.IDNumber = txtNewSSN.Text;
-                        sid = JHSchool.Data.JHStudent.Insert(NewStudRec);
-                        _StudentPhone = JHSchool.Data.JHPhone.SelectByStudentID(sid);
-                        _StudentPhone.Contact = txtNewTel.Text;
-                    }
+           
 
                     //if (StudCheckTool.CheckStudIDNumberSame(txtNewSSN.Text, sid))
                     //{
                     //    FISCA.Presentation.Controls.MsgBox.Show("身分證號重複請檢查");
                     //    return;
                     //}
+                    
 
                     Dictionary<string, int> chkSum = new Dictionary<string, int>();
                     foreach (JHSchool.Data.JHStudentRecord studRec in JHSchool.Data.JHStudent.SelectAll())
@@ -164,15 +155,34 @@ namespace StudentTransStudBase_KH
                             }
                     }
 
+                    bool chkDNumber = false;
                     if (chkSum.ContainsKey(cbotStudentNumber.Text))
                     {
-                        if (chkSum[cbotStudentNumber.Text] > 1)
+                        if (chkSum[cbotStudentNumber.Text] > 0)
                         {
-                            FISCA.Presentation.Controls.MsgBox.Show("學號重複請檢查");
-                            return;
+                            chkDNumber = true;
                         }
                     }
 
+                    Errors.SetError(cbotStudentNumber, "");
+
+                    if (chkDNumber)
+                    {
+                        Errors.SetError(cbotStudentNumber, "學號重複請檢查!");
+                        return;
+                    }  
+
+                    if (_status == AddTransStudStatus.Added)
+                    {
+
+                        JHSchool.Data.JHStudentRecord NewStudRec = new JHSchool.Data.JHStudentRecord();
+                        NewStudRec.Name = txtNewName.Text;
+                        NewStudRec.Gender = cboNewGender.Text;
+                        NewStudRec.IDNumber = txtNewSSN.Text;
+                        sid = JHSchool.Data.JHStudent.Insert(NewStudRec);
+                        _StudentPhone = JHSchool.Data.JHPhone.SelectByStudentID(sid);
+                        _StudentPhone.Contact = txtNewTel.Text;
+                    }
 
                     if (!string.IsNullOrEmpty(sid))
                         _student = JHSchool.Data.JHStudent.SelectByID(sid);
@@ -338,6 +348,8 @@ namespace StudentTransStudBase_KH
             cboSeatNo.Text = "";
             // 班級座號
             setClassNo();
-        }
+            // 取得學號
+            cbotStudentNumber.Text = Utility.GetStudentNumber(cboGradeYear.Text);
+        }   
     }
 }

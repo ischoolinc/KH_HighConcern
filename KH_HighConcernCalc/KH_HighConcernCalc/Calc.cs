@@ -198,18 +198,20 @@ namespace KH_HighConcernCalc
 
             //  取得班級高關懷人數
             QueryHelper qh3 = new QueryHelper();
-            string query3 = "select class.id as class_id,sum(number_reduce) as class_hcount from $kh.automatic.placement.high.concern inner join student on to_number($kh.automatic.placement.high.concern.ref_student_id,'999999999')=student.id inner join class on student.ref_class_id=class.id  group by class_id;";
+            string query3 = "select class.id as class_id,sum(number_reduce) as class_hcount,count($kh.automatic.placement.high.concern.ref_student_id) as class_hscount from $kh.automatic.placement.high.concern inner join student on to_number($kh.automatic.placement.high.concern.ref_student_id,'999999999')=student.id inner join class on student.ref_class_id=class.id  group by class_id;";
             DataTable dt3 = qh3.Select(query3);
             foreach (DataRow dr in dt3.Rows)
             {
                 string classID = dr["class_id"].ToString();
 
                 int number_reduce = int.Parse(dr["class_hcount"].ToString());
+                int sCount = int.Parse(dr["class_hscount"].ToString());
 
                 // 加入高關懷學生
                 if(retValue.ContainsKey(classID))
                 {
                     retValue[classID].HStudentCount = number_reduce;
+                    retValue[classID].ClassHStudentCount = sCount;
                     retValue[classID].ClassStudentCount += retValue[classID].HStudentCount;
                 }
             }

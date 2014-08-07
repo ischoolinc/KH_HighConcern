@@ -147,8 +147,8 @@ namespace StudentClassItem_KH
                         retList.Add("身分證「" + Content["IDNumber"] + "」");
                     if (Content.ContainsKey("StudentNumber"))
                         retList.Add("學號「" + Content["StudentNumber"] + "」");
-                    if (Content.ContainsKey("ClassName"))
-                        retList.Add("班級「" + Content["ClassName"] + "」");
+                    if (Content.ContainsKey("NewClassName"))
+                        retList.Add("班級「" + Content["NewClassName"] + "」");
                     if (Content.ContainsKey("SeatNo"))
                         retList.Add("座號「" + Content["SeatNo"] + "」");
                     break;           

@@ -41,8 +41,7 @@ namespace ClassLock_KH
                 }
             };
             K12.Presentation.NLDPanels.Class.AddListPaneField(ClassLockStudentCountField);
-
-
+                       
 
             ListPaneField ClassLockField = new ListPaneField("班級鎖定");
             ClassLockField.GetVariable += delegate(object sender, GetVariableEventArgs e)
@@ -63,6 +62,18 @@ namespace ClassLock_KH
                 }
             };
             K12.Presentation.NLDPanels.Class.AddListPaneField(ClassLockCommentField);
+
+
+            ListPaneField ClassLockSStudentCountField = new ListPaneField("特殊生人數");
+            ClassLockSStudentCountField.GetVariable += delegate(object sender, GetVariableEventArgs e)
+            {
+                if (_ClassStudentDict.ContainsKey(e.Key))
+                {
+                    if (_ClassStudentDict.ContainsKey(e.Key))
+                        e.Value = _ClassStudentDict[e.Key].ClassHStudentCount;
+                }
+            };
+            K12.Presentation.NLDPanels.Class.AddListPaneField(ClassLockSStudentCountField);
 
 
             K12.Presentation.NLDPanels.Class.SelectedSourceChanged += delegate {
@@ -105,6 +116,7 @@ namespace ClassLock_KH
                     ClassLockField.Reload();
                     ClassLockCommentField.Reload();
                     ClassLockStudentCountField.Reload();
+                    ClassLockSStudentCountField.Reload();
                 }
             };
 
@@ -113,6 +125,7 @@ namespace ClassLock_KH
             {
                 _ClassStudentDict = KH_HighConcernCalc.Calc.GetClassStudentAllIDDict();
                 ClassLockStudentCountField.Reload();
+                ClassLockSStudentCountField.Reload();
             });
 
             K12.Presentation.NLDPanels.Class.ListPaneContexMenu["班級鎖定/解鎖"].Click += delegate
@@ -181,6 +194,7 @@ namespace ClassLock_KH
                         ClassLockField.Reload();
                         ClassLockCommentField.Reload();
                         ClassLockStudentCountField.Reload();
+                        ClassLockSStudentCountField.Reload();
                     }
             };
         }

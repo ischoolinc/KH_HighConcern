@@ -182,5 +182,29 @@ namespace StudentTransStudBase_KH
 
             return retVal;
         }
+
+
+        /// <summary>
+        /// 透過年級取得學號
+        /// </summary>
+        /// <param name="grYear"></param>
+        /// <returns></returns>
+        public  static string GetStudentNumber(string grYear)
+        {
+            string retVal = "學號有非數字無法取得";
+            if (!string.IsNullOrWhiteSpace(grYear))
+            {
+                QueryHelper qh = new QueryHelper();
+                string strSQL = "select student_number from student inner join class on student.ref_class_id=class.id where student.status=1 and class.grade_year=" + grYear + " and student_number<>'' order by student_number desc limit 1;";
+                DataTable dt = qh.Select(strSQL);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    int no;
+                    if (int.TryParse(dr[0].ToString(), out no))
+                        retVal = (no + 1).ToString();
+                }
+            }
+            return retVal;
+        }
     }
 }

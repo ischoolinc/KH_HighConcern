@@ -26,12 +26,12 @@ namespace KH_HighConcernCalc
         public int StudentCount { get; set; }
 
         /// <summary>
-        /// 高關懷人數
+        /// 高關懷減免人數
         /// </summary>
         public int HStudentCount = 0;
 
         /// <summary>
-        /// 編班人數=班級人數+高關懷人數
+        /// 編班人數=班級人數+高關懷減免人數
         /// </summary>
         public int ClassStudentCount { get; set; }
 
@@ -39,5 +39,10 @@ namespace KH_HighConcernCalc
         /// 將班級名稱轉數字
         /// </summary>
         public int ClassNameInt { get; set; }
+
+        /// <summary>
+        /// 班級高關懷人數
+        /// </summary>
+        public int ClassHStudentCount { get; set; }
     }
 }
