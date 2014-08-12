@@ -119,6 +119,7 @@
   <ItemGroup>
     <Compile Include="DAO\UDTTransfer.cs" />
     <Compile Include="DAO\UDT_ClassLock.cs" />
+    <Compile Include="DAO\UDT_ClassLock_Log.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SendDataForm.cs">

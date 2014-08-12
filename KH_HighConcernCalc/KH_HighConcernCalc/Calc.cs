@@ -190,6 +190,7 @@ namespace KH_HighConcernCalc
                     cs.ClassNameInt = csi;
                 cs.StudentCount = int.Parse(dr["stud_count"].ToString());
                 cs.ClassStudentCount = cs.StudentCount;
+                cs.ClassStudentCountStr = cs.StudentCount.ToString();
 
                 //// 排除班級鎖定
                 //if (!lockClassName.Contains(cs.ClassName))
@@ -207,12 +208,15 @@ namespace KH_HighConcernCalc
                 int number_reduce = int.Parse(dr["class_hcount"].ToString());
                 int sCount = int.Parse(dr["class_hscount"].ToString());
 
+
                 // 加入高關懷學生
                 if(retValue.ContainsKey(classID))
                 {
                     retValue[classID].HStudentCount = number_reduce;
                     retValue[classID].ClassHStudentCount = sCount;
+                    string str1 = "(" + retValue[classID].ClassStudentCount + "+" + number_reduce + ")";
                     retValue[classID].ClassStudentCount += retValue[classID].HStudentCount;
+                    retValue[classID].ClassStudentCountStr = retValue[classID].ClassStudentCount + str1;
                 }
             }
 

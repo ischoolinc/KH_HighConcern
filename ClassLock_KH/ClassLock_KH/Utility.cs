@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using FISCA.Data;
+using System.Data;
 
 namespace ClassLock_KH
 {
@@ -173,6 +175,37 @@ namespace ClassLock_KH
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// 取得資料庫日期時間
+        /// </summary>
+        /// <returns></returns>
+        public static DateTime? GetDBServerDateTime()
+        {
+            DateTime? retVal;
+            retVal = null;
+            QueryHelper qh = new QueryHelper();
+            string query = "select now()";
+            DataTable dt = qh.Select(query);
+            if (dt.Rows.Count > 0)
+                retVal = DateTime.Parse(dt.Rows[0][0].ToString());
+
+            return retVal;
+        }
+
+        public static DateTime? GetLastUnlockDate()
+        {
+            DateTime? retVal;
+
+            retVal = null;
+            QueryHelper qh = new QueryHelper();
+            string query = "select date_time from $kh.automatic.class.unlock.log order by last_update desc limit 1";
+            DataTable dt = qh.Select(query);
+            if (dt.Rows.Count > 0)
+                retVal = DateTime.Parse(dt.Rows[0][0].ToString());
+
+            return retVal;
         }
     }
 }

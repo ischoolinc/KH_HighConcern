@@ -37,7 +37,10 @@ namespace ClassLock_KH
                 if (_ClassStudentDict.ContainsKey(e.Key))
                 {
                     if (_ClassStudentDict.ContainsKey(e.Key))
-                        e.Value = _ClassStudentDict[e.Key].ClassStudentCount;
+                    {
+                        
+                        e.Value = _ClassStudentDict[e.Key].ClassStudentCountStr;
+                    }
                 }
             };
             K12.Presentation.NLDPanels.Class.AddListPaneField(ClassLockStudentCountField);
@@ -209,9 +212,62 @@ namespace ClassLock_KH
         {
             UDTTransfer.CreateUDTTable();
 
+            // 檢查是否需要全部班級解鎖
+            // 取得Server時間
+            DateTime? serDT = Utility.GetDBServerDateTime();
+
+            // 2015 年開始
+            if (serDT.HasValue && serDT.Value.Year>=2015)
+            {
+                // 第一學期
+                DateTime dt1b = new DateTime(DateTime.Now.Year, 8, 1);
+                DateTime dt1e = new DateTime(DateTime.Now.Year + 1, 2, 1);
+                // 第二學期
+                DateTime dt2b = new DateTime(DateTime.Now.Year, 2, 1);
+                DateTime dt2e = new DateTime(DateTime.Now.Year, 8, 1);
+
+                //檢查是否符合解鎖規則
+                bool chkUnLock = false;
+
+                if (serDT.Value >= dt1b || serDT.Value >= dt2b)
+                    chkUnLock = true;
+
+                // 需要解鎖
+                if (chkUnLock)
+                {
+                    bool runUnLock = true;
+
+                    // 取得最後解鎖日期
+                    DateTime? unLockDate = Utility.GetLastUnlockDate();
+
+                    if (unLockDate.HasValue)
+                    {
+                        if (unLockDate.Value.Month > 7)
+                        {
+                            if (unLockDate.Value >= dt1b && unLockDate.Value < dt1e)
+                                runUnLock = false;
+                        }
+                        else
+                        {
+                            if (unLockDate.Value >= dt2b && unLockDate.Value < dt2e)
+                                runUnLock = false;
+                        }
+                    }
+
+                    // 執行全部解鎖
+                    if (runUnLock)
+                    {
+                        // 寫入解鎖log
+                        UDT_ClassLock_Log lo = new UDT_ClassLock_Log();
+                        lo.Action = "班級解鎖";
+                        lo.Date = serDT.Value;
+                        lo.Save();
+
+                        UDTTransfer.UnlockAllClass();
+                    }
+                }
+            }        
         }
 
-
-      
     }
 }
