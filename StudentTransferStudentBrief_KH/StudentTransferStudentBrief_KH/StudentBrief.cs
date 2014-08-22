@@ -737,6 +737,13 @@ namespace StudentTransferStudentBrief_KH
                 cboSeatNo.Text = "";
                 // 取得座號
                 FillEmptySeatNos(SRecord != null ? SRecord.SeatNo : null, _ClassID);
+
+                cboStudentNumber.Text = "";
+                // 處理學號
+                if (SRecord != null)
+                    FillStudentNumberLast(SRecord.StudentNumber);
+                else
+                    FillStudentNumberLast(string.Empty);
             }
         }
     }
