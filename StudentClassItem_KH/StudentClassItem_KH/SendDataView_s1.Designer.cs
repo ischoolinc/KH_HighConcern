@@ -78,11 +78,11 @@
             // 
             this.labelX3.BackgroundStyle.Class = "";
             this.labelX3.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX3.Location = new System.Drawing.Point(41, 84);
+            this.labelX3.Location = new System.Drawing.Point(15, 84);
             this.labelX3.Name = "labelX3";
-            this.labelX3.Size = new System.Drawing.Size(34, 21);
+            this.labelX3.Size = new System.Drawing.Size(60, 21);
             this.labelX3.TabIndex = 2;
-            this.labelX3.Text = "備註";
+            this.labelX3.Text = "局端備註";
             // 
             // labelX4
             // 

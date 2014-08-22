@@ -35,8 +35,8 @@ namespace StudentClassItem_KH
             {
                 txtDate.Text = _RspMsg.Date.ToString();
                 txtAction.Text = _RspMsg.Action;
-                //txtComment.Text = _RspMsg.Comment;
-                txtComment.Text = _RspMsg.GetComment();
+                txtComment.Text = _RspMsg.Comment;
+              //  txtComment.Text = _RspMsg.GetComment();
                 txtContent.Text = _RspMsg.GetContentString(true);
 
                 if (_RspMsg.Detail.Count > 0)
