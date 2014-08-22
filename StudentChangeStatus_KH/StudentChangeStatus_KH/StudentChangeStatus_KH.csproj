@@ -118,6 +118,7 @@
     <Compile Include="StudentChangeStatusStudentBar.Designer.cs">
       <DependentUpon>StudentChangeStatusStudentBar.cs</DependentUpon>
     </Compile>
+    <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Library\Customization.Tagging.dll" />

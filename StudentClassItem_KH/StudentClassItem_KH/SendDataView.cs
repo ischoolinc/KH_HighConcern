@@ -163,8 +163,13 @@ DateTime:日期時間。
                                         rm.Content.Add("DocNo", xmlContent.Element("DocNo").Value);
 
                                     if (xmlContent.Element("NumberReduce") != null)
-                                        rm.Content.Add("NumberReduce", xmlContent.Element("NumberReduce").Value);                                   
-                                    
+                                        rm.Content.Add("NumberReduce", xmlContent.Element("NumberReduce").Value);
+
+                                    if (xmlContent.Element("StudentStatus") != null)
+                                        rm.Content.Add("StudentStatus", xmlContent.Element("StudentStatus").Value);
+
+                                    if (xmlContent.Element("NewStudentStatus") != null)
+                                        rm.Content.Add("NewStudentStatus", xmlContent.Element("NewStudentStatus").Value);  
                                 }
 
                                 // 詳細內容    

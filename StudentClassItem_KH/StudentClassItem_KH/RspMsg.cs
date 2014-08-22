@@ -151,7 +151,24 @@ namespace StudentClassItem_KH
                         retList.Add("班級「" + Content["NewClassName"] + "」");
                     if (Content.ContainsKey("SeatNo"))
                         retList.Add("座號「" + Content["SeatNo"] + "」");
-                    break;           
+                    break;
+
+                case "狀態變更":
+                    retList.Add(selAction);
+                    if (Content.ContainsKey("StudentName"))
+                        retList.Add("學生「" + Content["StudentName"] + "」");
+                    if (Content.ContainsKey("IDNumber"))
+                        retList.Add("身分證「" + Content["IDNumber"] + "」");
+                    if (Content.ContainsKey("StudentNumber"))
+                        retList.Add("學號「" + Content["StudentNumber"] + "」");
+                    if (Content.ContainsKey("ClassName"))
+                        retList.Add("班級「" + Content["ClassName"] + "」");
+                    if (Content.ContainsKey("StudentStatus"))
+                        retList.Add("狀態變更前「" + Content["StudentStatus"] + "」");
+                    if (Content.ContainsKey("NewStudentStatus"))
+                        retList.Add("狀態變更後「" + Content["NewStudentStatus"] + "」");
+
+                    break;     
             }
 
             if (newLine)

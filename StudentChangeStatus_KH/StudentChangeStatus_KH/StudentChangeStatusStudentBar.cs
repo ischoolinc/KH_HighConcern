@@ -447,12 +447,12 @@ namespace StudentChangeStatus_KH
                 {
                     if ((StatusItem)button.Tag != GetStatusItem(studentRec.Status).Value)
                     {
-                        FISCA.Presentation.Controls.MsgBox.Show("Hello!");
-
-                        if (MessageBox.Show("確認變更學生狀態為" + ((StatusItem)button.Tag).Text + "？", "ischool", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        if (MessageBox.Show("請問是否將 " + studentRec.Name + " 由" + studentRec.StatusStr + " 調整成 " + ((StatusItem)button.Tag).Text + "，按下「是」確認後，需報局備查。", "ischool", MessageBoxButtons.YesNo) == DialogResult.Yes)
                         {
                             try
                             {
+                                string StudStatus=studentRec.StatusStr;
+                                string NewStudStatus=((StatusItem)button.Tag).Text;
                                 string log = "學生「" + studentRec.Name + "」狀態已";
                                 log += "由「" + studentRec.StatusStr + "」變更為「" + ((StatusItem)button.Tag).Text + "」";
 
@@ -484,6 +484,13 @@ namespace StudentChangeStatus_KH
                                     MsgBox.Show("在" + studentRec.Status.ToString() + "狀態身分證號有重複無法變更.");
                                     return;
                                 }
+
+                                // 傳送到局端
+                                string action = "狀態變更";
+                                string ClassName = "";
+                                if (studentRec.Class != null)
+                                    ClassName = studentRec.Class.Name;
+                                Utility.SendData(action, ClassName, studentRec.Name, studentRec.StudentNumber, studentRec.IDNumber, StudStatus, NewStudStatus);
 
                                 K12.Data.Student.Update(studentRec);
                                 FISCA.LogAgent.ApplicationLog.Log("學生狀態", "變更", "student", studentRec.ID, log);
