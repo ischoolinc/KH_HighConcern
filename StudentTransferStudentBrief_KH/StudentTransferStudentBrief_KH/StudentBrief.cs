@@ -145,10 +145,17 @@ namespace StudentTransferStudentBrief_KH
                     {
                         cboSeatNo.Text = SRecord.SeatNo + "";
                         cboStudentNumber.Text = SRecord.StudentNumber;
-
+                        
                         //if (CRecord != null)
                         //    cboClass.SelectedIndex = cboClass.FindStringExact(CRecord.Name);
                     }
+
+                    // 如果學生是同校轉出又轉入，回到原班
+                    if (CRecord != null)
+                        txtClass.Text = CRecord.Name;
+
+                    txtClass.ReadOnly = true;
+
                     ClassRunning.IsRunning = false;
                     ClassRunning.Visible = false;
                     NextButtonEnabled = true;
@@ -719,21 +726,24 @@ namespace StudentTransferStudentBrief_KH
         #endregion
 
         private void cboGradeYear_SelectedIndexChanged(object sender, EventArgs e)
-        {
+        {   
             if (!string.IsNullOrEmpty(cboGradeYear.Text))
             {
-                _ClassID = "";
-                txtClass.Text = "";
-                Dictionary<string, string> grClassDict = Utility.GetClassNameFirst(cboGradeYear.Text);
-
-                foreach (string name in grClassDict.Keys)
+                // 當學生沒有原班級才處理，有原班回到原班
+                if (CRecord == null)
                 {
-                    // 取得班級名稱
-                    txtClass.Text = name;
-                    _ClassID = grClassDict[name];
-                    break;
-                }
+                    _ClassID = "";
+                    txtClass.Text = "";
+                    Dictionary<string, string> grClassDict = Utility.GetClassNameFirst(cboGradeYear.Text);
 
+                    foreach (string name in grClassDict.Keys)
+                    {
+                        // 取得班級名稱
+                        txtClass.Text = name;
+                        _ClassID = grClassDict[name];
+                        break;
+                    }
+                }
                 cboSeatNo.Text = "";
                 // 取得座號
                 FillEmptySeatNos(SRecord != null ? SRecord.SeatNo : null, _ClassID);

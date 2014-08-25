@@ -107,7 +107,18 @@ namespace StudentClassItem_KH
 
         private void SetClassNameCotItems(string GradeYear)
         {
-            Dictionary<string, int> classCot = Utility.GetClassNameDictByGradeYear(GradeYear);
+            Dictionary<string, int> classCot = new Dictionary<string, int>();
+
+            List<KH_HighConcernCalc.ClassStudent> ClassStudentList = KH_HighConcernCalc.Calc.GetClassStudentList(GradeYear);
+            _ClassNameDict.Clear();
+            foreach (KH_HighConcernCalc.ClassStudent cs in ClassStudentList)
+            {
+                classCot.Add(cs.ClassName, cs.ClassStudentCount);
+               _ClassNameDict.Add(cs.ClassName, cs.ClassID);
+            }
+
+
+           // Dictionary<string, int> classCot = Utility.GetClassNameDictByGradeYear(GradeYear);
             cboClassName.Text = "";
             cboClassName.Items.Clear();
             _ClassNameMapDict.Clear();
@@ -117,7 +128,7 @@ namespace StudentClassItem_KH
                 cboClassName.Items.Add(nName);
                 _ClassNameMapDict.Add(nName, name);
             }
-            _ClassNameDict = Utility.GetClassNameIDDictByGradeYear(GradeYear);            
+           // _ClassNameDict = Utility.GetClassNameIDDictByGradeYear(GradeYear);            
         }
 
 

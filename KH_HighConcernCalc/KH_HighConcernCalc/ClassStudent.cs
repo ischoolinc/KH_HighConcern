@@ -49,5 +49,10 @@ namespace KH_HighConcernCalc
         /// 編班人數=班級人數+高關懷減免人數(字串型態顯示)
         /// </summary>
         public string ClassStudentCountStr { get; set; }
+
+        /// <summary>
+        /// 有高關懷學生1，沒有0
+        /// </summary>
+        public byte HasHStudentCount { get; set; }
     }
 }

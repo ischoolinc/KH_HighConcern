@@ -68,7 +68,8 @@ namespace StudentTransStudBase_KH
                     lblSeatNo.Text = cboSeatNo.Text = _student.SeatNo.Value.ToString();
                 lblStudentNum.Text = cbotStudentNumber.Text = _student.StudentNumber;
 
-                lblNewClassName.Text = "";
+                // 如果轉出又入，使用原班
+                lblNewClassName.Text = lblClassName.Text;
             }
 
             //依照status不同調整畫面大小
@@ -344,7 +345,10 @@ namespace StudentTransStudBase_KH
 
         private void cboGradeYear_SelectedIndexChanged(object sender, EventArgs e)
         {
-            lblNewClassName.Text = Utility.GetClassNameFirst(cboGradeYear.Text);
+            if (!string.IsNullOrWhiteSpace(lblClassName.Text))
+                lblNewClassName.Text = lblClassName.Text;
+            else
+                lblNewClassName.Text = Utility.GetClassNameFirst(cboGradeYear.Text);
             cboSeatNo.Text = "";
             // 班級座號
             setClassNo();

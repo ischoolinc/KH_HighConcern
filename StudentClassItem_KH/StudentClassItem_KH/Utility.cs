@@ -89,16 +89,6 @@ namespace StudentClassItem_KH
 
             if (!string.IsNullOrEmpty(GradeYear))
             {
-                //QueryHelper qh = new QueryHelper();
-                //string query = @"select class.class_name,count(student.id) as studCot from class inner join student on class.id=student.ref_class_id  where student.status=1 and (class_name not in(select class_name from $kh.automatic.class.lock) and class_name not in(select distinct class_name from $kh.automatic.placement.high.concern)) and class.grade_year=" + GradeYear + " group by class.class_name order by count(student.id),class.class_name";
-                //DataTable dt = qh.Select(query);
-                //foreach (DataRow dr in dt.Rows)
-                //{
-                //    string className = dr["class_name"].ToString();
-                //    int cot = int.Parse(dr["studCot"].ToString());
-
-                //    retVal.Add(className, cot);
-                //}
 
                 List<KH_HighConcernCalc.ClassStudent> ClassStudentList = KH_HighConcernCalc.Calc.GetClassStudentList(GradeYear);
 
@@ -157,14 +147,7 @@ namespace StudentClassItem_KH
             Dictionary<string, string> retVal = new Dictionary<string, string>();
 
             if (!string.IsNullOrEmpty(GradeYear))
-            {
-                //QueryHelper qh = new QueryHelper();
-                //string query = @"select distinct class.class_name,class.id as classID from class inner join student on class.id=student.ref_class_id  where (class_name not in(select class_name from $kh.automatic.class.lock) and class_name not in(select distinct class_name from $kh.automatic.placement.high.concern)) and class.grade_year=" + GradeYear + " order by class.class_name";
-                //DataTable dt = qh.Select(query);
-                //foreach (DataRow dr in dt.Rows)
-                //{
-                //    retVal.Add(dr["class_name"].ToString(), dr["classID"].ToString());
-                //}
+            {             
 
                 List<KH_HighConcernCalc.ClassStudent> ClassStudentList = KH_HighConcernCalc.Calc.GetClassStudentList(GradeYear);
 

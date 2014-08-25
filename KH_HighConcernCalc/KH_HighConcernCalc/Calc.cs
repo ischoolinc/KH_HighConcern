@@ -55,7 +55,7 @@ namespace KH_HighConcernCalc
                         cs.ClassNameInt = csi;
                     cs.StudentCount = int.Parse(dr["stud_count"].ToString());
                     cs.ClassStudentCount = cs.StudentCount;
-
+                    cs.HasHStudentCount = 0;
                     // 排除班級鎖定
                     if(!lockClassName.Contains(cs.ClassName))
                         retValue.Add(cs);
@@ -78,7 +78,8 @@ namespace KH_HighConcernCalc
                         {
                             hasSStudent = true;
                             cs.HStudentCount = number_reduce;
-                            cs.ClassStudentCount += cs.HStudentCount;                            
+                            cs.ClassStudentCount += cs.HStudentCount;
+                            cs.HasHStudentCount = 1;
                             break;
                         }
                     }
@@ -87,8 +88,8 @@ namespace KH_HighConcernCalc
                 // 有特殊生
                 if (hasSStudent)
                 {
-                    // 編班人數排序 (先編班人數小>大,實際人數小(高關懷人數多>少),班級名稱數字小在前)
-                    retValue = (from data in retValue orderby data.ClassStudentCount ascending, data.HStudentCount descending ,data.ClassNameInt ascending select data).ToList();
+                    // 編班人數排序 (先編班人數小>大,沒有高關懷人在前，實際人數小(高關懷人數多>少),班級名稱數字小在前)
+                    retValue = (from data in retValue orderby data.ClassStudentCount ascending,data.HasHStudentCount ascending, data.HStudentCount descending ,data.ClassNameInt ascending select data).ToList();
                 }
                 else
                 {
@@ -129,6 +130,7 @@ namespace KH_HighConcernCalc
                         cs.ClassNameInt = csi;
                     cs.StudentCount = int.Parse(dr["stud_count"].ToString());
                     cs.ClassStudentCount = cs.StudentCount;
+                    cs.HasHStudentCount = 0;
 
                     // 排除班級鎖定
                     if (!lockClassName.Contains(cs.ClassName))
@@ -152,6 +154,7 @@ namespace KH_HighConcernCalc
                         {                            
                             cs.HStudentCount = number_reduce;
                             cs.ClassStudentCount += cs.HStudentCount;
+                            cs.HasHStudentCount = 1;
                             break;
                         }
                     }
@@ -191,7 +194,7 @@ namespace KH_HighConcernCalc
                 cs.StudentCount = int.Parse(dr["stud_count"].ToString());
                 cs.ClassStudentCount = cs.StudentCount;
                 cs.ClassStudentCountStr = cs.StudentCount.ToString();
-
+                cs.HasHStudentCount = 0;
                 //// 排除班級鎖定
                 //if (!lockClassName.Contains(cs.ClassName))
                     retValue.Add(cs.ClassID,cs);
@@ -217,6 +220,8 @@ namespace KH_HighConcernCalc
                     string str1 = "(" + retValue[classID].ClassStudentCount + "+" + number_reduce + ")";
                     retValue[classID].ClassStudentCount += retValue[classID].HStudentCount;
                     retValue[classID].ClassStudentCountStr = retValue[classID].ClassStudentCount + str1;
+                    // 有高關懷學生
+                    retValue[classID].HasHStudentCount = 1;
                 }
             }
 
