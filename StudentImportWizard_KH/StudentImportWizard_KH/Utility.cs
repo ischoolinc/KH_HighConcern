@@ -51,9 +51,10 @@ namespace StudentImportWizard_KH
                         StudentXML.SetElementValue("IDNumber", ls.IDNumber);
                         StudentXML.SetElementValue("StudentNumber", ls.StudentNumber);
                         StudentXML.SetElementValue("StudentName", ls.StudentName);
-                        StudentXML.SetElementValue("ClassName", ls.ClassName);                     
+                        StudentXML.SetElementValue("ClassName", ls.ClassName);                        
                         StudentXML.SetElementValue("SeatNo", ls.SeatNo);
                         StudentXML.SetElementValue("GradeYear", ls.GradeYear);
+                        StudentXML.SetElementValue("StudentStatus", ls.StudentStatus);
                         Detail.Add(StudentXML);
                     }
                 }
@@ -70,6 +71,8 @@ namespace StudentImportWizard_KH
                         StudentXML.SetElementValue("NewClassName", ls.ClassName);
                         StudentXML.SetElementValue("SeatNo", ls.SeatNo);
                         StudentXML.SetElementValue("GradeYear", ls.GradeYear);
+                        StudentXML.SetElementValue("StudentStatus",ls.oStudentStatus);
+                        StudentXML.SetElementValue("NewStudentStatus",ls.StudentStatus);
                         Detail.Add(StudentXML);
                     }                
                 }               
@@ -104,38 +107,79 @@ namespace StudentImportWizard_KH
                 }
             }
 
+            Dictionary<string, string> sStatusDict = new Dictionary<string, string>();
+            sStatusDict.Add("1", "一般");
+            sStatusDict.Add("2", "延修");
+            sStatusDict.Add("4", "休學");
+            sStatusDict.Add("8", "輟學");
+            sStatusDict.Add("16", "畢業或離校");
+            sStatusDict.Add("256", "刪除");
+
             Dictionary<string, string> ddDict = new Dictionary<string, string>();
+            Dictionary<string, string> ddDsict = new Dictionary<string, string>();
             if (sidList.Count > 0)
             {
                 ddDict.Clear();
-                string querStr = "select student.id,student_number,class.class_name from student inner join class on student.ref_class_id=class.id where student.status=1 and student.id in("+string.Join(",",sidList.ToArray())+")";
+                ddDsict.Clear();
+                string querStr = "select student.id,student_number,class.class_name,student.status as stud_status from student left join class on student.ref_class_id=class.id where  student.id in(" + string.Join(",", sidList.ToArray()) + ")";
                 QueryHelper qh1 = new QueryHelper();
                 DataTable dt1 = qh1.Select(querStr);
 
                 foreach (DataRow dr in dt1.Rows)
-                    ddDict.Add(dr["id"].ToString(), dr["class_name"].ToString());
+                {
+                    string id=dr["id"].ToString();
+                    string status = dr["stud_status"].ToString();
+                    string className = "";
+                    if (dr["class_name"]!=null)
+                        className=dr["class_name"].ToString();
 
+                    ddDict.Add(id, className);
+                    // 學生狀態
+                    if (sStatusDict.ContainsKey(status))
+                        ddDsict.Add(id, sStatusDict[status]);
+
+                }
                 foreach (logStud ls in logStudList)
                 {
                     if (ddDict.ContainsKey(ls.StudentID))
                         ls.oClassName = ddDict[ls.StudentID];
+                    
+                    if (ddDsict.ContainsKey(ls.StudentID)) 
+                        ls.oStudentStatus = ddDsict[ls.StudentID];
+                    
                 }
             }
 
             if (snoList.Count > 0)
             {
                 ddDict.Clear();
-                string querStr = "select student.id,student_number,class.class_name from student inner join class on student.ref_class_id=class.id where student.status=1 and student.student_number in('" + string.Join("','", snoList.ToArray()) + "')";
+                ddDsict.Clear();
+                string querStr = "select student.id,student_number,class.class_name,student.status as stud_status from student left join class on student.ref_class_id=class.id where student.student_number in('" + string.Join("','", snoList.ToArray()) + "')";
                 QueryHelper qh1 = new QueryHelper();
                 DataTable dt1 = qh1.Select(querStr);
 
                 foreach (DataRow dr in dt1.Rows)
-                    ddDict.Add(dr["student_number"].ToString(), dr["class_name"].ToString());
+                {
+                    string status = dr["stud_status"].ToString();
+                    string snum = dr["student_number"].ToString();
+                    string className = "";
+                    if (dr["class_name"] != null)
+                        className = dr["class_name"].ToString();
 
+                    ddDict.Add(snum, className);
+
+                    // 學生狀態
+                    if (sStatusDict.ContainsKey(status))
+                        ddDsict.Add(snum, sStatusDict[status]);
+
+                }
                 foreach (logStud ls in logStudList)
                 {
                     if (ddDict.ContainsKey(ls.StudentNumber))
                         ls.oClassName = ddDict[ls.StudentNumber];
+
+                    if (ddDsict.ContainsKey(ls.StudentNumber))
+                        ls.oStudentStatus = ddDsict[ls.StudentNumber];
                 }
             }
             return logStudList;

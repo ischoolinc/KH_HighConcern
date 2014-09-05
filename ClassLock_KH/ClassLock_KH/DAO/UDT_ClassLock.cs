@@ -41,6 +41,12 @@ namespace ClassLock_KH.DAO
         ///</summary>
         [Field(Field = "date_str", Indexed = false)]
         public string DateStr { get; set; }
+        
+        ///<summary>
+        /// 不自動解鎖，當 是 不自動解鎖
+        ///</summary>
+        [Field(Field = "unauto_unlock", Indexed = false)]
+        public bool UnAutoUnlock { get; set; }
 
     }
 }

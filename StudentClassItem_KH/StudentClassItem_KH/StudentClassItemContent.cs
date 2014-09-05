@@ -322,8 +322,11 @@ namespace StudentClassItem_KH
                     prlp.SaveLog("", "", "student", PrimaryKey);
 
                     Student.Instance.SyncDataBackground(PrimaryKey);
-                    
+                                    
                 }
+
+                EventHandler eh = FISCA.InteractionService.PublishEvent("KH_StudentClassItemContent");
+                eh(this, EventArgs.Empty);
             }
         }
     }

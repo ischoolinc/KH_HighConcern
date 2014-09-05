@@ -68,7 +68,7 @@ namespace StudentClassItem_KH
             switch (selAction)
             { 
                 case "匯入新增學生":
-                case "匯入更新班級":
+                case "匯入更新":
                 case "匯入特殊身分":
                     if (Content.ContainsKey("Summary"))
                         retList.Add(Content["Summary"]);

@@ -49,5 +49,15 @@ namespace StudentClassItem_KH
         /// 理由
         /// </summary>
         public string Reason { get; set; }
+
+        /// <summary>
+        /// 學生狀態
+        /// </summary>
+        public string Status { get; set; }
+
+        /// <summary>
+        /// 新學生狀態
+        /// </summary>
+        public string NewStatus { get; set; }
     }
 }

@@ -41,9 +41,9 @@ namespace KH_HighConcernCalc
                 foreach (DataRow dr in dt1.Rows)
                     lockClassName.Add(dr["class_name"].ToString());
 
-                // 取得班級人數(一般生)
+                // 取得班級人數(一般生,輟學 1,8)
                 QueryHelper qh2 = new QueryHelper();
-                string query2 = "select class.class_name,class.id as classid,count(student.id) as stud_count from student inner join class on student.ref_class_id=class.id where class.grade_year=" + GradeYear + " and student.status=1 group by class.class_name,classid order by stud_count;";
+                string query2 = "select class.class_name,class.id as classid,count(student.id) as stud_count from student inner join class on student.ref_class_id=class.id where class.grade_year=" + GradeYear + " and student.status in(1,8) group by class.class_name,classid order by stud_count;";
                 DataTable dt2 = qh2.Select(query2);
                 foreach (DataRow dr in dt2.Rows)
                 {
@@ -116,9 +116,9 @@ namespace KH_HighConcernCalc
                 foreach (DataRow dr in dt1.Rows)
                     lockClassName.Add(dr["class_name"].ToString());
 
-                // 取得班級人數(一般生)
+                // 取得班級人數(一般生,輟學 1,8)
                 QueryHelper qh2 = new QueryHelper();
-                string query2 = "select class.class_name,class.id as classid,count(student.id) as stud_count from student inner join class on student.ref_class_id=class.id where student.status=1 group by class.class_name,classid order by stud_count;";
+                string query2 = "select class.class_name,class.id as classid,count(student.id) as stud_count from student inner join class on student.ref_class_id=class.id where student.status in(1,8) group by class.class_name,classid order by stud_count;";
                 DataTable dt2 = qh2.Select(query2);
                 foreach (DataRow dr in dt2.Rows)
                 {
@@ -179,9 +179,9 @@ namespace KH_HighConcernCalc
             //foreach (DataRow dr in dt1.Rows)
             //    lockClassName.Add(dr["class_name"].ToString());
 
-            // 取得班級人數(一般生)
+            // 取得班級人數(一般生、輟學 1,8)
             QueryHelper qh2 = new QueryHelper();
-            string query2 = "select class.class_name,class.id as classid,count(student.id) as stud_count from student inner join class on student.ref_class_id=class.id where student.status=1 group by class.class_name,classid order by stud_count;";
+            string query2 = "select class.class_name,class.id as classid,count(student.id) as stud_count from student inner join class on student.ref_class_id=class.id where student.status in(1,8) group by class.class_name,classid order by stud_count;";
             DataTable dt2 = qh2.Select(query2);
             foreach (DataRow dr in dt2.Rows)
             {

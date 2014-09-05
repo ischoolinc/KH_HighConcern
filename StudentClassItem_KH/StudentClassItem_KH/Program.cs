@@ -15,11 +15,10 @@ namespace StudentClassItem_KH
         public static void Main()
         {
             FISCA.InteractionService.RegisterAPI<IRewriteAPI_JH.IStudentClassDetailItemAPI>(new StudentClassItem());
-
-        
-            //註冊一個事件引發模組
-            EventHandler eh = FISCA.InteractionService.PublishEvent("KH_StudentClassItemContent");
-            eh(null, EventArgs.Empty);
+                    
+            ////註冊一個事件引發模組
+            //EventHandler eh = FISCA.InteractionService.PublishEvent("KH_StudentClassItemContent");
+            //eh(null, EventArgs.Empty);
         }
 
 

@@ -97,7 +97,7 @@ namespace ClassLock_KH
             rbiDelAll["全部班級解鎖"].Click += delegate
             {
 
-                if (FISCA.Presentation.Controls.MsgBox.Show("將全部班級解鎖，按下「是」確認後，需報局備查。", "全部班級解鎖", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes)
+                if (FISCA.Presentation.Controls.MsgBox.Show("將全部班級解鎖，按下「是」確認後，局端會留解鎖紀錄。", "全部班級解鎖", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes)
                 {
 
                     // 全部解鎖
@@ -123,6 +123,8 @@ namespace ClassLock_KH
                 }
             };
 
+            #region 同步更新
+
             // 當高關懷特殊身分有更新
             FISCA.InteractionService.SubscribeEvent("KH_HighConcern_HighConcernContent", (sender, args) =>
             {
@@ -130,6 +132,49 @@ namespace ClassLock_KH
                 ClassLockStudentCountField.Reload();
                 ClassLockSStudentCountField.Reload();
             });
+
+            // 當變更學生狀態
+            FISCA.InteractionService.SubscribeEvent("KH_StudentChangeStatus", (sender, args) =>
+            {
+                _ClassStudentDict = KH_HighConcernCalc.Calc.GetClassStudentAllIDDict();
+                ClassLockStudentCountField.Reload();
+                ClassLockSStudentCountField.Reload();
+            });
+
+            // 當變更學生班級
+            FISCA.InteractionService.SubscribeEvent("KH_StudentClassItemContent", (sender, args) =>
+            {
+                _ClassStudentDict = KH_HighConcernCalc.Calc.GetClassStudentAllIDDict();
+                ClassLockStudentCountField.Reload();
+                ClassLockSStudentCountField.Reload();
+            });
+
+            // 當變更學生轉入
+            FISCA.InteractionService.SubscribeEvent("KH_StudentTransferStudentBriefItem", (sender, args) =>
+            {
+                _ClassStudentDict = KH_HighConcernCalc.Calc.GetClassStudentAllIDDict();
+                ClassLockStudentCountField.Reload();
+                ClassLockSStudentCountField.Reload();
+            });
+
+            // 當變更學生匯入
+            FISCA.InteractionService.SubscribeEvent("KH_StudentImportWizard", (sender, args) =>
+            {
+                _ClassStudentDict = KH_HighConcernCalc.Calc.GetClassStudentAllIDDict();
+                ClassLockStudentCountField.Reload();
+                ClassLockSStudentCountField.Reload();
+            });
+
+            // 當變更學生-轉入
+            FISCA.InteractionService.SubscribeEvent("KH_StudentTransStudBase", (sender, args) =>
+            {
+                _ClassStudentDict = KH_HighConcernCalc.Calc.GetClassStudentAllIDDict();
+                ClassLockStudentCountField.Reload();
+                ClassLockSStudentCountField.Reload();
+            });
+
+            #endregion
+            
 
             K12.Presentation.NLDPanels.Class.ListPaneContexMenu["班級鎖定/解鎖"].Click += delegate
             {
@@ -178,7 +223,7 @@ namespace ClassLock_KH
                     }
                     else
                     {
-                        if (FISCA.Presentation.Controls.MsgBox.Show("「班級解鎖」，按下「是」確認後，需報局備查。", "班級解鎖", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes)
+                        if (FISCA.Presentation.Controls.MsgBox.Show("「班級解鎖」，按下「是」確認後，局端會留解鎖紀錄。", "班級解鎖", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes)
                         {
                             // 已被鎖定解鎖
                             data.Deleted = true;
@@ -211,6 +256,8 @@ namespace ClassLock_KH
         static void _bgLLoadUDT_DoWork(object sender, DoWorkEventArgs e)
         {
             UDTTransfer.CreateUDTTable();
+
+            //FISCA.ServerModule.AutoManaged("http://module.ischool.com.tw/module/137/KHCentralOffice/udm.xml");
 
             // 檢查是否需要全部班級解鎖
             // 取得Server時間

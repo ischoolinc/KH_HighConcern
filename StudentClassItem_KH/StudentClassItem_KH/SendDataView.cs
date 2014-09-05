@@ -204,6 +204,12 @@ DateTime:日期時間。
                                         if (elms1.Element("Reason") != null)
                                             rs.Reason = elms1.Element("Reason").Value;
 
+                                        if (elms1.Element("StudentStatus") != null)
+                                            rs.Status = elms1.Element("StudentStatus").Value;
+
+                                        if (elms1.Element("NewStudentStatus") != null)
+                                            rs.NewStatus = elms1.Element("NewStudentStatus").Value;
+
                                         rm.Detail.Add(rs);
                                     }
                                 }

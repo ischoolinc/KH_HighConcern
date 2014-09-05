@@ -73,6 +73,8 @@ namespace StudentClassItem_KH
                         //dt.Columns.Add("年級");
                         dt.Columns.Add("班級");
                         dt.Columns.Add("新班級");
+                        dt.Columns.Add("狀態");
+                        dt.Columns.Add("新狀態");
                         //dt.Columns.Add("理由");
 
                         foreach (RspStud rs in _RspMsg.Detail)
@@ -84,6 +86,8 @@ namespace StudentClassItem_KH
                             //dr["年級"] = rs.GradeYear;
                             dr["班級"] = rs.ClassName;
                             dr["新班級"] = rs.NewClassName;
+                            dr["狀態"] = rs.Status;
+                            dr["新狀態"] = rs.NewStatus;
                             //dr["理由"] = rs.Reason;
                             dt.Rows.Add(dr);
                         }

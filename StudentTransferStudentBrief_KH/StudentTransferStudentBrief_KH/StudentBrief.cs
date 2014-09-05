@@ -619,6 +619,10 @@ namespace StudentTransferStudentBrief_KH
                 foreach (TransferProcessor tp in TransferProcessor.Processors)
                     tp.SetStudentId(Arguments[Consts.StudentID] + "");
 
+                //註冊一個事件引發模組
+                EventHandler eh = FISCA.InteractionService.PublishEvent("KH_StudentTransferStudentBriefItem");
+                eh(this, EventArgs.Empty);
+
                 return ContinueDirection.Next;
             }
             catch (Exception ex)
@@ -756,5 +760,6 @@ namespace StudentTransferStudentBrief_KH
                     FillStudentNumberLast(string.Empty);
             }
         }
+
     }
 }

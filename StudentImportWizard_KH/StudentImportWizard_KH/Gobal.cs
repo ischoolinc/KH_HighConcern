@@ -18,5 +18,10 @@ namespace StudentImportWizard_KH
         internal static bool _SendData = false;
 
 
+        /// <summary>
+        /// 當有選狀態
+        /// </summary>
+        internal static bool _SelectStatus = false;
+
     }
 }

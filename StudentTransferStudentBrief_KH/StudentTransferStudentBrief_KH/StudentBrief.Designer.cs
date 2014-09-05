@@ -107,7 +107,7 @@
             // btnNext
             // 
             this.btnNext.Location = new System.Drawing.Point(504, 551);
-            this.btnNext.TabIndex = 2;
+            this.btnNext.TabIndex = 2;            
             // 
             // btnPrevious
             // 

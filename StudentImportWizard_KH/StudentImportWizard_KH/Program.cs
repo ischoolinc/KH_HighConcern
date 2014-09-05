@@ -13,9 +13,9 @@ namespace StudentImportWizard_KH
         {
             FISCA.InteractionService.RegisterAPI<IRewriteAPI_JH.IStudentImportWizardAPI>(new StudentImportWizardItem());
 
-            //註冊一個事件引發模組
-            EventHandler eh = FISCA.InteractionService.PublishEvent("KH_StudentImportWizard");
-            eh(null, EventArgs.Empty);
+            ////註冊一個事件引發模組
+            //EventHandler eh = FISCA.InteractionService.PublishEvent("KH_StudentImportWizard");
+            //eh(null, EventArgs.Empty);
         }
     }
 }

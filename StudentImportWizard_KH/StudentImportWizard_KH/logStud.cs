@@ -44,5 +44,15 @@ namespace StudentImportWizard_KH
         /// 年級
         /// </summary>
         public string GradeYear { get; set; }
+
+        /// <summary>
+        /// 原學生狀態
+        /// </summary>
+        public string oStudentStatus { get; set; }
+
+        /// <summary>
+        /// 學生狀態
+        /// </summary>
+        public string StudentStatus { get; set; }
     }
 }

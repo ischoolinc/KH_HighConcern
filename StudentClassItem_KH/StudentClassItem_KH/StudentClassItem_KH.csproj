@@ -237,6 +237,7 @@
     <ProjectReference Include="..\..\KH_HighConcernCalc\KH_HighConcernCalc\KH_HighConcernCalc.csproj">
       <Project>{8bb13d31-4959-4dc1-a9ff-4bf8a4731bb6}</Project>
       <Name>KH_HighConcernCalc</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

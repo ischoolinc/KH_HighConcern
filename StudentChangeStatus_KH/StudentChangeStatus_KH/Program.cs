@@ -14,9 +14,9 @@ namespace StudentChangeStatus_KH
             FISCA.InteractionService.RegisterAPI<Tagging.IStudentChangeStatusAPI>(new StudentChangeStatusBarBuilder());
 
 
-            //註冊一個事件引發模組
-            EventHandler eh = FISCA.InteractionService.PublishEvent("KH_StudentChangeStatus");
-            eh(null, EventArgs.Empty);
+            ////註冊一個事件引發模組
+            //EventHandler eh = FISCA.InteractionService.PublishEvent("KH_StudentChangeStatus");
+            //eh(null, EventArgs.Empty);
         }
     }
 }

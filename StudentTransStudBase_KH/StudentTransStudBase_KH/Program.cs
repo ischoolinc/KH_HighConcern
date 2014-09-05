@@ -15,9 +15,9 @@ namespace StudentTransStudBase_KH
         {
             FISCA.InteractionService.RegisterAPI<IRewriteAPI_JH.IStudentTransStudBaseAPI>(new StudentTransStudBaseItem());
 
-            //註冊一個事件引發模組
-            EventHandler eh = FISCA.InteractionService.PublishEvent("KH_StudentTransStudBase");
-            eh(null, EventArgs.Empty);
+            ////註冊一個事件引發模組
+            //EventHandler eh = FISCA.InteractionService.PublishEvent("KH_StudentTransStudBase");
+            //eh(null, EventArgs.Empty);
 
         }
     }

@@ -13,9 +13,9 @@ namespace StudentTransferStudentBrief_KH
         {
             FISCA.InteractionService.RegisterAPI<StudentTransferAPI.IStudentBriefBaseAPI>(new StudentTransferStudentBriefItem());
 
-            //註冊一個事件引發模組
-            EventHandler eh = FISCA.InteractionService.PublishEvent("KH_StudentTransferStudentBriefItem");
-            eh(null, EventArgs.Empty);
+            ////註冊一個事件引發模組
+            //EventHandler eh = FISCA.InteractionService.PublishEvent("KH_StudentTransferStudentBriefItem");
+            //eh(null, EventArgs.Empty);
          }
     }
 }

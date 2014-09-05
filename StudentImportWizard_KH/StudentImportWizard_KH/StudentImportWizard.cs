@@ -403,6 +403,9 @@ namespace StudentImportWizard_KH
             // 處理班級選項
             Gobal._SelectClassName = false;
 
+            // 學生狀態
+            Gobal._SelectStatus = false;
+
             Context.SelectedFields = new SheetColumnCollection();
             foreach (ImportItem each in lvSourceFieldList.Items)
             {
@@ -412,6 +415,9 @@ namespace StudentImportWizard_KH
                     {
                         if (column.Name == "班級")
                             Gobal._SelectClassName = true;
+
+                        if (column.Name == "狀態")
+                            Gobal._SelectStatus = true;
 
                         Context.SelectedFields.Add(column.Name, column);
                         column.SetStyle(Context.TipStyle.Header);
@@ -428,9 +434,30 @@ namespace StudentImportWizard_KH
             // 檢查是否需要傳送至局端備查
             Gobal._SendData = false;
 
-            if (Gobal._SelectClassName)
+            if (Gobal._SelectClassName && Gobal._SelectStatus)
+            {
+                if (FISCA.Presentation.Controls.MsgBox.Show("勾選班級、狀態，按下「是」確認後，需報局備查。", "匯入調整班級與學生狀態", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes)
+                {
+                    Gobal._SendData = true;
+                }
+                else
+                {
+                    e.Cancel = true;
+                }
+            }else if (Gobal._SelectClassName)
             {
                 if (FISCA.Presentation.Controls.MsgBox.Show("勾選班級，按下「是」確認後，需報局備查。","匯入調整班級",MessageBoxButtons.YesNo,MessageBoxIcon.Question,MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes)
+                {
+                    Gobal._SendData = true;
+                }
+                else
+                {
+                    e.Cancel = true;
+                }
+            }
+            else if (Gobal._SelectStatus)
+            {
+                if (FISCA.Presentation.Controls.MsgBox.Show("勾選狀態，按下「是」確認後，需報局備查。", "匯入調整學生狀態", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes)
                 {
                     Gobal._SendData = true;
                 }
@@ -1216,11 +1243,16 @@ namespace StudentImportWizard_KH
                     if (Context.ImportMode == ImportMode.Insert)
                     {
                         ls.oClassName = "";
+                        ls.oStudentStatus = "";
                     }
-
+                    
 
                     if (Context.SourceReader.Columns.ContainsKey("座號"))
                         ls.SeatNo = Context.SourceReader.GetValue("座號");
+
+                    if (Context.SourceReader.Columns.ContainsKey("狀態"))
+                        ls.StudentStatus = Context.SourceReader.GetValue("狀態");
+
 
                     logStudList.Add(ls);
 
@@ -1244,7 +1276,7 @@ namespace StudentImportWizard_KH
                         ActionStr = "匯入新增學生";
                     else
                     {
-                        ActionStr = "匯入更新班級";
+                        ActionStr = "匯入更新";
                         // 取得原班級學號只處理學生狀態為一般。
                         logStudList = Utility.ConveroClassName(logStudList);
                     }
@@ -1350,6 +1382,10 @@ namespace StudentImportWizard_KH
                 // 與 DAL 同步
                 JHSchool.Data.JHStudent.RemoveAll();
                 JHSchool.Data.JHStudent.SelectAll();
+
+                //註冊一個事件引發模組
+                EventHandler eh = FISCA.InteractionService.PublishEvent("KH_StudentImportWizard");
+                eh(this, EventArgs.Empty);
 
                 //SmartSchool.StudentRelated.Student stu = SmartSchool.StudentRelated.Student.Instance;
                 //stu.ReloadData();

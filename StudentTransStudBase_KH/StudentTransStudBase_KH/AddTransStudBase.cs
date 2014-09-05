@@ -252,6 +252,10 @@ namespace StudentTransStudBase_KH
                     JHSchool.Student.Instance.SyncAllBackground();
                     JHSchool.Data.JHStudent.RemoveAll();
                     JHSchool.Data.JHStudent.SelectAll();
+
+                    //註冊一個事件引發模組
+                    EventHandler eh = FISCA.InteractionService.PublishEvent("KH_StudentTransStudBase");
+                    eh(this, EventArgs.Empty);
                 }
             }
             catch(Exception ex)
