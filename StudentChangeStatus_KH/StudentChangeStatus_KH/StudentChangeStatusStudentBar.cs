@@ -449,17 +449,17 @@ namespace StudentChangeStatus_KH
                     {                      
                             try
                             {
-                                bool chkSend = false;
+                                bool chkSendSpec = false;
 
                                 string StudStatus=studentRec.StatusStr;
                                 string NewStudStatus=((StatusItem)button.Tag).Text;
 
                                 if ((StudStatus == "畢業或離校" || StudStatus == "休學" || StudStatus == "刪除") && NewStudStatus == "一般")
-                                    chkSend = true;
+                                    chkSendSpec = true;
 
-                                string ShowMsg = "請問是否將 " + studentRec.Name + " 由" + StudStatus + " 調整成 " + NewStudStatus;
+                                string ShowMsg = "請問是否將 " + studentRec.Name + " 由" + StudStatus + " 調整成 " + NewStudStatus + "，按下「是」確認後，局端會留狀態變更紀錄。"; 
 
-                                if (chkSend)
+                                if (chkSendSpec)
                                 {
                                     ShowMsg = "請問是否將 " + studentRec.Name + " 由" + StudStatus + " 調整成 " + NewStudStatus + "，按下「是」確認後，需報局備查。"; 
                                 }
@@ -498,15 +498,19 @@ namespace StudentChangeStatus_KH
                                         return;
                                     }
 
-                                    if (chkSend)
-                                    {
-                                        // 傳送到局端
-                                        string action = "狀態變更";
-                                        string ClassName = "";
-                                        if (studentRec.Class != null)
-                                            ClassName = studentRec.Class.Name;
-                                        Utility.SendData(action, ClassName, studentRec.Name, studentRec.StudentNumber, studentRec.IDNumber, StudStatus, NewStudStatus);
-                                    }
+
+                                    // 傳送到局端
+                                    string action = "一般狀態變更";
+
+                                    // 特殊狀態
+                                    if (chkSendSpec)
+                                        action = "特殊狀態變更";
+
+                                    string ClassName = "";
+                                    if (studentRec.Class != null)
+                                        ClassName = studentRec.Class.Name;
+                                    Utility.SendData(action, ClassName, studentRec.Name, studentRec.StudentNumber, studentRec.IDNumber, StudStatus, NewStudStatus);
+
                                     K12.Data.Student.Update(studentRec);
                                     FISCA.LogAgent.ApplicationLog.Log("學生狀態", "變更", "student", studentRec.ID, log);
 
