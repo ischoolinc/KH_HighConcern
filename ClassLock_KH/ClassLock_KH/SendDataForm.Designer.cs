@@ -36,6 +36,7 @@
             this.labelX2 = new DevComponents.DotNetBar.LabelX();
             this.labelX3 = new DevComponents.DotNetBar.LabelX();
             this.txtDocNo = new DevComponents.DotNetBar.Controls.TextBoxX();
+            this.chkNUnLock = new DevComponents.DotNetBar.Controls.CheckBoxX();
             ((System.ComponentModel.ISupportInitialize)(this.dtDate)).BeginInit();
             this.SuspendLayout();
             // 
@@ -120,7 +121,7 @@
             this.btnSend.AutoSize = true;
             this.btnSend.BackColor = System.Drawing.Color.Transparent;
             this.btnSend.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnSend.Location = new System.Drawing.Point(145, 132);
+            this.btnSend.Location = new System.Drawing.Point(145, 150);
             this.btnSend.Name = "btnSend";
             this.btnSend.Size = new System.Drawing.Size(75, 25);
             this.btnSend.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -134,7 +135,7 @@
             this.btnExit.AutoSize = true;
             this.btnExit.BackColor = System.Drawing.Color.Transparent;
             this.btnExit.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnExit.Location = new System.Drawing.Point(239, 132);
+            this.btnExit.Location = new System.Drawing.Point(239, 150);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(75, 25);
             this.btnExit.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -197,11 +198,27 @@
             this.txtDocNo.Size = new System.Drawing.Size(169, 25);
             this.txtDocNo.TabIndex = 7;
             // 
+            // chkNUnLock
+            // 
+            this.chkNUnLock.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.chkNUnLock.BackgroundStyle.Class = "";
+            this.chkNUnLock.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.chkNUnLock.Location = new System.Drawing.Point(145, 121);
+            this.chkNUnLock.Name = "chkNUnLock";
+            this.chkNUnLock.Size = new System.Drawing.Size(100, 23);
+            this.chkNUnLock.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.chkNUnLock.TabIndex = 8;
+            this.chkNUnLock.Text = "不自動解鎖";
+            // 
             // SendDataForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(337, 166);
+            this.ClientSize = new System.Drawing.Size(337, 187);
+            this.Controls.Add(this.chkNUnLock);
             this.Controls.Add(this.txtDocNo);
             this.Controls.Add(this.labelX3);
             this.Controls.Add(this.labelX2);
@@ -230,5 +247,6 @@
         private DevComponents.DotNetBar.LabelX labelX2;
         private DevComponents.DotNetBar.LabelX labelX3;
         private DevComponents.DotNetBar.Controls.TextBoxX txtDocNo;
+        private DevComponents.DotNetBar.Controls.CheckBoxX chkNUnLock;
     }
 }

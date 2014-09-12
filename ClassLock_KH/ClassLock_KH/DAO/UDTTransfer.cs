@@ -33,15 +33,20 @@ namespace ClassLock_KH.DAO
         }
 
         /// <summary>
-        /// 全部班級解鎖
+        /// 全部班級解鎖(會過濾不自動解鎖)
         /// </summary>
         public static void UnlockAllClass()
         {
             AccessHelper _AccessHelper = new AccessHelper();
             List<UDT_ClassLock> dataList = _AccessHelper.Select<UDT_ClassLock>();
             foreach (UDT_ClassLock data in dataList)
-                data.Deleted = true;
+            {
+                // 當不自動解鎖跳過
+                if (data.UnAutoUnlock)
+                    continue;
 
+                data.Deleted = true;
+            }
             dataList.SaveAll();
         }
 

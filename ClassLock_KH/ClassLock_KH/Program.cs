@@ -51,7 +51,11 @@ namespace ClassLock_KH
             {
                 if (_UDT_ClassLockDict.ContainsKey(e.Key))
                 {
-                    e.Value = "鎖定";
+
+                    if (_UDT_ClassLockDict[e.Key].UnAutoUnlock)
+                        e.Value = "鎖定(不自動解鎖)";
+                    else
+                        e.Value = "鎖定";
                 }
             };
             K12.Presentation.NLDPanels.Class.AddListPaneField(ClassLockField);
@@ -212,12 +216,18 @@ namespace ClassLock_KH
                                 data.Comment = strComment;
                                 data.DocNo = strDocNo;
                                 data.DateStr = strDate;
+                                data.UnAutoUnlock = sdf.GetNUnLock();
 
                                 string errMsg = Utility.SendData(classRec.Name, grYear, "", "鎖定班級", strDate,strComment,strDocNo);
                                 if (errMsg != "")
                                     FISCA.Presentation.Controls.MsgBox.Show(errMsg);
                                 else
-                                    FISCA.Presentation.Controls.MsgBox.Show("已鎖定");
+                                {
+                                    if (data.UnAutoUnlock)
+                                        FISCA.Presentation.Controls.MsgBox.Show("已鎖定(不自動解鎖)");
+                                    else
+                                        FISCA.Presentation.Controls.MsgBox.Show("已鎖定");
+                                }
                             }
                         }
                     }

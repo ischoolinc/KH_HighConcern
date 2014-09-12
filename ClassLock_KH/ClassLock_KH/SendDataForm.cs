@@ -17,6 +17,8 @@ namespace ClassLock_KH
 
         private string _strDocNo = "";
 
+        private bool _NUnLock = false;
+
         public SendDataForm()
         {
             InitializeComponent();
@@ -43,6 +45,8 @@ namespace ClassLock_KH
 
             if (!string.IsNullOrEmpty(txtDocNo.Text))
                 _strDocNo = txtDocNo.Text;
+
+            _NUnLock = chkNUnLock.Checked;
 
             this.DialogResult = System.Windows.Forms.DialogResult.Yes;            
         }
@@ -79,5 +83,13 @@ namespace ClassLock_KH
             return _strDocNo;
         }
 
+        /// <summary>
+        /// 取得是否不自動解鎖
+        /// </summary>
+        /// <returns></returns>
+        public bool GetNUnLock()
+        {
+            return _NUnLock;
+        }
     }
 }
