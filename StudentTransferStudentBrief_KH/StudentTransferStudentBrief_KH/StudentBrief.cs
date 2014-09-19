@@ -647,6 +647,16 @@ namespace StudentTransferStudentBrief_KH
             else
                 srecord.SeatNo = null;
 
+            if(_ClassID==null)
+            foreach(ClassRecord cr in Class.SelectAll())
+            {
+                if (cr.Name == txtClass.Text)
+                {
+                    _ClassID = cr.ID;
+                    break;
+                }
+            }
+
                 srecord.RefClassID = _ClassID;
                 (Arguments[Consts.TransferInGridItem] as StatusForm.TransferInItem).ClassName = txtClass.Text;
         }

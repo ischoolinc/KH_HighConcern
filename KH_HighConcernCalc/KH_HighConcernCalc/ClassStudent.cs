@@ -54,5 +54,11 @@ namespace KH_HighConcernCalc
         /// 有高關懷學生1，沒有0
         /// </summary>
         public byte HasHStudentCount { get; set; }
+
+        /// <summary>
+        /// 班級排列順序
+        /// </summary>
+        public int ClassOrder { get; set; }
+
     }
 }
