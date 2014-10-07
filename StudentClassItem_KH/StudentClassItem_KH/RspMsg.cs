@@ -131,8 +131,11 @@ namespace StudentClassItem_KH
                     if (Content.ContainsKey("StudentNumber"))
                         retList.Add("學號「" + Content["StudentNumber"] + "」");
 
-                    //if (Content.ContainsKey("Reason"))
-                    //    retList.Add("理由「" + Content["Reason"] + "」");
+                    if (Content.ContainsKey("ScheduleClassDate"))
+                        retList.Add("編班委員會會議日期「" + Content["ScheduleClassDate"] + "」");
+
+                    if (Content.ContainsKey("Reason"))
+                        retList.Add("備註：「" + Content["Reason"] + "」");
 
                     if (Content.ContainsKey("FirstPriorityClassName"))
                         retList.Add("第一優先順班級「" + Content["FirstPriorityClassName"] + "」");

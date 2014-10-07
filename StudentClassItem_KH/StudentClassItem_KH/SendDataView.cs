@@ -107,16 +107,16 @@ DateTime:日期時間。
                                 if (elm.Element("Comment") != null)
                                     rm.Comment = elm.Element("Comment").Value;
 
-                                if (elm.Element("Verify") != null)
+                                if (elm.Element("isVerify") != null)
                                 {
-                                    rm.Verify = elm.Element("Verify").Value;
+                                    rm.Verify = elm.Element("isVerify").Value;
 
-                                    if (rm.Verify.Trim() == "t")
-                                        rm.Verify = "通過";
-                                    else if (rm.Verify.Trim() == "f")
-                                        rm.Verify = "未通過";
-                                    else
-                                        rm.Verify = "";
+                                    //if (rm.Verify.Trim() == "t")
+                                    //    rm.Verify = "通過";
+                                    //else if (rm.Verify.Trim() == "f")
+                                    //    rm.Verify = "未通過";
+                                    //else
+                                    //    rm.Verify = "";
                                 }
 
                                 if (elm.Element("Content") != null)
