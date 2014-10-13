@@ -67,11 +67,12 @@ namespace KH_HighConcern.ImportExport
                     pIdx++;
                     this.ImportProgress = pIdx;
 
-                    string IDNumber = "", StudentNumber = "", StudentName = "", ClassName = "", SeatNo = "", NumberReduce = "", DocNo = "";
+                    string IDNumber = "", StudentNumber = "", StudentName = "", ClassName = "", SeatNo = "", NumberReduce = "", DocNo = "",EDoc="";
 
                     StudentNumber = row.GetValue("學號");
                     int hCount = int.Parse(row.GetValue("減免人數"));
                     DocNo = row.GetValue("文號");
+                    EDoc = row.GetValue("相關證明文件網址");
                     if (_StudentNumIDDict.ContainsKey(StudentNumber))
                     {
                         string sid = _StudentNumIDDict[StudentNumber];
@@ -92,6 +93,7 @@ namespace KH_HighConcern.ImportExport
                             // 更新
                             _HighConcernDict[sid].NumberReduce = hCount;
                             _HighConcernDict[sid].DocNo = DocNo;
+                            _HighConcernDict[sid].EDoc = EDoc;
                             HighConcernList.Add(_HighConcernDict[sid]);
                         }
                         else
@@ -105,6 +107,7 @@ namespace KH_HighConcern.ImportExport
                             newData.HighConcern = true;
                             newData.NumberReduce = hCount;
                             newData.DocNo = DocNo;
+                            newData.EDoc = EDoc;
                             HighConcernList.Add(newData);
                         }
                         
@@ -117,6 +120,7 @@ namespace KH_HighConcern.ImportExport
                         ls.SeatNo = SeatNo;
                         ls.DocNo = DocNo;
                         ls.NumberReduce = NumberReduce;
+                        ls.EDoc = EDoc;
                         logStudList.Add(ls);
 
                         //Utility.SendData("匯入特殊身分", IDNumber, StudentNumber, StudentName, ClassName, SeatNo, DocNo, NumberReduce);

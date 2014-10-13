@@ -33,6 +33,10 @@
     <Field Required="True" Name="文號" Description="高關懷特殊身分文號">
       <Validate AutoCorrect="False" Description="「文號」不允許空白。" ErrorType="Error" Validator="不可空白" When="" />      
   </Field>
+
+      <Field Required="False" Name="相關證明文件網址" EmptyAlsoValidate="False">
+      </Field>
+      
     </FieldList>
     <ValidatorList>  
 	<FieldValidator Name="學號是否存在" Type="HIGHCONCERNSTUDENTNUMBERCHECK"/>    

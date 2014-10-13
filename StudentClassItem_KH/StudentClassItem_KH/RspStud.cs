@@ -59,5 +59,10 @@ namespace StudentClassItem_KH
         /// 新學生狀態
         /// </summary>
         public string NewStatus { get; set; }
+
+        /// <summary>
+        /// 相關證明文件網址
+        /// </summary>
+        public string EDoc { get; set; }
     }
 }

@@ -33,6 +33,8 @@
             this.txtCount = new DevComponents.DotNetBar.Controls.TextBoxX();
             this.labelX2 = new DevComponents.DotNetBar.LabelX();
             this.txtDocNo = new DevComponents.DotNetBar.Controls.TextBoxX();
+            this.txtEDoc = new DevComponents.DotNetBar.Controls.TextBoxX();
+            this.labelX3 = new DevComponents.DotNetBar.LabelX();
             this.SuspendLayout();
             // 
             // labelX1
@@ -104,20 +106,47 @@
             this.txtDocNo.Name = "txtDocNo";
             this.txtDocNo.Size = new System.Drawing.Size(179, 25);
             this.txtDocNo.TabIndex = 5;
-            this.txtDocNo.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtDocNo.TextChanged += new System.EventHandler(this.txtDocNo_TextChanged);
+            // 
+            // txtEDoc
+            // 
+            // 
+            // 
+            // 
+            this.txtEDoc.Border.Class = "TextBoxBorder";
+            this.txtEDoc.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtEDoc.Location = new System.Drawing.Point(144, 58);
+            this.txtEDoc.Name = "txtEDoc";
+            this.txtEDoc.Size = new System.Drawing.Size(393, 25);
+            this.txtEDoc.TabIndex = 7;
+            // 
+            // labelX3
+            // 
+            this.labelX3.AutoSize = true;
+            // 
+            // 
+            // 
+            this.labelX3.BackgroundStyle.Class = "";
+            this.labelX3.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX3.Location = new System.Drawing.Point(24, 60);
+            this.labelX3.Name = "labelX3";
+            this.labelX3.Size = new System.Drawing.Size(114, 21);
+            this.labelX3.TabIndex = 6;
+            this.labelX3.Text = "相關證明文件網址";
             // 
             // HighConcernContent
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.txtEDoc);
+            this.Controls.Add(this.labelX3);
             this.Controls.Add(this.txtDocNo);
             this.Controls.Add(this.labelX2);
             this.Controls.Add(this.txtCount);
             this.Controls.Add(this.chkHighConcern);
             this.Controls.Add(this.labelX1);
             this.Name = "HighConcernContent";
-            this.Size = new System.Drawing.Size(550, 70);
+            this.Size = new System.Drawing.Size(550, 100);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -130,5 +159,7 @@
         private DevComponents.DotNetBar.Controls.TextBoxX txtCount;
         private DevComponents.DotNetBar.LabelX labelX2;
         private DevComponents.DotNetBar.Controls.TextBoxX txtDocNo;
+        private DevComponents.DotNetBar.Controls.TextBoxX txtEDoc;
+        private DevComponents.DotNetBar.LabelX labelX3;
     }
 }

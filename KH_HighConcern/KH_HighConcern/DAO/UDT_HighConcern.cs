@@ -53,5 +53,12 @@ namespace KH_HighConcern.DAO
         ///</summary>
         [Field(Field = "doc_no", Indexed = false)]
         public string DocNo { get; set; }
+
+        ///<summary>
+        /// 相關證明文件網址
+        ///</summary>
+        [Field(Field = "e_doc", Indexed = false)]
+        public string EDoc { get; set; }
+
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -169,7 +170,10 @@ DateTime:日期時間。
                                         rm.Content.Add("StudentStatus", xmlContent.Element("StudentStatus").Value);
 
                                     if (xmlContent.Element("NewStudentStatus") != null)
-                                        rm.Content.Add("NewStudentStatus", xmlContent.Element("NewStudentStatus").Value);  
+                                        rm.Content.Add("NewStudentStatus", xmlContent.Element("NewStudentStatus").Value);
+
+                                    if (xmlContent.Element("EDoc") != null)
+                                        rm.Content.Add("EDoc", xmlContent.Element("EDoc").Value);
                                 }
 
                                 // 詳細內容    
@@ -210,6 +214,9 @@ DateTime:日期時間。
                                         if (elms1.Element("NewStudentStatus") != null)
                                             rs.NewStatus = elms1.Element("NewStudentStatus").Value;
 
+                                        if (elms1.Element("EDoc") != null)
+                                            rs.EDoc = elms1.Element("EDoc").Value;
+
                                         rm.Detail.Add(rs);
                                     }
                                 }
@@ -243,6 +250,9 @@ DateTime:日期時間。
                     dgData.Rows[rowIdx].Cells[colR1.Index].Value = rm.Verify;
                     // 局端備註
                     dgData.Rows[rowIdx].Cells[colR2.Index].Value = rm.Comment;
+
+                    // 相關證明文件網址
+                    dgData.Rows[rowIdx].Cells[colEDoc.Index].Value = rm.GetEDoc();
                 }
                 
             }
@@ -316,6 +326,23 @@ DateTime:日期時間。
                 }
             }
 
+        }
+
+        private void dgData_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            
+            // 處理相關文件連結
+            string url="";
+            if (e.ColumnIndex ==colEDoc.Index && dgData.Rows[e.RowIndex].Cells[colEDoc.Index].Value != null)
+            {
+                url = dgData.Rows[e.RowIndex].Cells[colEDoc.Index].Value.ToString();
+
+                if(!string.IsNullOrEmpty(url))
+                {
+                    ProcessStartInfo info = new ProcessStartInfo (url);
+                    Process.Start(info);
+                }
+            }
         }
 
         

@@ -21,7 +21,7 @@ namespace ClassLock_KH
         /// <param name="ClassID"></param>
         /// <param name="Action"></param>
         /// <returns></returns>
-        public static string SendData(string ClassName, string GradeYear, string Reason, string Action, string ScheduleClassDate,string Comment,string DocNo)
+        public static string SendData(string ClassName, string GradeYear, string Reason, string Action, string ScheduleClassDate,string Comment,string DocNo,string EDoc)
         {
             string DSNS = FISCA.Authentication.DSAServices.AccessPoint;
             string AccessPoint = @"j.kh.edu.tw";
@@ -51,6 +51,7 @@ namespace ClassLock_KH
                 s3.SetElementValue("ScheduleClassDate", ScheduleClassDate);
                 s3.SetElementValue("Comment", Comment);
                 s3.SetElementValue("DocNo", DocNo);
+                s3.SetElementValue("EDoc", EDoc);
                 s2.Add(s3);
                 s1.Add(s2);
                 xmlRoot.Add(s1);

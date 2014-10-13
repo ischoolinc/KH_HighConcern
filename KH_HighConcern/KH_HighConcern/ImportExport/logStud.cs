@@ -17,5 +17,10 @@ namespace KH_HighConcern.ImportExport
         public string SeatNo { get; set; }
         public string DocNo { get; set; }
         public string NumberReduce { get; set; }
+
+        /// <summary>
+        /// 相關證明文件網址
+        /// </summary>
+        public string EDoc { get; set; }
     }
 }

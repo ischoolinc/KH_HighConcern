@@ -56,6 +56,20 @@ namespace StudentClassItem_KH
         }
 
         /// <summary>
+        /// 解析取得相關證明文件網址
+        /// </summary>
+        /// <returns></returns>
+        public string GetEDoc()
+        {
+            string retVal = "";
+
+            if (Content.ContainsKey("EDoc"))
+                retVal = Content["EDoc"];
+
+            return retVal;
+        }
+
+        /// <summary>
         ///  取得 Content 組合
         /// </summary>
         /// <returns></returns>
@@ -95,6 +109,9 @@ namespace StudentClassItem_KH
                     if (Content.ContainsKey("Comment"))
                         retList.Add("備註「" + Content["Comment"] + "」");
 
+                    if (Content.ContainsKey("EDoc"))
+                        retList.Add("相關證明文件網址「" + Content["EDoc"] + "」");
+
                     if (Content.ContainsKey("DocNo"))
                         retList.Add("文號「" + Content["DocNo"] + "」");
 
@@ -116,6 +133,10 @@ namespace StudentClassItem_KH
                         retList.Add("減免人數「" + Content["NumberReduce"] + "」");
                     if (Content.ContainsKey("DocNo"))
                         retList.Add("文號「" + Content["DocNo"] + "」");
+
+                    if (Content.ContainsKey("EDoc"))
+                        retList.Add("相關證明文件網址「" + Content["EDoc"] + "」");
+
                     break;
 
                 case "調整班級":
@@ -136,6 +157,10 @@ namespace StudentClassItem_KH
 
                     if (Content.ContainsKey("Reason"))
                         retList.Add("備註：「" + Content["Reason"] + "」");
+
+                    if (Content.ContainsKey("EDoc"))
+                        retList.Add("相關證明文件網址：「" + Content["EDoc"] + "」");
+
 
                     if (Content.ContainsKey("FirstPriorityClassName"))
                         retList.Add("第一優先順班級「" + Content["FirstPriorityClassName"] + "」");

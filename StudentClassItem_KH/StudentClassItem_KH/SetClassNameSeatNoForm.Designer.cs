@@ -41,6 +41,8 @@
             this.btnExit = new DevComponents.DotNetBar.ButtonX();
             this.cboGradeYear = new DevComponents.DotNetBar.Controls.ComboBoxEx();
             this.labelX5 = new DevComponents.DotNetBar.LabelX();
+            this.txtEDoc = new DevComponents.DotNetBar.Controls.TextBoxX();
+            this.labelX6 = new DevComponents.DotNetBar.LabelX();
             ((System.ComponentModel.ISupportInitialize)(this.dtMeetting)).BeginInit();
             this.SuspendLayout();
             // 
@@ -225,7 +227,7 @@
             this.btnSend.AutoSize = true;
             this.btnSend.BackColor = System.Drawing.Color.Transparent;
             this.btnSend.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnSend.Location = new System.Drawing.Point(269, 171);
+            this.btnSend.Location = new System.Drawing.Point(269, 208);
             this.btnSend.Name = "btnSend";
             this.btnSend.Size = new System.Drawing.Size(75, 25);
             this.btnSend.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -239,7 +241,7 @@
             this.btnExit.AutoSize = true;
             this.btnExit.BackColor = System.Drawing.Color.Transparent;
             this.btnExit.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnExit.Location = new System.Drawing.Point(350, 171);
+            this.btnExit.Location = new System.Drawing.Point(350, 208);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(75, 25);
             this.btnExit.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -276,11 +278,41 @@
             this.labelX5.TabIndex = 9;
             this.labelX5.Text = "年級";
             // 
+            // txtEDoc
+            // 
+            // 
+            // 
+            // 
+            this.txtEDoc.Border.Class = "TextBoxBorder";
+            this.txtEDoc.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtEDoc.Location = new System.Drawing.Point(131, 171);
+            this.txtEDoc.Multiline = true;
+            this.txtEDoc.Name = "txtEDoc";
+            this.txtEDoc.Size = new System.Drawing.Size(295, 25);
+            this.txtEDoc.TabIndex = 10;
+            // 
+            // labelX6
+            // 
+            this.labelX6.AutoSize = true;
+            this.labelX6.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX6.BackgroundStyle.Class = "";
+            this.labelX6.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX6.Location = new System.Drawing.Point(11, 173);
+            this.labelX6.Name = "labelX6";
+            this.labelX6.Size = new System.Drawing.Size(114, 21);
+            this.labelX6.TabIndex = 11;
+            this.labelX6.Text = "相關證明文件網址";
+            // 
             // SetClassNameSeatNoForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(436, 206);
+            this.ClientSize = new System.Drawing.Size(436, 237);
+            this.Controls.Add(this.txtEDoc);
+            this.Controls.Add(this.labelX6);
             this.Controls.Add(this.cboGradeYear);
             this.Controls.Add(this.labelX5);
             this.Controls.Add(this.btnExit);
@@ -319,5 +351,7 @@
         private DevComponents.DotNetBar.ButtonX btnExit;
         private DevComponents.DotNetBar.Controls.ComboBoxEx cboGradeYear;
         private DevComponents.DotNetBar.LabelX labelX5;
+        private DevComponents.DotNetBar.Controls.TextBoxX txtEDoc;
+        private DevComponents.DotNetBar.LabelX labelX6;
     }
 }

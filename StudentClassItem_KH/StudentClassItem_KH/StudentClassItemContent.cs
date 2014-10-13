@@ -304,11 +304,14 @@ namespace StudentClassItem_KH
                     else
                         objStudent.SeatNo = null;
 
-                    // 傳送至局端
-                    string errMsg = Utility.SendData("調整班級", objStudent.IDNumber, objStudent.StudentNumber, objStudent.Name, gradeYear, oldClassName, scnsf.GetSeatNo(), className, scnsf.GetMettingDate(), scnsf.GetMemo(),FirstClassName);
-                    if (errMsg != "")
-                        FISCA.Presentation.Controls.MsgBox.Show(errMsg);
-
+                    // 檢查是否傳送到局端,true才會送，主要修改當改座號不傳。
+                    if (scnsf.GetChkSend())
+                    {
+                        // 傳送至局端
+                        string errMsg = Utility.SendData("調整班級", objStudent.IDNumber, objStudent.StudentNumber, objStudent.Name, gradeYear, oldClassName, scnsf.GetSeatNo(), className, scnsf.GetMettingDate(), scnsf.GetMemo(), FirstClassName, scnsf.GetEDoc());
+                        if (errMsg != "")
+                            FISCA.Presentation.Controls.MsgBox.Show(errMsg);
+                    }
                     // 更新學生資料
                     K12.Data.Student.Update(objStudent);
 

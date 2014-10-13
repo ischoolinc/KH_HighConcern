@@ -40,6 +40,7 @@ namespace KH_HighConcern.DetailContent
             _ChangeListener.Add(new CheckBoxXSource(chkHighConcern));
             _ChangeListener.Add(new TextBoxSource(txtCount));
             _ChangeListener.Add(new TextBoxSource(txtDocNo));
+            _ChangeListener.Add(new TextBoxSource(txtEDoc));
             _ChangeListener.StatusChanged += _ChangeListener_StatusChanged;
             //啟動更新事件
             eh = FISCA.InteractionService.PublishEvent(EventCode);
@@ -85,11 +86,13 @@ namespace KH_HighConcern.DetailContent
             chkHighConcern.Checked = false;
             txtCount.Text = "";
             txtDocNo.Text = "";
+            txtEDoc.Text = "";
             if (_HighConcernDict.Count > 0)
             {
                 chkHighConcern.Checked = _HighConcernDict[PrimaryKey].HighConcern;
                 txtCount.Text = _HighConcernDict[PrimaryKey].NumberReduce.ToString();
                 txtDocNo.Text = _HighConcernDict[PrimaryKey].DocNo;
+                txtEDoc.Text = _HighConcernDict[PrimaryKey].EDoc;
             }
 
             _ChangeListener.Reset();
@@ -155,7 +158,7 @@ namespace KH_HighConcern.DetailContent
                 {
                     _ChangeListener.SuspendListen();
 
-                    string IDNumber = "", StudentNumber = "", StudentName = "", ClassName = "", SeatNo = "", NumberReduce = "", DocNo = "";
+                    string IDNumber = "", StudentNumber = "", StudentName = "", ClassName = "", SeatNo = "", NumberReduce = "", DocNo = "",EDoc="";
 
                     IDNumber = _StudRec.IDNumber;
                     StudentNumber = _StudRec.StudentNumber;
@@ -166,7 +169,7 @@ namespace KH_HighConcern.DetailContent
                         ClassName = _StudRec.Class.Name;
                     NumberReduce = bb.ToString();
                     DocNo = txtDocNo.Text;
-
+                    EDoc = txtEDoc.Text;
                     // 檢查當已是高關懷
                     if (_HighConcernDict.ContainsKey(PrimaryKey))
                     {
@@ -176,11 +179,13 @@ namespace KH_HighConcern.DetailContent
 
                             _HighConcernDict[PrimaryKey].NumberReduce = bb;
                             _HighConcernDict[PrimaryKey].DocNo = txtDocNo.Text;
+                            _HighConcernDict[PrimaryKey].EDoc = txtEDoc.Text;
                         }
                         else
                         {
                             txtCount.Text = "";
                             txtDocNo.Text = "";
+                            txtEDoc.Text = "";
                             _HighConcernDict[PrimaryKey].Deleted = true;
                         }
                         _HighConcernDict[PrimaryKey].Save();
@@ -193,6 +198,7 @@ namespace KH_HighConcern.DetailContent
                         newData.SeatNo = SeatNo;
                         newData.ClassName = ClassName;
                         newData.DocNo = txtDocNo.Text;
+                        newData.EDoc = txtEDoc.Text;
                         newData.RefStudentID = PrimaryKey;
                         newData.HighConcern = true;
                         newData.NumberReduce = bb;
@@ -200,7 +206,7 @@ namespace KH_HighConcern.DetailContent
                         newData.Save();
                     }
                     // 傳送至局端
-                    string errMsg = Utility.SendData("變更特殊身分", IDNumber, StudentNumber, StudentName, ClassName, SeatNo, DocNo, NumberReduce);
+                    string errMsg = Utility.SendData("變更特殊身分", IDNumber, StudentNumber, StudentName, ClassName, SeatNo, DocNo, NumberReduce,EDoc);
                     if (errMsg != "")
                     {
                         FISCA.Presentation.Controls.MsgBox.Show(errMsg);
@@ -234,6 +240,7 @@ namespace KH_HighConcern.DetailContent
             {
                 txtCount.Text = "";
                 txtDocNo.Text = "";
+                txtEDoc.Text = "";
                 _errorP.SetError(txtCount, "");
                 _errorP.SetError(txtDocNo, "");
             }

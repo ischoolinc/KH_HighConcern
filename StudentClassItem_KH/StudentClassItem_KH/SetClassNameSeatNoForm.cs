@@ -16,7 +16,10 @@ namespace StudentClassItem_KH
         private string _SeatNo = "";
         private DateTime _MeetingDate;
         private string _Memo = "";
+        private string _EDoc = "";
         private string _GradeYear = "";
+        // 是否傳送
+        private bool _ChkSend = true;
         Dictionary<string, string> _ClassNameDict;
         Dictionary<string, string> _ClassNameMapDict;
         public SetClassNameSeatNoForm()
@@ -81,6 +84,15 @@ namespace StudentClassItem_KH
             return _Memo;
         }
 
+        /// <summary>
+        /// 相關證明文件網址
+        /// </summary>
+        /// <returns></returns>
+        public string GetEDoc()
+        {
+            return _EDoc;
+        }
+
         private void btnExit_Click(object sender, EventArgs e)
         {
             this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
@@ -136,6 +148,9 @@ namespace StudentClassItem_KH
         {
             if (ChkData())
             {
+
+                _ChkSend = true;
+
                 _ClassName = "";
                 if(_ClassNameMapDict.ContainsKey(cboClassName.Text))
                     _ClassName = _ClassNameMapDict[cboClassName.Text];
@@ -143,19 +158,36 @@ namespace StudentClassItem_KH
                 _SeatNo = cboSeatNo.Text;
                 _MeetingDate = dtMeetting.Value;
                 _Memo = txtMemo.Text;
-                
+                _EDoc = txtEDoc.Text;
 
-                string msg = "請問是否將班級由「" + _oldClassName + "」調整成「" + _ClassName + "」，按下「是」確認後，需報局備查。";
-                
-                if (FISCA.Presentation.Controls.MsgBox.Show(msg, "調整確認", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes)
-                    this.DialogResult = System.Windows.Forms.DialogResult.OK;
-                else
-                    this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-                
+                // 班級相同只改座號不傳送
+                if (_oldClassName == _ClassName)
+                    _ChkSend = false;
+
+                if (_ChkSend)
+                {
+                    string msg = "請問是否將班級由「" + _oldClassName + "」調整成「" + _ClassName + "」，按下「是」確認後，需報局備查。";
+
+                    if (FISCA.Presentation.Controls.MsgBox.Show(msg, "調整確認", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes)
+                        this.DialogResult = System.Windows.Forms.DialogResult.OK;
+                    else
+                        this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+                }
+
+                this.DialogResult = System.Windows.Forms.DialogResult.OK;
             }
             else {
                 FISCA.Presentation.Controls.MsgBox.Show("資料有誤無法儲存");
             }
+        }
+
+        /// <summary>
+        /// 取得是否傳送
+        /// </summary>
+        /// <returns></returns>
+        public bool GetChkSend()
+        {
+            return _ChkSend;
         }
 
         private bool ChkData()

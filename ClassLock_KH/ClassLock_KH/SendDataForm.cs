@@ -17,6 +17,8 @@ namespace ClassLock_KH
 
         private string _strDocNo = "";
 
+        private string _strEDoc = "";
+
         private bool _NUnLock = false;
 
         public SendDataForm()
@@ -45,6 +47,9 @@ namespace ClassLock_KH
 
             if (!string.IsNullOrEmpty(txtDocNo.Text))
                 _strDocNo = txtDocNo.Text;
+
+            if (!string.IsNullOrEmpty(txtEDoc.Text))
+                _strEDoc = txtEDoc.Text;
 
             _NUnLock = chkNUnLock.Checked;
 
@@ -90,6 +95,15 @@ namespace ClassLock_KH
         public bool GetNUnLock()
         {
             return _NUnLock;
+        }
+
+        /// <summary>
+        /// 相關證明文件網址
+        /// </summary>
+        /// <returns></returns>
+        public string GetEDoc()
+        {
+            return _strEDoc;
         }
     }
 }

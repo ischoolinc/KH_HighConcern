@@ -41,6 +41,7 @@
             this.colDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colAction = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colContent = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colEDoc = new System.Windows.Forms.DataGridViewLinkColumn();
             this.colR1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colR2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dtBeginDate)).BeginInit();
@@ -211,6 +212,7 @@
             this.colDate,
             this.colAction,
             this.colContent,
+            this.colEDoc,
             this.colR1,
             this.colR2});
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -228,8 +230,9 @@
             this.dgData.ReadOnly = true;
             this.dgData.RowTemplate.Height = 24;
             this.dgData.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgData.Size = new System.Drawing.Size(722, 222);
+            this.dgData.Size = new System.Drawing.Size(820, 222);
             this.dgData.TabIndex = 4;
+            this.dgData.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgData_CellContentClick);
             this.dgData.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.dgData_MouseDoubleClick);
             // 
             // btnQuery
@@ -239,7 +242,7 @@
             this.btnQuery.AutoSize = true;
             this.btnQuery.BackColor = System.Drawing.Color.Transparent;
             this.btnQuery.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnQuery.Location = new System.Drawing.Point(570, 279);
+            this.btnQuery.Location = new System.Drawing.Point(668, 279);
             this.btnQuery.Name = "btnQuery";
             this.btnQuery.Size = new System.Drawing.Size(75, 25);
             this.btnQuery.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -254,7 +257,7 @@
             this.btnExit.AutoSize = true;
             this.btnExit.BackColor = System.Drawing.Color.Transparent;
             this.btnExit.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnExit.Location = new System.Drawing.Point(661, 279);
+            this.btnExit.Location = new System.Drawing.Point(759, 279);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(75, 25);
             this.btnExit.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -311,6 +314,14 @@
             this.colContent.ReadOnly = true;
             this.colContent.Width = 200;
             // 
+            // colEDoc
+            // 
+            this.colEDoc.HeaderText = "相關證明文件網址";
+            this.colEDoc.Name = "colEDoc";
+            this.colEDoc.ReadOnly = true;
+            this.colEDoc.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.colEDoc.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
             // colR1
             // 
             this.colR1.HeaderText = "審核結果";
@@ -327,7 +338,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(749, 315);
+            this.ClientSize = new System.Drawing.Size(847, 315);
             this.Controls.Add(this.lblMsg);
             this.Controls.Add(this.btnExport);
             this.Controls.Add(this.btnExit);
@@ -363,6 +374,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colDate;
         private System.Windows.Forms.DataGridViewTextBoxColumn colAction;
         private System.Windows.Forms.DataGridViewTextBoxColumn colContent;
+        private System.Windows.Forms.DataGridViewLinkColumn colEDoc;
         private System.Windows.Forms.DataGridViewTextBoxColumn colR1;
         private System.Windows.Forms.DataGridViewTextBoxColumn colR2;
     }

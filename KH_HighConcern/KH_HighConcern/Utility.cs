@@ -10,7 +10,7 @@ namespace KH_HighConcern
 {
     public class Utility
     {
-        public static string SendData(string action, string IDNumber, string StudentNumber, string StudentName, string ClassName, string SeatNo, string DocNo, string NumberReduce)
+        public static string SendData(string action, string IDNumber, string StudentNumber, string StudentName, string ClassName, string SeatNo, string DocNo, string NumberReduce,string EDoc)
         {
             string DSNS = FISCA.Authentication.DSAServices.AccessPoint;
 
@@ -44,6 +44,7 @@ namespace KH_HighConcern
                 Content.SetElementValue("SeatNo", SeatNo);
                 Content.SetElementValue("NumberReduce", NumberReduce);
                 Content.SetElementValue("DocNo", DocNo);
+                Content.SetElementValue("EDoc", EDoc);
                 s2.Add(Content);
                 s1.Add(s2);
                 xmlRoot.Add(s1);
@@ -98,7 +99,7 @@ namespace KH_HighConcern
                     StudentXML.SetElementValue("ClassName", ls.ClassName);
                     StudentXML.SetElementValue("SeatNo", ls.SeatNo);
                     StudentXML.SetElementValue("NumberReduce", ls.NumberReduce);
-                    StudentXML.SetElementValue("DocNo", ls.DocNo);
+                    StudentXML.SetElementValue("DocNo", ls.DocNo);                    
                     Detail.Add(StudentXML);
                 }
                                

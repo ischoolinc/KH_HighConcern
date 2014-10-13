@@ -48,5 +48,11 @@ namespace ClassLock_KH.DAO
         [Field(Field = "unauto_unlock", Indexed = false)]
         public bool UnAutoUnlock { get; set; }
 
+        ///<summary>
+        /// 相關證明文件網址
+        ///</summary>
+        [Field(Field = "e_doc", Indexed = false)]
+        public string EDoc { get; set; }
+
     }
 }
