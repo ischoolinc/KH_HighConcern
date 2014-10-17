@@ -144,6 +144,21 @@ namespace StudentClassItem_KH
         }
 
 
+        /// <summary>
+        /// 檢查班級名稱是否相同
+        /// </summary>
+        /// <returns></returns>
+        private bool chkSameClassName()
+        {
+            bool retVal = false;
+            if (_ClassNameMapDict.ContainsKey(cboClassName.Text))
+                _ClassName = _ClassNameMapDict[cboClassName.Text];
+
+            if (_oldClassName == _ClassName)
+                retVal = true;
+            return retVal;
+        }
+
         private void btnSend_Click(object sender, EventArgs e)
         {
             if (ChkData())
@@ -161,7 +176,7 @@ namespace StudentClassItem_KH
                 _EDoc = txtEDoc.Text;
 
                 // 班級相同只改座號不傳送
-                if (_oldClassName == _ClassName)
+                if (chkSameClassName())
                     _ChkSend = false;
 
                 if (_ChkSend)
@@ -201,8 +216,11 @@ namespace StudentClassItem_KH
 
             if (dtMeetting.IsEmpty)
             {
-                pass = false;
-                FISCA.Presentation.Controls.MsgBox.Show("編班委員會會議日期必填");
+                if (chkSameClassName() == false)
+                {
+                    pass = false;
+                    FISCA.Presentation.Controls.MsgBox.Show("編班委員會會議日期必填");
+                }
             }
 
             return pass;
