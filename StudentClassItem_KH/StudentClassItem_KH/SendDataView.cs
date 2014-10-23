@@ -341,7 +341,7 @@ DateTime:日期時間。
                 {
                     try
                     {
-                        if (url.Contains("http"))
+                        if (url.Contains("://"))
                         {
                             ProcessStartInfo info = new ProcessStartInfo(url);
                             Process.Start(info);
