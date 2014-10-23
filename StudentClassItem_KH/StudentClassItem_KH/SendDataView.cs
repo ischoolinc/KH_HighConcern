@@ -333,14 +333,28 @@ DateTime:日期時間。
             
             // 處理相關文件連結
             string url="";
-            if (e.ColumnIndex ==colEDoc.Index && dgData.Rows[e.RowIndex].Cells[colEDoc.Index].Value != null)
+            if (e.RowIndex>=0 && e.ColumnIndex ==colEDoc.Index && dgData.Rows[e.RowIndex].Cells[colEDoc.Index].Value != null)
             {
                 url = dgData.Rows[e.RowIndex].Cells[colEDoc.Index].Value.ToString();
 
                 if(!string.IsNullOrEmpty(url))
                 {
-                    ProcessStartInfo info = new ProcessStartInfo (url);
-                    Process.Start(info);
+                    try
+                    {
+                        if (url.Contains("http"))
+                        {
+                            ProcessStartInfo info = new ProcessStartInfo(url);
+                            Process.Start(info);
+                        }
+                        else
+                        {
+                            FISCA.Presentation.Controls.MsgBox.Show("網址不完整");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        FISCA.Presentation.Controls.MsgBox.Show("網址無法解析，" + ex.Message);
+                    }
                 }
             }
         }
