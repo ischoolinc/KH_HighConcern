@@ -63,13 +63,15 @@ namespace KH_HighConcernCalc
 
                 //  取得班級高關懷人數
                 QueryHelper qh3 = new QueryHelper();
-                string query3 = "select class.class_name,sum(number_reduce) as class_hcount from $kh.automatic.placement.high.concern inner join student on to_number($kh.automatic.placement.high.concern.ref_student_id,'999999999')=student.id inner join class on student.ref_class_id=class.id where class.grade_year=" + GradeYear + " and student.status in(1,8) group by class.class_name;";
+                string query3 = "select class.class_name,sum(number_reduce) as class_hcount,count($kh.automatic.placement.high.concern.ref_student_id) as class_hscount from $kh.automatic.placement.high.concern inner join student on to_number($kh.automatic.placement.high.concern.ref_student_id,'999999999')=student.id inner join class on student.ref_class_id=class.id where class.grade_year=3 and student.status in(1,8) group by class.class_name;";
                 DataTable dt3 = qh3.Select(query3);
                 foreach (DataRow dr in dt3.Rows)
                 {
                     string className = dr["class_name"].ToString();
 
                     int number_reduce = int.Parse(dr["class_hcount"].ToString());
+
+                    int hscount = int.Parse(dr["class_hscount"].ToString());
 
                     // 加入高關懷學生
                     foreach (ClassStudent cs in retValue)
@@ -78,6 +80,7 @@ namespace KH_HighConcernCalc
                         {
                             hasSStudent = true;
                             cs.HStudentCount = number_reduce;
+                            cs.ClassHStudentCount = hscount;
                             cs.ClassStudentCount += cs.HStudentCount;
                             cs.HasHStudentCount = 1;
                             break;
@@ -104,8 +107,8 @@ namespace KH_HighConcernCalc
                     // 有特殊生
                     if (hasSStudent)
                     {
-                        // 編班人數排序 (先編班人數小>大,沒有高關懷人在前，實際人數小(高關懷人數多>少),班級名稱數字小在前)
-                        retValue = (from data in retValue orderby data.ClassStudentCount ascending, data.HasHStudentCount ascending, data.HStudentCount descending, data.ClassNameInt ascending select data).ToList();
+                        // 編班人數排序 (先編班人數小>大,沒有高關懷人在前，高關懷人數小到大,班級名稱數字小在前)
+                        retValue = (from data in retValue orderby data.ClassStudentCount ascending, data.HasHStudentCount ascending, data.ClassHStudentCount ascending, data.ClassNameInt ascending select data).ToList();
                     }
                     else
                     {
@@ -140,8 +143,8 @@ namespace KH_HighConcernCalc
                 // 有特殊生
                     if (hasSStudent)
                     {
-                        // 編班人數排序 (先編班人數小>大,沒有高關懷人在前，實際人數小(高關懷人數多>少),班級排序數字小在前)
-                        retValue = (from data in retValue orderby data.ClassStudentCount ascending, data.HasHStudentCount ascending, data.HStudentCount descending, data.ClassOrder ascending select data).ToList();
+                        // 編班人數排序 (先編班人數小>大,沒有高關懷人在前，高關懷人數小到大,班級排序數字小在前)
+                        retValue = (from data in retValue orderby data.ClassStudentCount ascending, data.HasHStudentCount ascending, data.ClassHStudentCount ascending, data.ClassOrder ascending select data).ToList();
                     }
                     else
                     {
@@ -193,7 +196,7 @@ namespace KH_HighConcernCalc
 
                 //  取得班級高關懷人數
                 QueryHelper qh3 = new QueryHelper();
-                string query3 = "select class.class_name,sum(number_reduce) as class_hcount from $kh.automatic.placement.high.concern inner join student on to_number($kh.automatic.placement.high.concern.ref_student_id,'999999999')=student.id inner join class on student.ref_class_id=class.id where student.status in(1,8) group by class.class_name;";
+                string query3 = "select class.class_name,sum(number_reduce) as class_hcount,count($kh.automatic.placement.high.concern.ref_student_id) as class_hscount from $kh.automatic.placement.high.concern inner join student on to_number($kh.automatic.placement.high.concern.ref_student_id,'999999999')=student.id inner join class on student.ref_class_id=class.id where student.status in(1,8) group by class.class_name;";
                 DataTable dt3 = qh3.Select(query3);
                 foreach (DataRow dr in dt3.Rows)
                 {
@@ -201,12 +204,15 @@ namespace KH_HighConcernCalc
 
                     int number_reduce = int.Parse(dr["class_hcount"].ToString());
 
+                    int hscount = int.Parse(dr["class_hscount"].ToString());
+
                     // 加入高關懷學生
                     foreach (ClassStudent cs in retValue)
                     {
                         if (cs.ClassName == className)
                         {                            
                             cs.HStudentCount = number_reduce;
+                            cs.ClassHStudentCount = hscount;
                             cs.ClassStudentCount += cs.HStudentCount;
                             cs.HasHStudentCount = 1;
                             break;
