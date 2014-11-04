@@ -63,7 +63,7 @@ namespace KH_HighConcernCalc
 
                 //  取得班級高關懷人數
                 QueryHelper qh3 = new QueryHelper();
-                string query3 = "select class.class_name,sum(number_reduce) as class_hcount,count($kh.automatic.placement.high.concern.ref_student_id) as class_hscount from $kh.automatic.placement.high.concern inner join student on to_number($kh.automatic.placement.high.concern.ref_student_id,'999999999')=student.id inner join class on student.ref_class_id=class.id where class.grade_year=3 and student.status in(1,8) group by class.class_name;";
+                string query3 = "select class.class_name,sum(number_reduce) as class_hcount,count($kh.automatic.placement.high.concern.ref_student_id) as class_hscount from $kh.automatic.placement.high.concern inner join student on to_number($kh.automatic.placement.high.concern.ref_student_id,'999999999')=student.id inner join class on student.ref_class_id=class.id where class.grade_year=" + GradeYear + " and student.status in(1,8) group by class.class_name;";
                 DataTable dt3 = qh3.Select(query3);
                 foreach (DataRow dr in dt3.Rows)
                 {
