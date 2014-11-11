@@ -107,8 +107,11 @@ namespace KH_HighConcernCalc
                     // 有特殊生
                     if (hasSStudent)
                     {
-                        // 編班人數排序 (先編班人數小>大,沒有高關懷人在前，高關懷人數小到大,班級名稱數字小在前)
-                        retValue = (from data in retValue orderby data.ClassStudentCount ascending, data.HasHStudentCount ascending, data.ClassHStudentCount ascending, data.ClassNameInt ascending select data).ToList();
+                        //// 編班人數排序 (先編班人數小>大,沒有高關懷人在前，高關懷人數小到大,班級名稱數字小在前)
+                        //retValue = (from data in retValue orderby data.ClassStudentCount ascending, data.HasHStudentCount ascending, data.ClassHStudentCount ascending, data.ClassNameInt ascending select data).ToList();
+
+                        // 2014/11/11,高雄小組會議討論後調整：編班人數排序 (先編班人數小>大,沒有高關懷人在前，班級名稱數字小在前)
+                        retValue = (from data in retValue orderby data.ClassStudentCount ascending, data.HasHStudentCount ascending, data.ClassNameInt ascending select data).ToList();
                     }
                     else
                     {
@@ -143,8 +146,8 @@ namespace KH_HighConcernCalc
                 // 有特殊生
                     if (hasSStudent)
                     {
-                        // 編班人數排序 (先編班人數小>大,沒有高關懷人在前，高關懷人數小到大,班級排序數字小在前)
-                        retValue = (from data in retValue orderby data.ClassStudentCount ascending, data.HasHStudentCount ascending, data.ClassHStudentCount ascending, data.ClassOrder ascending select data).ToList();
+                        // 2014/11/11,高雄小組會議討論修改：編班人數排序 (先編班人數小>大,沒有高關懷人在前，班級排序數字小在前)
+                        retValue = (from data in retValue orderby data.ClassStudentCount ascending, data.HasHStudentCount ascending, data.ClassOrder ascending select data).ToList();
                     }
                     else
                     {
