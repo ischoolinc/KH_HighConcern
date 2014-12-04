@@ -1280,7 +1280,9 @@ namespace StudentImportWizard_KH
                         // 取得原班級學號只處理學生狀態為一般。
                         logStudList = Utility.ConveroClassName(logStudList);
                     }
-                    Utility.SendDataList(ActionStr, logStudList,Context.ImportMode);
+                    // 當有勾選班級、狀態才需要傳送
+                    if(Gobal._SendData)
+                        Utility.SendDataList(ActionStr, logStudList,Context.ImportMode);
                 }
 
                 pgImport.Value = reader.RelativelyIndex;
