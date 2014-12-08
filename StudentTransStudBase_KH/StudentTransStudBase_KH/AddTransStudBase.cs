@@ -227,8 +227,21 @@ namespace StudentTransStudBase_KH
                         if (_student.Class.GradeYear.HasValue)
                             strGradeYear = _student.Class.GradeYear.Value.ToString();
 
-                    JHSchool.Data.JHStudent.Update(_student);
-                    JHSchool.Data.JHPhone.Update(_StudentPhone);
+                    // 當學生狀態非一般調整學生狀態
+                    if (_student.Status != K12.Data.StudentRecord.StudentStatus.一般)
+                    {
+                        _student.Status = K12.Data.StudentRecord.StudentStatus.一般;
+                    }
+
+                    try
+                    {
+                        JHSchool.Data.JHStudent.Update(_student);
+                        JHSchool.Data.JHPhone.Update(_StudentPhone);
+                    }
+                    catch (Exception ex)
+                    {
+                        FISCA.Presentation.Controls.MsgBox.Show("更新學生資料發生錯誤：" + ex.Message);
+                    }
 
                     // 傳送至局端
                     string errMsg = Utility.SendData("自動轉入", _student.IDNumber, _student.StudentNumber, _student.Name, strGradeYear, lblClassName.Text, cboSeatNo.Text, lblNewClassName.Text, "", "");
