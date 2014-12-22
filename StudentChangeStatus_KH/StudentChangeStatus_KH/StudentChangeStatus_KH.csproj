@@ -111,6 +111,12 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="sendMessage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="sendMessage.Designer.cs">
+      <DependentUpon>sendMessage.cs</DependentUpon>
+    </Compile>
     <Compile Include="StudentChangeStatusBarBuilder.cs" />
     <Compile Include="StudentChangeStatusStudentBar.cs">
       <SubType>UserControl</SubType>
@@ -158,6 +164,11 @@
     <Content Include="Library\K12.Presentation.dll" />
     <Content Include="Library\K12.Presentation.pdb" />
     <Content Include="Library\K12.Presentation.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="sendMessage.resx">
+      <DependentUpon>sendMessage.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

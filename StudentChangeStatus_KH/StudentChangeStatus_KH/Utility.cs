@@ -15,7 +15,7 @@ namespace StudentChangeStatus_KH
         /// <param name="ClassID"></param>
         /// <param name="Action"></param>
         /// <returns></returns>
-        public static string SendData(string Action,string ClassName,string StudentName,string StudentNumber,string IDNumber, string StudentStatus, string NewStudentStatus)
+        public static string SendData(string Action,string ClassName,string StudentName,string StudentNumber,string IDNumber, string StudentStatus, string NewStudentStatus,string Msg)
         {
             string DSNS = FISCA.Authentication.DSAServices.AccessPoint;
             string AccessPoint = @"j.kh.edu.tw";
@@ -45,6 +45,7 @@ namespace StudentChangeStatus_KH
                 s3.SetElementValue("IDNumber", IDNumber);
                 s3.SetElementValue("StudentStatus", StudentStatus);
                 s3.SetElementValue("NewStudentStatus", NewStudentStatus);
+                s3.SetElementValue("Reason", Msg); // 備註
                 s2.Add(s3);
                 s1.Add(s2);
                 xmlRoot.Add(s1);

@@ -457,15 +457,16 @@ namespace StudentChangeStatus_KH
                                 if ((StudStatus == "畢業或離校" || StudStatus == "休學" || StudStatus == "刪除") && NewStudStatus == "一般")
                                     chkSendSpec = true;
 
-                                string ShowMsg = "請問是否將 " + studentRec.Name + " 由" + StudStatus + " 調整成 " + NewStudStatus + "，按下「是」確認後，局端會留狀態變更紀錄。"; 
+                                //string ShowMsg = "請問是否將 " + studentRec.Name + " 由" + StudStatus + " 調整成 " + NewStudStatus + "，按下「是」確認後，局端會留狀態變更紀錄。"; 
 
-                                if (chkSendSpec)
-                                {
-                                    ShowMsg = "請問是否將 " + studentRec.Name + " 由" + StudStatus + " 調整成 " + NewStudStatus + "，按下「是」確認後，需報局備查。"; 
-                                }
+                                //if (chkSendSpec)
+                                //{
+                                //    ShowMsg = "請問是否將 " + studentRec.Name + " 由" + StudStatus + " 調整成 " + NewStudStatus + "，按下「是」確認後，需報局備查。"; 
+                                //}
 
-                                if (MessageBox.Show(ShowMsg, "ischool", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                                {
+                                sendMessage smg = new sendMessage(studentRec.Name, StudStatus, NewStudStatus, chkSendSpec);
+                                if(smg.ShowDialog()== DialogResult.Yes)
+                                {                                 
                                     string log = "學生「" + studentRec.Name + "」狀態已";
                                     log += "由「" + studentRec.StatusStr + "」變更為「" + ((StatusItem)button.Tag).Text + "」";
 
@@ -509,7 +510,7 @@ namespace StudentChangeStatus_KH
                                     string ClassName = "";
                                     if (studentRec.Class != null)
                                         ClassName = studentRec.Class.Name;
-                                    Utility.SendData(action, ClassName, studentRec.Name, studentRec.StudentNumber, studentRec.IDNumber, StudStatus, NewStudStatus);
+                                    Utility.SendData(action, ClassName, studentRec.Name, studentRec.StudentNumber, studentRec.IDNumber, StudStatus, NewStudStatus,smg.GetMessage());
 
                                     K12.Data.Student.Update(studentRec);
                                     FISCA.LogAgent.ApplicationLog.Log("學生狀態", "變更", "student", studentRec.ID, log);

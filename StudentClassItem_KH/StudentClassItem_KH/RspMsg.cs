@@ -195,6 +195,8 @@ namespace StudentClassItem_KH
                         retList.Add("狀態變更前「" + Content["StudentStatus"] + "」");
                     if (Content.ContainsKey("NewStudentStatus"))
                         retList.Add("狀態變更後「" + Content["NewStudentStatus"] + "」");
+                    if (Content.ContainsKey("Reason"))
+                        retList.Add("備註「" + Content["Reason"] + "」");
                     break;
 
                 case "一般狀態變更":
@@ -211,6 +213,8 @@ namespace StudentClassItem_KH
                         retList.Add("狀態變更前「" + Content["StudentStatus"] + "」");
                     if (Content.ContainsKey("NewStudentStatus"))
                         retList.Add("狀態變更後「" + Content["NewStudentStatus"] + "」");
+                    if (Content.ContainsKey("Reason"))
+                        retList.Add("備註「" + Content["Reason"] + "」");
 
                     break;     
             }
