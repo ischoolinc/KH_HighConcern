@@ -119,6 +119,7 @@
             this.txtEDoc.Name = "txtEDoc";
             this.txtEDoc.Size = new System.Drawing.Size(393, 25);
             this.txtEDoc.TabIndex = 7;
+            this.txtEDoc.TextChanged += new System.EventHandler(this.txtEDoc_TextChanged);
             // 
             // labelX3
             // 

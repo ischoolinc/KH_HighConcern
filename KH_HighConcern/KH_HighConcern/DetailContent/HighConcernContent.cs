@@ -252,5 +252,12 @@ namespace KH_HighConcern.DetailContent
                 _errorP.SetError(txtEDoc, "");
             }
         }
+
+        private void txtEDoc_TextChanged(object sender, EventArgs e)
+        {
+            _errorP.SetError(txtEDoc, "");
+            if (txtEDoc.Text != "")
+                chkHighConcern.Checked = true;
+        }
     }
 }

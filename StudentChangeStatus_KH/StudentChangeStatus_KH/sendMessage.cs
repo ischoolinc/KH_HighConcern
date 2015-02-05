@@ -51,7 +51,7 @@ namespace StudentChangeStatus_KH
             if(_chkSendSpec)
                 sb.AppendLine("按下「是」確認後，需報局備查。");
             else
-                sb.AppendLine("按下「是」確認後，局端會留狀態變更紀錄。");
+                sb.AppendLine("按下「是」確認後，不需函報教育局，僅由局端線上審核。");
 
             lblMsg.Text = sb.ToString();
         }

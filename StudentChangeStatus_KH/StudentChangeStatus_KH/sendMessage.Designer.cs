@@ -43,11 +43,11 @@
             // 
             this.lblMsg.BackgroundStyle.Class = "";
             this.lblMsg.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.lblMsg.Location = new System.Drawing.Point(12, 21);
+            this.lblMsg.Location = new System.Drawing.Point(12, 12);
             this.lblMsg.Name = "lblMsg";
-            this.lblMsg.Size = new System.Drawing.Size(347, 66);
+            this.lblMsg.Size = new System.Drawing.Size(422, 75);
             this.lblMsg.TabIndex = 0;
-            this.lblMsg.Text = "請問是否將 測試學生 由 一般 調整成 畢業或離校，\r\n按下「是」確認後，需報局備查。";
+            this.lblMsg.Text = "請問是否將 測試學生 由 一般 調整成 畢業或離校，\r\n按下「是」確認後，不需函報教育局，\r\n僅由局端線上審核。";
             this.lblMsg.TextAlignment = System.Drawing.StringAlignment.Center;
             // 
             // label1
@@ -65,7 +65,7 @@
             this.txtMsg.Location = new System.Drawing.Point(60, 94);
             this.txtMsg.Multiline = true;
             this.txtMsg.Name = "txtMsg";
-            this.txtMsg.Size = new System.Drawing.Size(299, 22);
+            this.txtMsg.Size = new System.Drawing.Size(374, 22);
             this.txtMsg.TabIndex = 2;
             // 
             // btnY
@@ -74,7 +74,7 @@
             this.btnY.AutoSize = true;
             this.btnY.BackColor = System.Drawing.Color.Transparent;
             this.btnY.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnY.Location = new System.Drawing.Point(200, 134);
+            this.btnY.Location = new System.Drawing.Point(273, 134);
             this.btnY.Name = "btnY";
             this.btnY.Size = new System.Drawing.Size(75, 25);
             this.btnY.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -88,7 +88,7 @@
             this.btnN.AutoSize = true;
             this.btnN.BackColor = System.Drawing.Color.Transparent;
             this.btnN.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnN.Location = new System.Drawing.Point(284, 134);
+            this.btnN.Location = new System.Drawing.Point(357, 134);
             this.btnN.Name = "btnN";
             this.btnN.Size = new System.Drawing.Size(75, 25);
             this.btnN.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -100,7 +100,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(376, 171);
+            this.ClientSize = new System.Drawing.Size(446, 171);
             this.Controls.Add(this.btnN);
             this.Controls.Add(this.btnY);
             this.Controls.Add(this.txtMsg);
