@@ -261,82 +261,87 @@ namespace StudentClassItem_KH
         private void lnkSend_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             SetClassNameSeatNoForm scnsf = new SetClassNameSeatNoForm();
-            string gradeYear="";
-            string oldClassName = "";        
-
-            // 有班級
-            if (objStudent.Class != null)
-            {
-                //// 不能修改年級，依學生本身班級年級
-                //scnsf.setCboGradeYearEnable(false);
-
-                // 因需求調整年級可自由選
-                scnsf.setCboGradeYearEnable(true);
-
-                // 放入可選年級
-                scnsf.SetCboGradeYearItems(Utility.GetGradeYearList());
-
-                // 原班級名稱
-                oldClassName = objStudent.Class.Name;
-                // 填入年級
-                if (objStudent.Class.GradeYear.HasValue)
-                    gradeYear = objStudent.Class.GradeYear.Value.ToString();
-                scnsf.SetCboGradeYearText(gradeYear);
-            }
-            else
-            {
-                scnsf.setCboGradeYearEnable(true);
-                // 放入可選年級
-                scnsf.SetCboGradeYearItems(Utility.GetGradeYearList());
-            }
-            
-
-            scnsf.SetOldClassName(oldClassName);
-           
             if (scnsf.ShowDialog() == DialogResult.OK)
             {
-                string className = "",FirstClassName="";
-                className = scnsf.GetClassName();
-                FirstClassName = scnsf.GetFirstClassName();
+                #region 當點傳送才處理
+                string gradeYear = "";
+                string oldClassName = "";
 
-                _ClassNameIDDic = scnsf.GetClassNameDict();
-                int seatNo;
-
-                // 修改學生班、座
-                if (_ClassNameIDDic.ContainsKey(className))
+                // 有班級
+                if (objStudent.Class != null)
                 {
-                    objStudent.RefClassID = _ClassNameIDDic[className];
-                    if (int.TryParse(scnsf.GetSeatNo(), out seatNo))
-                        objStudent.SeatNo = seatNo;
-                    else
-                        objStudent.SeatNo = null;
+                    //// 不能修改年級，依學生本身班級年級
+                    //scnsf.setCboGradeYearEnable(false);
 
-                    // 檢查是否傳送到局端,true才會送，主要修改當改座號不傳。
-                    if (scnsf.GetChkSend())
-                    {
-                        // 傳送至局端
-                        string errMsg = Utility.SendData("調整班級", objStudent.IDNumber, objStudent.StudentNumber, objStudent.Name, gradeYear, oldClassName, scnsf.GetSeatNo(), className, scnsf.GetMettingDate(), scnsf.GetMemo(), FirstClassName, scnsf.GetEDoc());
-                        if (errMsg != "")
-                            FISCA.Presentation.Controls.MsgBox.Show(errMsg);
-                    }
-                    // 更新學生資料
-                    K12.Data.Student.Update(objStudent);
+                    // 因需求調整年級可自由選
+                    scnsf.setCboGradeYearEnable(true);
 
-                    prlp.SetAfterSaveText("班級", lblClassName.Text);
-                    prlp.SetAfterSaveText("座號", lblSeatNo.Text);
-                    prlp.SetAfterSaveText("學號", txtStudentNumber.Text);
-                    prlp.SetActionBy("學籍", "學生班級資訊");
-                    prlp.SetAction("修改學生班級資訊");
-                    prlp.SetDescTitle("學生姓名:" + objStudent.Name + ",學號:" + objStudent.StudentNumber + ",");
+                    // 放入可選年級
+                    scnsf.SetCboGradeYearItems(Utility.GetGradeYearList());
 
-                    prlp.SaveLog("", "", "student", PrimaryKey);
-
-                    Student.Instance.SyncDataBackground(PrimaryKey);
-                                    
+                    // 原班級名稱
+                    oldClassName = objStudent.Class.Name;
+                    // 填入年級
+                    if (objStudent.Class.GradeYear.HasValue)
+                        gradeYear = objStudent.Class.GradeYear.Value.ToString();
+                    scnsf.SetCboGradeYearText(gradeYear);
+                }
+                else
+                {
+                    scnsf.setCboGradeYearEnable(true);
+                    // 放入可選年級
+                    scnsf.SetCboGradeYearItems(Utility.GetGradeYearList());
                 }
 
-                EventHandler eh = FISCA.InteractionService.PublishEvent("KH_StudentClassItemContent");
-                eh(this, EventArgs.Empty);
+
+                scnsf.SetOldClassName(oldClassName);
+
+                if (scnsf.ShowDialog() == DialogResult.OK)
+                {
+                    string className = "", FirstClassName = "";
+                    className = scnsf.GetClassName();
+                    FirstClassName = scnsf.GetFirstClassName();
+
+                    _ClassNameIDDic = scnsf.GetClassNameDict();
+                    int seatNo;
+
+                    // 修改學生班、座
+                    if (_ClassNameIDDic.ContainsKey(className))
+                    {
+                        objStudent.RefClassID = _ClassNameIDDic[className];
+                        if (int.TryParse(scnsf.GetSeatNo(), out seatNo))
+                            objStudent.SeatNo = seatNo;
+                        else
+                            objStudent.SeatNo = null;
+
+                        // 檢查是否傳送到局端,true才會送，主要修改當改座號不傳。
+                        if (scnsf.GetChkSend())
+                        {
+                            // 傳送至局端
+                            string errMsg = Utility.SendData("調整班級", objStudent.IDNumber, objStudent.StudentNumber, objStudent.Name, gradeYear, oldClassName, scnsf.GetSeatNo(), className, scnsf.GetMettingDate(), scnsf.GetMemo(), FirstClassName, scnsf.GetEDoc());
+                            if (errMsg != "")
+                                FISCA.Presentation.Controls.MsgBox.Show(errMsg);
+                        }
+                        // 更新學生資料
+                        K12.Data.Student.Update(objStudent);
+
+                        prlp.SetAfterSaveText("班級", lblClassName.Text);
+                        prlp.SetAfterSaveText("座號", lblSeatNo.Text);
+                        prlp.SetAfterSaveText("學號", txtStudentNumber.Text);
+                        prlp.SetActionBy("學籍", "學生班級資訊");
+                        prlp.SetAction("修改學生班級資訊");
+                        prlp.SetDescTitle("學生姓名:" + objStudent.Name + ",學號:" + objStudent.StudentNumber + ",");
+
+                        prlp.SaveLog("", "", "student", PrimaryKey);
+
+                        Student.Instance.SyncDataBackground(PrimaryKey);
+
+                    }
+
+                    EventHandler eh = FISCA.InteractionService.PublishEvent("KH_StudentClassItemContent");
+                    eh(this, EventArgs.Empty);
+                }
+                #endregion                
             }
         }
     }
