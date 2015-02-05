@@ -209,7 +209,7 @@ namespace ClassLock_KH
                             strComment = sdf.GetComment();
                             strDocNo = sdf.GetDocNo();
                             strEDoc = sdf.GetEDoc();
-                            if (FISCA.Presentation.Controls.MsgBox.Show("「班級鎖定」，按下「是」確認後，需報局備查。", "班級鎖定", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes)
+                            if (FISCA.Presentation.Controls.MsgBox.Show("「班級鎖定」，按下「是」確認後，除集中式特殊班級，餘需函報教育局並由局端線上審核。", "班級鎖定", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes)
                             {
                                 // 沒有鎖定
                                 data = new UDT_ClassLock();

@@ -39,7 +39,13 @@ namespace ClassLock_KH
                 FISCA.Presentation.Controls.MsgBox.Show("編班委員會會議日期必填");
                 return;
             }
-            
+
+            if (string.IsNullOrWhiteSpace(txtEDoc.Text))
+            {
+                FISCA.Presentation.Controls.MsgBox.Show("相關證明文件網址必填");
+                return;
+            }
+
             _strDate = dtDate.Value.ToShortDateString();
 
             if (!string.IsNullOrEmpty(txtComment.Text))

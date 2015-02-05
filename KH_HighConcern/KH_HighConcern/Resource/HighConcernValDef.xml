@@ -35,6 +35,7 @@
   </Field>
 
       <Field Required="False" Name="相關證明文件網址" EmptyAlsoValidate="False">
+        <Validate AutoCorrect="False" Description="「相關證明文件網址」不允許空白。" ErrorType="Error" Validator="不可空白" When="" />      
       </Field>
       
     </FieldList>

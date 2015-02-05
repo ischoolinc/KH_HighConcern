@@ -143,6 +143,12 @@ namespace KH_HighConcern.DetailContent
                 _errorP.SetError(txtDocNo, "文號必填");
                 retVal = false;
             }
+
+            if(txtEDoc.Text.Trim()=="")
+            {
+                _errorP.SetError(txtEDoc, "相關證明文件網址");
+                retVal = false;
+            }
             return retVal;
         }
 
@@ -154,7 +160,7 @@ namespace KH_HighConcern.DetailContent
                 int.TryParse(txtCount.Text, out bb);
 
                 // 再次確認畫面
-                if (FISCA.Presentation.Controls.MsgBox.Show("變更高關懷特殊身份，按下「是」確認後，需報局備查。", "高關懷學生", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
+                if (FISCA.Presentation.Controls.MsgBox.Show("變更高關懷特殊身分，按下「是」確認後，不需函報教育局，僅由局端線上審核。", "高關懷學生", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
                 {
                     _ChangeListener.SuspendListen();
 
@@ -243,6 +249,7 @@ namespace KH_HighConcern.DetailContent
                 txtEDoc.Text = "";
                 _errorP.SetError(txtCount, "");
                 _errorP.SetError(txtDocNo, "");
+                _errorP.SetError(txtEDoc, "");
             }
         }
     }

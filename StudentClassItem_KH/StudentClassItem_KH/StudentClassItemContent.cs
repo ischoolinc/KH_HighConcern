@@ -262,13 +262,17 @@ namespace StudentClassItem_KH
         {
             SetClassNameSeatNoForm scnsf = new SetClassNameSeatNoForm();
             string gradeYear="";
-            string oldClassName = "";
+            string oldClassName = "";        
 
             // 有班級
             if (objStudent.Class != null)
             {
-                // 不能修改年級，依學生本身班級年級
-                scnsf.setCboGradeYearEnable(false);
+                //// 不能修改年級，依學生本身班級年級
+                //scnsf.setCboGradeYearEnable(false);
+
+                // 因需求調整年級可自由選
+                scnsf.setCboGradeYearEnable(true);
+
                 // 原班級名稱
                 oldClassName = objStudent.Class.Name;
                 // 填入年級
