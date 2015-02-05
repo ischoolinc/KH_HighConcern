@@ -273,6 +273,9 @@ namespace StudentClassItem_KH
                 // 因需求調整年級可自由選
                 scnsf.setCboGradeYearEnable(true);
 
+                // 放入可選年級
+                scnsf.SetCboGradeYearItems(Utility.GetGradeYearList());
+
                 // 原班級名稱
                 oldClassName = objStudent.Class.Name;
                 // 填入年級
