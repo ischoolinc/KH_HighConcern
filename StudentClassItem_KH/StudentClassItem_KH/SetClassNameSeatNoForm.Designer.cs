@@ -231,7 +231,7 @@
             this.btnSend.Name = "btnSend";
             this.btnSend.Size = new System.Drawing.Size(75, 25);
             this.btnSend.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.btnSend.TabIndex = 5;
+            this.btnSend.TabIndex = 6;
             this.btnSend.Text = "確定";
             this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
             // 
@@ -245,7 +245,7 @@
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(75, 25);
             this.btnExit.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.btnExit.TabIndex = 6;
+            this.btnExit.TabIndex = 7;
             this.btnExit.Text = "取消";
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
@@ -289,7 +289,7 @@
             this.txtEDoc.Multiline = true;
             this.txtEDoc.Name = "txtEDoc";
             this.txtEDoc.Size = new System.Drawing.Size(295, 25);
-            this.txtEDoc.TabIndex = 10;
+            this.txtEDoc.TabIndex = 5;
             // 
             // labelX6
             // 

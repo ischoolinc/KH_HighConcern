@@ -261,9 +261,6 @@ namespace StudentClassItem_KH
         private void lnkSend_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             SetClassNameSeatNoForm scnsf = new SetClassNameSeatNoForm();
-            if (scnsf.ShowDialog() == DialogResult.OK)
-            {
-                #region 當點傳送才處理
                 string gradeYear = "";
                 string oldClassName = "";
 
@@ -340,8 +337,6 @@ namespace StudentClassItem_KH
 
                     EventHandler eh = FISCA.InteractionService.PublishEvent("KH_StudentClassItemContent");
                     eh(this, EventArgs.Empty);
-                }
-                #endregion                
             }
         }
     }

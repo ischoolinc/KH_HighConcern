@@ -181,15 +181,15 @@ namespace StudentClassItem_KH
 
                 if (_ChkSend)
                 {
-                    string msg = "請問是否將班級由「" + _oldClassName + "」調整成「" + _ClassName + "」，按下「是」確認後，不需函報教育局，僅由局端線上審核。";
+                    string msg = "請問是否將班級由「" + _oldClassName + "」調整成「" + _ClassName + "」，按下「是」確認後，需函報教育局並由局端線上審核。";
 
                     if (FISCA.Presentation.Controls.MsgBox.Show(msg, "調整確認", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes)
                         this.DialogResult = System.Windows.Forms.DialogResult.OK;
                     else
                         this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
                 }
-
-                this.DialogResult = System.Windows.Forms.DialogResult.OK;
+                else
+                    this.DialogResult = System.Windows.Forms.DialogResult.OK;
             }
             else {
                 FISCA.Presentation.Controls.MsgBox.Show("資料有誤無法儲存");
