@@ -47,11 +47,11 @@ namespace StudentChangeStatus_KH
             this.MaximumSize = this.MinimumSize = this.Size;
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("請問是否將 " + _studName + " 由" + _StudStatus + " 調整成 " + _NewStudStatus + "，");
-            
-            if(_chkSendSpec)
-                sb.AppendLine("按下「是」確認後，需報局備查。");
-            else
+
+            if (_chkSendSpec) // 特殊狀態變更
                 sb.AppendLine("按下「是」確認後，不需函報教育局，僅由局端線上審核。");
+            else
+                sb.AppendLine("按下「是」確認後，局端會留狀態變更紀錄。");
 
             lblMsg.Text = sb.ToString();
         }
