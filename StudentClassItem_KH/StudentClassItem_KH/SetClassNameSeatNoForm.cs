@@ -223,7 +223,8 @@ namespace StudentClassItem_KH
                 }
             }
 
-            if (string.IsNullOrWhiteSpace(txtEDoc.Text))
+            // 當沒有填且班級名稱不同
+            if (string.IsNullOrWhiteSpace(txtEDoc.Text) && chkSameClassName()==false)
             {
                 pass = false;
                 FISCA.Presentation.Controls.MsgBox.Show("相關證明文件網址必填");
