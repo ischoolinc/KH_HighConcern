@@ -154,7 +154,8 @@ namespace StudentImportWizard_KH
             {
                 ddDict.Clear();
                 ddDsict.Clear();
-                string querStr = "select student.id,student_number,class.class_name,student.status as stud_status from student left join class on student.ref_class_id=class.id where student.student_number in('" + string.Join("','", snoList.ToArray()) + "')";
+                // 學號只處理學生狀態為一般 1
+                string querStr = "select student.id,student_number,class.class_name,student.status as stud_status from student left join class on student.ref_class_id=class.id where student.status=1 and student.student_number in('" + string.Join("','", snoList.ToArray()) + "')";
                 QueryHelper qh1 = new QueryHelper();
                 DataTable dt1 = qh1.Select(querStr);
 
@@ -166,7 +167,8 @@ namespace StudentImportWizard_KH
                     if (dr["class_name"] != null)
                         className = dr["class_name"].ToString();
 
-                    ddDict.Add(snum, className);
+                    if(!ddDict.ContainsKey(snum))
+                        ddDict.Add(snum, className);
 
                     // 學生狀態
                     if (sStatusDict.ContainsKey(status))
