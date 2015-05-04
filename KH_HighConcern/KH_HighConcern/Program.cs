@@ -10,6 +10,8 @@ using System.Text;
 using FISCA.Permission;
 using FISCA.Presentation;
 using System.Windows.Forms;
+using K12.Presentation;
+
 
 namespace KH_HighConcern
 {
@@ -81,6 +83,24 @@ namespace KH_HighConcern
                        new ImportExport.ImportHighConcern().Execute();
                };
 
+
+               #region 匯出高關懷特殊身分
+               // 匯出高關懷特殊身分
+               Catalog catalog3 = RoleAclSource.Instance["學生"]["功能按鈕"];
+               catalog3.Add(new RibbonFeature("KH_HighConcern_ExportHighConcern", "匯出高關懷特殊身分"));
+
+
+               // 匯出高關懷特殊身分
+               NLDPanels.Student.RibbonBarItems["資料統計"]["匯出"]["其它相關匯出"]["匯出高關懷特殊身分"].Enable = UserAcl.Current["KH_HighConcern_ExportHighConcern"].Executable;
+               NLDPanels.Student.RibbonBarItems["資料統計"]["匯出"]["其它相關匯出"]["匯出高關懷特殊身分"].Click += delegate
+               {
+                   SmartSchool.API.PlugIn.Export.Exporter exporter = new ImportExport.ExportHighConcern();
+                   ImportExport.ExportStudentV2 wizard = new ImportExport.ExportStudentV2(exporter.Text, exporter.Image);
+                   exporter.InitializeExport(wizard);
+                   wizard.ShowDialog();
+               };
+
+               #endregion
 
                // 資料項目-高關懷特殊身分
                FeatureAce UserPermission = FISCA.Permission.UserAcl.Current["KH_HighConcern_HighConcernContent"];
