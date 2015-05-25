@@ -434,9 +434,15 @@ namespace StudentImportWizard_KH
             // 檢查是否需要傳送至局端備查
             Gobal._SendData = false;
 
+            MsgForm mf = new MsgForm();
+            mf.Text="";
+
             if (Gobal._SelectClassName && Gobal._SelectStatus)
             {
-                if (FISCA.Presentation.Controls.MsgBox.Show("勾選班級、狀態，按下「是」確認後，不需函報教育局，僅由局端線上審核。", "匯入調整班級與學生狀態", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes)
+                mf.Text="匯入調整班級與學生狀態";
+                mf.SetMsg("勾選班級、狀態，按下「是」確認後，不需函報教育局，僅由局端線上審核。");
+                //if (FISCA.Presentation.Controls.MsgBox.Show("勾選班級、狀態，按下「是」確認後，不需函報教育局，僅由局端線上審核。", "匯入調整班級與學生狀態", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes)
+                if(mf.ShowDialog()== System.Windows.Forms.DialogResult.Yes)
                 {
                     Gobal._SendData = true;
                 }
@@ -446,7 +452,10 @@ namespace StudentImportWizard_KH
                 }
             }else if (Gobal._SelectClassName)
             {
-                if (FISCA.Presentation.Controls.MsgBox.Show("勾選班級，按下「是」確認後，不需函報教育局，僅由局端線上審核。", "匯入調整班級", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes)
+                mf.Text="匯入調整班級";
+                mf.SetMsg("勾選班級，按下「是」確認後，不需函報教育局，僅由局端線上審核。");                
+                //if (FISCA.Presentation.Controls.MsgBox.Show("勾選班級，按下「是」確認後，不需函報教育局，僅由局端線上審核。", "匯入調整班級", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes)
+                if (mf.ShowDialog() == System.Windows.Forms.DialogResult.Yes)
                 {
                     Gobal._SendData = true;
                 }
@@ -457,7 +466,10 @@ namespace StudentImportWizard_KH
             }
             else if (Gobal._SelectStatus)
             {
-                if (FISCA.Presentation.Controls.MsgBox.Show("勾選狀態，按下「是」確認後，不需函報教育局，僅由局端線上審核。", "匯入調整學生狀態", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes)
+                mf.Text="匯入調整學生狀態";
+                mf.SetMsg("勾選狀態，按下「是」確認後，不需函報教育局，僅由局端線上審核。");
+                //if (FISCA.Presentation.Controls.MsgBox.Show("勾選狀態，按下「是」確認後，不需函報教育局，僅由局端線上審核。", "匯入調整學生狀態", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes)
+                if(mf.ShowDialog()== System.Windows.Forms.DialogResult.Yes)
                 {
                     Gobal._SendData = true;
                 }
