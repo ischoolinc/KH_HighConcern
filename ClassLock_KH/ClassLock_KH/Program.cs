@@ -100,8 +100,11 @@ namespace ClassLock_KH
             rbiDelAll["全部班級解鎖"].Enable = UserAcl.Current["KH_HighConcern_AllClassUnLock"].Executable;
             rbiDelAll["全部班級解鎖"].Click += delegate
             {
-
-                if (FISCA.Presentation.Controls.MsgBox.Show("將全部班級解鎖，按下「是」確認後，局端會留解鎖紀錄。", "全部班級解鎖", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes)
+                MsgForm mf2 = new MsgForm();
+                mf2.Text = "全部班級解鎖";
+                mf2.SetMsg("將全部班級解鎖，按下「是」確認後，局端會留解鎖紀錄。");
+                //if (FISCA.Presentation.Controls.MsgBox.Show("將全部班級解鎖，按下「是」確認後，局端會留解鎖紀錄。", "全部班級解鎖", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes)
+                if(mf2.ShowDialog()== System.Windows.Forms.DialogResult.Yes)
                 {
 
                     // 全部解鎖
@@ -209,7 +212,11 @@ namespace ClassLock_KH
                             strComment = sdf.GetComment();
                             strDocNo = sdf.GetDocNo();
                             strEDoc = sdf.GetEDoc();
-                            if (FISCA.Presentation.Controls.MsgBox.Show("「班級鎖定」，按下「是」確認後，除集中式特殊班級，餘需函報教育局並由局端線上審核。", "班級鎖定", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes)
+                            MsgForm mf = new MsgForm();
+                            mf.Text = "班級鎖定";
+                            mf.SetMsg("「班級鎖定」，按下「是」確認後，除集中式特殊班級，餘需函報教育局並由局端線上審核。");
+                            //if (FISCA.Presentation.Controls.MsgBox.Show("「班級鎖定」，按下「是」確認後，除集中式特殊班級，餘需函報教育局並由局端線上審核。", "班級鎖定", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes)
+                            if(mf.ShowDialog()== System.Windows.Forms.DialogResult.Yes)
                             {
                                 // 沒有鎖定
                                 data = new UDT_ClassLock();
@@ -236,7 +243,11 @@ namespace ClassLock_KH
                     }
                     else
                     {
-                        if (FISCA.Presentation.Controls.MsgBox.Show("「班級解鎖」，按下「是」確認後，局端會留解鎖紀錄。", "班級解鎖", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes)
+                        MsgForm mf1 = new MsgForm();
+                        mf1.Text = "班級解鎖";
+                        mf1.SetMsg("「班級解鎖」，按下「是」確認後，局端會留解鎖紀錄。");
+                        //if (FISCA.Presentation.Controls.MsgBox.Show("「班級解鎖」，按下「是」確認後，局端會留解鎖紀錄。", "班級解鎖", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes)
+                        if(mf1.ShowDialog()== System.Windows.Forms.DialogResult.Yes)
                         {
                             // 已被鎖定解鎖
                             data.Deleted = true;
