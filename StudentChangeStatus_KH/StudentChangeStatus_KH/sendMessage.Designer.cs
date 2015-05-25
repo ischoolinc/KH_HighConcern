@@ -33,6 +33,7 @@
             this.txtMsg = new System.Windows.Forms.TextBox();
             this.btnY = new DevComponents.DotNetBar.ButtonX();
             this.btnN = new DevComponents.DotNetBar.ButtonX();
+            this.lbUrl = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // lblMsg
@@ -96,11 +97,24 @@
             this.btnN.Text = "否";
             this.btnN.Click += new System.EventHandler(this.btnN_Click);
             // 
+            // lbUrl
+            // 
+            this.lbUrl.AutoSize = true;
+            this.lbUrl.BackColor = System.Drawing.Color.Transparent;
+            this.lbUrl.Location = new System.Drawing.Point(15, 138);
+            this.lbUrl.Name = "lbUrl";
+            this.lbUrl.Size = new System.Drawing.Size(242, 17);
+            this.lbUrl.TabIndex = 5;
+            this.lbUrl.TabStop = true;
+            this.lbUrl.Text = "轉入生自動編班與調班系統紀錄審查作業";
+            this.lbUrl.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lbUrl_LinkClicked);
+            // 
             // sendMessage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(446, 171);
+            this.Controls.Add(this.lbUrl);
             this.Controls.Add(this.btnN);
             this.Controls.Add(this.btnY);
             this.Controls.Add(this.txtMsg);
@@ -122,5 +136,6 @@
         private System.Windows.Forms.TextBox txtMsg;
         private DevComponents.DotNetBar.ButtonX btnY;
         private DevComponents.DotNetBar.ButtonX btnN;
+        private System.Windows.Forms.LinkLabel lbUrl;
     }
 }
