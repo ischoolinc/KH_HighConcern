@@ -183,7 +183,11 @@ namespace StudentClassItem_KH
                 {
                     string msg = "請問是否將班級由「" + _oldClassName + "」調整成「" + _ClassName + "」，按下「是」確認後，需函報教育局並由局端線上審核。";
 
-                    if (FISCA.Presentation.Controls.MsgBox.Show(msg, "調整確認", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes)
+                    MsgForm mf = new MsgForm();
+                    mf.Text = "調整確認";
+                    mf.SetMsg(msg);
+                    //if (FISCA.Presentation.Controls.MsgBox.Show(msg, "調整確認", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes)
+                    if(mf.ShowDialog()== System.Windows.Forms.DialogResult.Yes)
                         this.DialogResult = System.Windows.Forms.DialogResult.OK;
                     else
                         this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
