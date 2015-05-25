@@ -121,12 +121,16 @@ namespace StudentTransStudBase_KH
                 }
 
 
+                MsgForm mf = new MsgForm();
 
                 string msg = "請問是否將班級由「" + lblClassName.Text + "」調整成「" + lblNewClassName.Text + "」，並傳送至局端備查?";
 
                 bool chkSend = false;
 
-                if (FISCA.Presentation.Controls.MsgBox.Show(msg, "調整確認", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes)
+                mf.Text = "調整確認";
+                mf.SetMsg(msg);
+                //if (FISCA.Presentation.Controls.MsgBox.Show(msg, "調整確認", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes)
+                if(mf.ShowDialog()== System.Windows.Forms.DialogResult.Yes)
                 {
                     chkSend = true;                
                 }
