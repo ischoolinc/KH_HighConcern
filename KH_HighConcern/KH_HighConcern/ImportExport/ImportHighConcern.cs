@@ -46,7 +46,11 @@ namespace KH_HighConcern.ImportExport
 
             string retStr = "";
             bool run = false;
-            if (FISCA.Presentation.Controls.MsgBox.Show("匯入高關懷學生，按下「是」確認後，需報局備查，新生編班時確認之特殊生和高關懷學生名單，匯入系統後不需報局。", "匯入高關懷學生", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
+            MsgForm mf = new MsgForm();
+            mf.Text = "匯入高關懷學生";
+            mf.SetMsg("匯入高關懷學生，按下「是」確認後，需報局備查，新生編班時確認之特殊生和高關懷學生名單，匯入系統後不需報局。");
+            //if (FISCA.Presentation.Controls.MsgBox.Show("匯入高關懷學生，按下「是」確認後，需報局備查，新生編班時確認之特殊生和高關懷學生名單，匯入系統後不需報局。", "匯入高關懷學生", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
+            if(mf.ShowDialog()== DialogResult.Yes)
             {
                 run = true;
             }

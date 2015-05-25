@@ -159,8 +159,12 @@ namespace KH_HighConcern.DetailContent
                 int bb;
                 int.TryParse(txtCount.Text, out bb);
 
+                MsgForm mf = new MsgForm();
+                mf.Text = "高關懷學生";
+                mf.SetMsg("變更高關懷特殊身分，按下「是」確認後，不需函報教育局，僅由局端線上審核。");
                 // 再次確認畫面
-                if (FISCA.Presentation.Controls.MsgBox.Show("變更高關懷特殊身分，按下「是」確認後，不需函報教育局，僅由局端線上審核。", "高關懷學生", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
+                //if (FISCA.Presentation.Controls.MsgBox.Show("變更高關懷特殊身分，按下「是」確認後，不需函報教育局，僅由局端線上審核。", "高關懷學生", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
+                if(mf.ShowDialog()==  DialogResult.Yes)
                 {
                     _ChangeListener.SuspendListen();
 
