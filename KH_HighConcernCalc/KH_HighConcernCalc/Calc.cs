@@ -35,11 +35,11 @@ namespace KH_HighConcernCalc
             {
                 // 取得鎖定班級名稱
                 QueryHelper qh1 = new QueryHelper();
-                List<string> lockClassName = new List<string>();
-                string query1 = "select class_name from $kh.automatic.class.lock";
+                List<string> lockClassID = new List<string>();
+                string query1 = "select class_id from $kh.automatic.class.lock";
                 DataTable dt1 = qh1.Select(query1);
                 foreach (DataRow dr in dt1.Rows)
-                    lockClassName.Add(dr["class_name"].ToString());
+                    lockClassID.Add(dr["class_id"].ToString());
 
                 // 取得班級人數(一般生,輟學 1,8)
                 QueryHelper qh2 = new QueryHelper();
@@ -57,7 +57,7 @@ namespace KH_HighConcernCalc
                     cs.ClassStudentCount = cs.StudentCount;
                     cs.HasHStudentCount = 0;
                     // 排除班級鎖定
-                    if(!lockClassName.Contains(cs.ClassName))
+                    if (!lockClassID.Contains(cs.ClassID))
                         retValue.Add(cs);
                 }
 
@@ -169,11 +169,11 @@ namespace KH_HighConcernCalc
 
                 // 取得鎖定班級名稱
                 QueryHelper qh1 = new QueryHelper();
-                List<string> lockClassName = new List<string>();
-                string query1 = "select class_name from $kh.automatic.class.lock";
+                List<string> lockClassId = new List<string>();
+                string query1 = "select class_id from $kh.automatic.class.lock";
                 DataTable dt1 = qh1.Select(query1);
                 foreach (DataRow dr in dt1.Rows)
-                    lockClassName.Add(dr["class_name"].ToString());
+                    lockClassId.Add(dr["class_id"].ToString());
 
                 // 取得班級人數(一般生,輟學 1,8)
                 QueryHelper qh2 = new QueryHelper();
@@ -193,7 +193,7 @@ namespace KH_HighConcernCalc
                     
 
                     // 排除班級鎖定
-                    if (!lockClassName.Contains(cs.ClassName))
+                    if (!lockClassId.Contains(cs.ClassID))
                         retValue.Add(cs);
                 }
 
@@ -236,11 +236,11 @@ namespace KH_HighConcernCalc
 
             //// 取得鎖定班級名稱
             //QueryHelper qh1 = new QueryHelper();
-            //List<string> lockClassName = new List<string>();
-            //string query1 = "select class_name from $kh.automatic.class.lock";
+            //List<string> lockClassID = new List<string>();
+            //string query1 = "select class_id from $kh.automatic.class.lock";
             //DataTable dt1 = qh1.Select(query1);
             //foreach (DataRow dr in dt1.Rows)
-            //    lockClassName.Add(dr["class_name"].ToString());
+            //    lockClassID.Add(dr["class_id"].ToString());
 
             // 取得班級人數(一般生、輟學 1,8)
             QueryHelper qh2 = new QueryHelper();
@@ -259,7 +259,7 @@ namespace KH_HighConcernCalc
                 cs.ClassStudentCountStr = cs.StudentCount.ToString();
                 cs.HasHStudentCount = 0;
                 //// 排除班級鎖定
-                //if (!lockClassName.Contains(cs.ClassName))
+                //if (!lockClassID.Contains(cs.ClassID))
                     retValue.Add(cs.ClassID,cs);
             }
 
