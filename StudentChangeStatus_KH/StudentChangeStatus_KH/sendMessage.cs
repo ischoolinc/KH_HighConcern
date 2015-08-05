@@ -39,8 +39,19 @@ namespace StudentChangeStatus_KH
 
         private void btnY_Click(object sender, EventArgs e)
         {
-            _Message = txtMsg.Text;
-            this.DialogResult = System.Windows.Forms.DialogResult.Yes;
+            bool pass = true;
+            // 檢查當特殊狀態，
+            if (_chkSendSpec)
+                if (string.IsNullOrWhiteSpace(txtMsg.Text))
+                {
+                    pass = false;
+                    FISCA.Presentation.Controls.MsgBox.Show("備註必填欄位。");
+                }
+            if(pass)
+            {
+                _Message = txtMsg.Text;
+                this.DialogResult = System.Windows.Forms.DialogResult.Yes;
+            }            
         }
 
         private void sendMessage_Load(object sender, EventArgs e)
