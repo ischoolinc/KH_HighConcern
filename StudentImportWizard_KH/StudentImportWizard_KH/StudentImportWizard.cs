@@ -1161,6 +1161,13 @@ namespace StudentImportWizard_KH
 
         private void btnImport_Click(object sender, EventArgs e)
         {
+
+            // 取得需要傳送到局資料
+            List<logStud> logStudList = new List<logStud>();
+
+            // 檢查匯入狀況
+            bool chkImportPass = false;
+
             try
             {
                 //// 收集學生狀態
@@ -1187,10 +1194,6 @@ namespace StudentImportWizard_KH
                 btnImport.Enabled = false;
 
                 reader.Reset();
-                
-                // 取得需要傳送到局資料
-                List<logStud> logStudList = new List<logStud>();
-
 
                 while (reader.MoveNext())
                 {
@@ -1280,23 +1283,6 @@ namespace StudentImportWizard_KH
                         pgImport.Value = reader.RelativelyIndex;
                 }
 
-                // 傳送至高雄局端
-                if (logStudList.Count > 0)
-                {
-                    string ActionStr="";
-                    if (Context.ImportMode == ImportMode.Insert)
-                        ActionStr = "匯入新增學生";
-                    else
-                    {
-                        ActionStr = "匯入更新";
-                        // 取得原班級學號只處理學生狀態為一般。
-                        logStudList = Utility.ConveroClassName(logStudList);
-                    }
-                    // 當有勾選班級、狀態才需要傳送
-                    if(Gobal._SendData)
-                        Utility.SendDataList(ActionStr, logStudList,Context.ImportMode);
-                }
-
                 pgImport.Value = reader.RelativelyIndex;
 
                 //處理班級編號。
@@ -1312,9 +1298,6 @@ namespace StudentImportWizard_KH
                 //計算密碼雜~!
                 if (Context.SelectedFields.ContainsKey("登入密碼"))
                     HashPassword(output);
-
-               
-               
 
                 ImportMessage("上傳資料到主機，請稍後…");
                 //GeneralActionLog log = new GeneralActionLog();
@@ -1353,8 +1336,7 @@ namespace StudentImportWizard_KH
                     //log.ActionName = "新增匯入";
                     //log.Description = "新增匯入 " + reader.RowCount + " 筆學生資料。";
                     prlp.SaveLog("學生.匯入學生基本資料", "批次匯入", "批次新增匯入" + reader.RowCount + "筆學生資料.");
-                    
-
+                    chkImportPass = true;
                 }
                 else
                 {
@@ -1373,6 +1355,7 @@ namespace StudentImportWizard_KH
                     //log.ActionName = "更新匯入";
                     //log.Description = "更新匯入 " + reader.RowCount + " 筆學生資料。";
                     prlp.SaveLog("學生.匯入學生基本資料", "批次匯入", "批次更新匯入" + reader.RowCount + "筆學生資料.");
+                    chkImportPass = true;
                 }
 
                 //int t1 = Environment.TickCount;
@@ -1409,7 +1392,7 @@ namespace StudentImportWizard_KH
             {
                 //Console.Write((ex as DSAServerException).WarpedError.Response);
                 ImportMessage("上傳資料失敗");
-
+                chkImportPass = false;
 
                 XElement errElm = XElement.Parse((ex as DSAServerException).WarpedError.Response);
 
@@ -1423,12 +1406,38 @@ namespace StudentImportWizard_KH
                 
                 //CurrentUser user = CurrentUser.Instance;
                 //BugReporter.ReportException(user.SystemName, user.SystemVersion, ex, false);
-
-                btnImport.Enabled = true;
-
                 
-               
+                btnImport.Enabled = true;
             }
+
+            // 當匯入成功再處理
+            if(chkImportPass)
+            {
+                // 傳送至高雄局端
+                if (logStudList.Count > 0)
+                {
+                    try
+                    {
+                        string ActionStr = "";
+                        if (Context.ImportMode == ImportMode.Insert)
+                            ActionStr = "匯入新增學生";
+                        else
+                        {
+                            ActionStr = "匯入更新";
+                            // 取得原班級學號只處理學生狀態為一般。
+                            logStudList = Utility.ConveroClassName(logStudList);
+                        }
+                        // 當有勾選班級、狀態才需要傳送
+                        if (Gobal._SendData)
+                            Utility.SendDataList(ActionStr, logStudList, Context.ImportMode);
+                    }
+                    catch (Exception ex)
+                    {
+                        FISCA.Presentation.Controls.MsgBox.Show("上傳至局端失敗," + ex.Message);
+                    }
+                }
+            }
+
         }
 
         ///// <summary>
