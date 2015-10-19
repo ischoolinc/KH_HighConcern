@@ -44,6 +44,13 @@ namespace StudentClassItem_KH
 
         private void StudentClassItemContent_Load(object sender, EventArgs e)
         {
+
+            // 檢查班級調整功能
+            if (FISCA.Permission.UserAcl.Current["JHSchool.Student.Detail0090"].Editable)
+                lnkSend.Enabled = true;
+            else
+                lnkSend.Enabled = false;
+
             Errors = new ErrorProvider();
             _ClassNameIDDic = new Dictionary<string, string>();
             _ClassSeatNoList = new List<int>();
