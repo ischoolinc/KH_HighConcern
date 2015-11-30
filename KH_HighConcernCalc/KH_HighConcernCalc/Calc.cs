@@ -41,9 +41,9 @@ namespace KH_HighConcernCalc
                 foreach (DataRow dr in dt1.Rows)
                     lockClassID.Add(dr["class_id"].ToString());
 
-                // 取得班級人數(一般生,輟學 1,8)
+                // 取得班級人數(一般生,休學,輟學 1,4,8) 2015/11/30 因小組會議討論後加入休學狀態
                 QueryHelper qh2 = new QueryHelper();
-                string query2 = "select class.class_name,class.id as classid,count(student.id) as stud_count from student inner join class on student.ref_class_id=class.id where class.grade_year=" + GradeYear + " and student.status in(1,8) group by class.class_name,classid order by stud_count;";
+                string query2 = "select class.class_name,class.id as classid,count(student.id) as stud_count from student inner join class on student.ref_class_id=class.id where class.grade_year=" + GradeYear + " and student.status in(1,4,8) group by class.class_name,classid order by stud_count;";
                 DataTable dt2 = qh2.Select(query2);
                 foreach (DataRow dr in dt2.Rows)
                 {
@@ -61,9 +61,9 @@ namespace KH_HighConcernCalc
                         retValue.Add(cs);
                 }
 
-                //  取得班級高關懷人數
+                //  取得班級高關懷人數, 因小組會議討論加入休學狀態
                 QueryHelper qh3 = new QueryHelper();
-                string query3 = "select class.class_name,sum(number_reduce) as class_hcount,count($kh.automatic.placement.high.concern.ref_student_id) as class_hscount from $kh.automatic.placement.high.concern inner join student on to_number($kh.automatic.placement.high.concern.ref_student_id,'999999999')=student.id inner join class on student.ref_class_id=class.id where class.grade_year=" + GradeYear + " and student.status in(1,8) group by class.class_name;";
+                string query3 = "select class.class_name,sum(number_reduce) as class_hcount,count($kh.automatic.placement.high.concern.ref_student_id) as class_hscount from $kh.automatic.placement.high.concern inner join student on to_number($kh.automatic.placement.high.concern.ref_student_id,'999999999')=student.id inner join class on student.ref_class_id=class.id where class.grade_year=" + GradeYear + " and student.status in(1,4,8) group by class.class_name;";
                 DataTable dt3 = qh3.Select(query3);
                 foreach (DataRow dr in dt3.Rows)
                 {
@@ -175,9 +175,9 @@ namespace KH_HighConcernCalc
                 foreach (DataRow dr in dt1.Rows)
                     lockClassId.Add(dr["class_id"].ToString());
 
-                // 取得班級人數(一般生,輟學 1,8)
+                // 取得班級人數(一般生,休學,輟學 1,4,8) ,因小組會議討論加入休學狀態
                 QueryHelper qh2 = new QueryHelper();
-                string query2 = "select class.class_name,class.id as classid,count(student.id) as stud_count from student inner join class on student.ref_class_id=class.id where student.status in(1,8) group by class.class_name,classid order by stud_count;";
+                string query2 = "select class.class_name,class.id as classid,count(student.id) as stud_count from student inner join class on student.ref_class_id=class.id where student.status in(1,4,8) group by class.class_name,classid order by stud_count;";
                 DataTable dt2 = qh2.Select(query2);
                 foreach (DataRow dr in dt2.Rows)
                 {
@@ -197,9 +197,9 @@ namespace KH_HighConcernCalc
                         retValue.Add(cs);
                 }
 
-                //  取得班級高關懷人數
+                //  取得班級高關懷人數,因小組會議討論加入休學狀態,2015/11/30
                 QueryHelper qh3 = new QueryHelper();
-                string query3 = "select class.class_name,sum(number_reduce) as class_hcount,count($kh.automatic.placement.high.concern.ref_student_id) as class_hscount from $kh.automatic.placement.high.concern inner join student on to_number($kh.automatic.placement.high.concern.ref_student_id,'999999999')=student.id inner join class on student.ref_class_id=class.id where student.status in(1,8) group by class.class_name;";
+                string query3 = "select class.class_name,sum(number_reduce) as class_hcount,count($kh.automatic.placement.high.concern.ref_student_id) as class_hscount from $kh.automatic.placement.high.concern inner join student on to_number($kh.automatic.placement.high.concern.ref_student_id,'999999999')=student.id inner join class on student.ref_class_id=class.id where student.status in(1,4,8) group by class.class_name;";
                 DataTable dt3 = qh3.Select(query3);
                 foreach (DataRow dr in dt3.Rows)
                 {
@@ -242,9 +242,9 @@ namespace KH_HighConcernCalc
             //foreach (DataRow dr in dt1.Rows)
             //    lockClassID.Add(dr["class_id"].ToString());
 
-            // 取得班級人數(一般生、輟學 1,8)
+            // 取得班級人數(一般生、休學,輟學 1,4,8),因小組會議討論加入休學狀態,2015/11/30
             QueryHelper qh2 = new QueryHelper();
-            string query2 = "select class.class_name,class.id as classid,count(student.id) as stud_count from student inner join class on student.ref_class_id=class.id where student.status in(1,8) group by class.class_name,classid order by stud_count;";
+            string query2 = "select class.class_name,class.id as classid,count(student.id) as stud_count from student inner join class on student.ref_class_id=class.id where student.status in(1,4,8) group by class.class_name,classid order by stud_count;";
             DataTable dt2 = qh2.Select(query2);
             foreach (DataRow dr in dt2.Rows)
             {
@@ -263,9 +263,9 @@ namespace KH_HighConcernCalc
                     retValue.Add(cs.ClassID,cs);
             }
 
-            //  取得班級高關懷人數
+            //  取得班級高關懷人數,因小組會議討論加入休學狀態,2015/11/30
             QueryHelper qh3 = new QueryHelper();
-            string query3 = "select class.id as class_id,sum(number_reduce) as class_hcount,count($kh.automatic.placement.high.concern.ref_student_id) as class_hscount from $kh.automatic.placement.high.concern inner join student on to_number($kh.automatic.placement.high.concern.ref_student_id,'999999999')=student.id inner join class on student.ref_class_id=class.id and student.status in(1,8) group by class_id;";
+            string query3 = "select class.id as class_id,sum(number_reduce) as class_hcount,count($kh.automatic.placement.high.concern.ref_student_id) as class_hscount from $kh.automatic.placement.high.concern inner join student on to_number($kh.automatic.placement.high.concern.ref_student_id,'999999999')=student.id inner join class on student.ref_class_id=class.id and student.status in(1,4,8) group by class_id;";
             DataTable dt3 = qh3.Select(query3);
             foreach (DataRow dr in dt3.Rows)
             {
