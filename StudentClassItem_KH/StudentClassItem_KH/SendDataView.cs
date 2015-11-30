@@ -154,6 +154,10 @@ DateTime:日期時間。
                                     if (xmlContent.Element("FirstPriorityClassName") != null)
                                         rm.Content.Add("FirstPriorityClassName", xmlContent.Element("FirstPriorityClassName").Value);
 
+                                    if (xmlContent.Element("SecondPriorityClassName") != null)
+                                        rm.Content.Add("SecondPriorityClassName", xmlContent.Element("SecondPriorityClassName").Value);
+
+
                                     if (xmlContent.Element("Summary") != null)
                                         rm.Content.Add("Summary", xmlContent.Element("Summary").Value);
 

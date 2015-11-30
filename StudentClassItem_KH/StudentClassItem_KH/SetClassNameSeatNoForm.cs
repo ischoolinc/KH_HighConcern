@@ -247,12 +247,32 @@ namespace StudentClassItem_KH
             SetSeatNoItems(Utility.GetClassSeatNoList(className));
         }
 
+        /// <summary>
+        /// 取得第1順位班級名稱
+        /// </summary>
+        /// <returns></returns>
         public string GetFirstClassName()
         {
             string retVal = "";
             if (cboClassName.Items.Count > 0)
             {
                 string ccName=cboClassName.Items[0].ToString();
+                if (_ClassNameMapDict.ContainsKey(ccName))
+                    retVal = _ClassNameMapDict[ccName];
+            }
+            return retVal;
+        }
+
+        /// <summary>
+        /// 取得第2順位班級名稱
+        /// </summary>
+        /// <returns></returns>
+        public string GetSecondClassName ()
+        {
+            string retVal = "";
+            if (cboClassName.Items.Count > 1)
+            {
+                string ccName = cboClassName.Items[1].ToString();
                 if (_ClassNameMapDict.ContainsKey(ccName))
                     retVal = _ClassNameMapDict[ccName];
             }

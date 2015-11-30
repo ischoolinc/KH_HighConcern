@@ -29,7 +29,7 @@ namespace StudentClassItem_KH
         /// <param name="ScheduleClassDate"></param>
         /// <param name="Reason"></param>
         /// <returns></returns>
-        public static string SendData(string action, string IDNumber, string StudentNumber, string StudentName, string GradeYear, string ClassName, string SeatNo, string NewClassName, string ScheduleClassDate, string Reason, string FirstPriorityClassName,string EDoc)
+        public static string SendData(string action, string IDNumber, string StudentNumber, string StudentName, string GradeYear, string ClassName, string SeatNo, string NewClassName, string ScheduleClassDate, string Reason, string FirstPriorityClassName, string EDoc, string SecondPriorityClassName)
         {
             string DSNS = FISCA.Authentication.DSAServices.AccessPoint;
 
@@ -64,6 +64,7 @@ namespace StudentClassItem_KH
                 Content.SetElementValue("ScheduleClassDate", ScheduleClassDate);
                 Content.SetElementValue("Reason", Reason);
                 Content.SetElementValue("FirstPriorityClassName", FirstPriorityClassName);
+                Content.SetElementValue("SecondPriorityClassName", SecondPriorityClassName);
                 Content.SetElementValue("EDoc", EDoc);
                 s2.Add(Content);
                 s1.Add(s2);

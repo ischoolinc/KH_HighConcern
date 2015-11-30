@@ -163,7 +163,11 @@ namespace StudentClassItem_KH
 
 
                     if (Content.ContainsKey("FirstPriorityClassName"))
-                        retList.Add("第一優先順班級「" + Content["FirstPriorityClassName"] + "」");
+                        retList.Add("第一優先順位班級「" + Content["FirstPriorityClassName"] + "」");
+
+                    if (Content.ContainsKey("SecondPriorityClassName"))
+                        retList.Add("第二優先順位班級「" + Content["SecondPriorityClassName"] + "」");
+
 
                     break;
 

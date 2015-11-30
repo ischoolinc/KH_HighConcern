@@ -302,10 +302,10 @@ namespace StudentClassItem_KH
 
                 if (scnsf.ShowDialog() == DialogResult.OK)
                 {
-                    string className = "", FirstClassName = "";
+                    string className = "", FirstClassName = "",SecondClassName;
                     className = scnsf.GetClassName();
                     FirstClassName = scnsf.GetFirstClassName();
-
+                    SecondClassName = scnsf.GetSecondClassName();
                     _ClassNameIDDic = scnsf.GetClassNameDict();
                     int seatNo;
 
@@ -322,7 +322,7 @@ namespace StudentClassItem_KH
                         if (scnsf.GetChkSend())
                         {
                             // 傳送至局端
-                            string errMsg = Utility.SendData("調整班級", objStudent.IDNumber, objStudent.StudentNumber, objStudent.Name, gradeYear, oldClassName, scnsf.GetSeatNo(), className, scnsf.GetMettingDate(), scnsf.GetMemo(), FirstClassName, scnsf.GetEDoc());
+                            string errMsg = Utility.SendData("調整班級", objStudent.IDNumber, objStudent.StudentNumber, objStudent.Name, gradeYear, oldClassName, scnsf.GetSeatNo(), className, scnsf.GetMettingDate(), scnsf.GetMemo(), FirstClassName, scnsf.GetEDoc(),SecondClassName);
                             if (errMsg != "")
                                 FISCA.Presentation.Controls.MsgBox.Show(errMsg);
                         }
