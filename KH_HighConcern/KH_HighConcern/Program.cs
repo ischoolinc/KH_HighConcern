@@ -11,7 +11,7 @@ using FISCA.Permission;
 using FISCA.Presentation;
 using System.Windows.Forms;
 using K12.Presentation;
-
+using K12.Data;
 
 namespace KH_HighConcern
 {
@@ -116,6 +116,48 @@ namespace KH_HighConcern
                #region 自訂驗證規則
                FactoryProvider.FieldFactory.Add(new FieldValidatorFactory());
                #endregion
+
+               #region 加入自動加入班級類別
+               List<string> nameList = new List<string> ();
+               nameList.Add("普通班");
+                nameList.Add("體育班");
+                nameList.Add("美術班");
+                nameList.Add("音樂班");
+                nameList.Add("舞蹈班");
+                nameList.Add("資優班");
+                nameList.Add("資源班");
+                nameList.Add("特教班");
+                nameList.Add("技藝專班");
+                nameList.Add("機構式非學校自學班");
+
+               // 取得班級分類
+               List<TagConfigRecord> TagRecList = TagConfig.SelectByCategory(TagCategory.Class);
+               List<TagConfigRecord> AddTagRecList = new List<TagConfigRecord>();
+               List<string> hasNameList = new List<string>();
+               foreach(TagConfigRecord rec in TagRecList)
+               {
+                   if (rec.Prefix == "班級分類")
+                       hasNameList.Add(rec.Name);
+               }
+               
+               // 檢查是否新增
+               foreach(string name in nameList)
+               {
+                   if(!hasNameList.Contains(name))
+                   {
+                       TagConfigRecord rec = new TagConfigRecord();
+                       rec.Name = name;
+                       rec.Prefix = "班級分類";
+                       rec.Category = "Class";
+                       AddTagRecList.Add(rec);
+                   }
+               }
+
+               if (AddTagRecList.Count > 0)
+                   TagConfig.Insert(AddTagRecList);
+
+               #endregion
+
            }
     }
 }
