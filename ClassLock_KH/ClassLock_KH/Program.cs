@@ -320,8 +320,15 @@ namespace ClassLock_KH
                         }
                         else
                         {
-                            if (unLockDate.Value >= dt2b && unLockDate.Value < dt2e)
-                                runUnLock = false;
+                            if (serDT.Value >= dt1b && serDT.Value < dt2e)
+                            { 
+                            
+                            }
+                            else
+                            {
+                                if (unLockDate.Value >= dt2b && unLockDate.Value < dt2e)
+                                    runUnLock = false;
+                            }
                         }
                     }
 

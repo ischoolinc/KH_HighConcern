@@ -159,74 +159,103 @@ namespace KH_HighConcern.DetailContent
                 int bb;
                 int.TryParse(txtCount.Text, out bb);
 
-                MsgForm mf = new MsgForm();
-                mf.Text = "高關懷學生";
-                mf.SetMsg("變更高關懷特殊身分，按下「是」確認後，不需函報教育局，僅由局端線上審核。");
-                // 再次確認畫面
-                //if (FISCA.Presentation.Controls.MsgBox.Show("變更高關懷特殊身分，按下「是」確認後，不需函報教育局，僅由局端線上審核。", "高關懷學生", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
-                if(mf.ShowDialog()==  DialogResult.Yes)
+                _ChangeListener.SuspendListen();
+
+                string IDNumber = "", StudentNumber = "", StudentName = "", ClassName = "", SeatNo = "", NumberReduce = "", DocNo = "", EDoc = "";
+                IDNumber = _StudRec.IDNumber;
+                StudentNumber = _StudRec.StudentNumber;
+                StudentName = _StudRec.Name;
+                if (_StudRec.SeatNo.HasValue)
+                    SeatNo = _StudRec.SeatNo.Value.ToString();
+                if (_StudRec.Class != null)
+                    ClassName = _StudRec.Class.Name;
+                NumberReduce = bb.ToString();
+                DocNo = txtDocNo.Text;
+                EDoc = txtEDoc.Text;
+
+                if(chkHighConcern.Checked)
                 {
-                    _ChangeListener.SuspendListen();
-
-                    string IDNumber = "", StudentNumber = "", StudentName = "", ClassName = "", SeatNo = "", NumberReduce = "", DocNo = "",EDoc="";
-
-                    IDNumber = _StudRec.IDNumber;
-                    StudentNumber = _StudRec.StudentNumber;
-                    StudentName = _StudRec.Name;
-                    if (_StudRec.SeatNo.HasValue)
-                        SeatNo = _StudRec.SeatNo.Value.ToString();
-                    if (_StudRec.Class != null)
-                        ClassName = _StudRec.Class.Name;
-                    NumberReduce = bb.ToString();
-                    DocNo = txtDocNo.Text;
-                    EDoc = txtEDoc.Text;
-                    // 檢查當已是高關懷
-                    if (_HighConcernDict.ContainsKey(PrimaryKey))
+                    #region 傳送變更特殊身分
+                    MsgForm mf = new MsgForm();
+                    mf.Text = "高關懷學生";
+                    mf.SetMsg("變更高關懷特殊身分，按下「是」確認後，不需函報教育局，僅由局端線上審核。");
+                    // 再次確認畫面
+                    //if (FISCA.Presentation.Controls.MsgBox.Show("變更高關懷特殊身分，按下「是」確認後，不需函報教育局，僅由局端線上審核。", "高關懷學生", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
+                    if (mf.ShowDialog() == DialogResult.Yes)
                     {
-                        // 有勾選更新人數，沒有勾選刪除，因為沒存在必要
-                        if (chkHighConcern.Checked)
+                        // 檢查當已是高關懷
+                        if (_HighConcernDict.ContainsKey(PrimaryKey))
                         {
+                            // 有勾選更新人數，沒有勾選刪除，因為沒存在必要
+                            if (chkHighConcern.Checked)
+                            {
 
-                            _HighConcernDict[PrimaryKey].NumberReduce = bb;
-                            _HighConcernDict[PrimaryKey].DocNo = txtDocNo.Text;
-                            _HighConcernDict[PrimaryKey].EDoc = txtEDoc.Text;
+                                _HighConcernDict[PrimaryKey].NumberReduce = bb;
+                                _HighConcernDict[PrimaryKey].DocNo = txtDocNo.Text;
+                                _HighConcernDict[PrimaryKey].EDoc = txtEDoc.Text;
+                            }
+                            else
+                            {
+                                txtCount.Text = "";
+                                txtDocNo.Text = "";
+                                txtEDoc.Text = "";
+                                _HighConcernDict[PrimaryKey].Deleted = true;
+                            }
+                            _HighConcernDict[PrimaryKey].Save();
+
                         }
                         else
                         {
-                            txtCount.Text = "";
-                            txtDocNo.Text = "";
-                            txtEDoc.Text = "";
-                            _HighConcernDict[PrimaryKey].Deleted = true;
+                            UDT_HighConcern newData = new UDT_HighConcern();
+                            newData.StudentNumber = StudentNumber;
+                            newData.SeatNo = SeatNo;
+                            newData.ClassName = ClassName;
+                            newData.DocNo = txtDocNo.Text;
+                            newData.EDoc = txtEDoc.Text;
+                            newData.RefStudentID = PrimaryKey;
+                            newData.HighConcern = true;
+                            newData.NumberReduce = bb;
+                            newData.DocNo = txtDocNo.Text;
+                            newData.Save();
                         }
-                        _HighConcernDict[PrimaryKey].Save();
-
+                        // 傳送至局端
+                        string errMsg = Utility.SendData("變更特殊身分", IDNumber, StudentNumber, StudentName, ClassName, SeatNo, DocNo, NumberReduce, EDoc);
+                        if (errMsg != "")
+                        {
+                            FISCA.Presentation.Controls.MsgBox.Show(errMsg);
+                        }
                     }
                     else
-                    {
-                        UDT_HighConcern newData = new UDT_HighConcern();
-                        newData.StudentNumber = StudentNumber;
-                        newData.SeatNo = SeatNo;
-                        newData.ClassName = ClassName;
-                        newData.DocNo = txtDocNo.Text;
-                        newData.EDoc = txtEDoc.Text;
-                        newData.RefStudentID = PrimaryKey;
-                        newData.HighConcern = true;
-                        newData.NumberReduce = bb;
-                        newData.DocNo = txtDocNo.Text;
-                        newData.Save();
-                    }
-                    // 傳送至局端
-                    string errMsg = Utility.SendData("變更特殊身分", IDNumber, StudentNumber, StudentName, ClassName, SeatNo, DocNo, NumberReduce,EDoc);
-                    if (errMsg != "")
-                    {
-                        FISCA.Presentation.Controls.MsgBox.Show(errMsg);
-                    }
-                    this.CancelButtonVisible = false;
-                    this.SaveButtonVisible = false;
-                    eh(this, EventArgs.Empty);
-                    _ChangeListener.Reset();
-                    _ChangeListener.ResumeListen();
+                        chkHighConcern.Checked = false;
+                    #endregion
                 }
+                else
+                {
+                    #region 傳送取消特殊身分
+                    if (_HighConcernDict.ContainsKey(PrimaryKey))
+                    {
+                        // 取消清空畫面值與刪除該筆UDT
+                        txtCount.Text = "";
+                        txtDocNo.Text = "";
+                        txtEDoc.Text = "";                     
+                        _HighConcernDict[PrimaryKey].Deleted = true;
+                        _HighConcernDict[PrimaryKey].Save();
+
+                        string errMsg = Utility.SendData("取消特殊身分", IDNumber, StudentNumber, StudentName, ClassName, SeatNo, DocNo, NumberReduce, EDoc);
+                        if (errMsg != "")
+                        {
+                            FISCA.Presentation.Controls.MsgBox.Show(errMsg);
+                        }
+                    }
+
+                    #endregion
+                }
+
+                this.CancelButtonVisible = false;
+                this.SaveButtonVisible = false;
+                eh(this, EventArgs.Empty);
+                _ChangeListener.Reset();
+                _ChangeListener.ResumeListen();
             }
         }
 
@@ -246,22 +275,22 @@ namespace KH_HighConcern.DetailContent
 
         private void chkHighConcern_CheckedChanged(object sender, EventArgs e)
         {
-            if (chkHighConcern.Checked == false)
-            {
-                txtCount.Text = "";
-                txtDocNo.Text = "";
-                txtEDoc.Text = "";
-                _errorP.SetError(txtCount, "");
-                _errorP.SetError(txtDocNo, "");
-                _errorP.SetError(txtEDoc, "");
-            }
+            //if (chkHighConcern.Checked == false)
+            //{
+            //    txtCount.Text = "";
+            //    txtDocNo.Text = "";
+            //    txtEDoc.Text = "";
+            //    _errorP.SetError(txtCount, "");
+            //    _errorP.SetError(txtDocNo, "");
+            //    _errorP.SetError(txtEDoc, "");
+            //}
         }
 
         private void txtEDoc_TextChanged(object sender, EventArgs e)
         {
             _errorP.SetError(txtEDoc, "");
-            if (txtEDoc.Text != "")
-                chkHighConcern.Checked = true;
+            //if (txtEDoc.Text != "")
+            //    chkHighConcern.Checked = true;
         }
     }
 }
