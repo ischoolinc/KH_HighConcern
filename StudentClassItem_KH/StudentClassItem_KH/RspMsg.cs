@@ -136,7 +136,27 @@ namespace StudentClassItem_KH
 
                     if (Content.ContainsKey("EDoc"))
                         retList.Add("相關證明文件網址「" + Content["EDoc"] + "」");
+                    break;
 
+                case "取消特殊身分":
+                    retList.Add(selAction);
+                    if (Content.ContainsKey("StudentName"))
+                        retList.Add("學生「" + Content["StudentName"] + "」");
+                    if (Content.ContainsKey("IDNumber"))
+                        retList.Add("身分證「" + Content["IDNumber"] + "」");
+                    if (Content.ContainsKey("StudentNumber"))
+                        retList.Add("學號「" + Content["StudentNumber"] + "」");
+                    if (Content.ContainsKey("ClassName"))
+                        retList.Add("班級「" + Content["ClassName"] + "」");
+                    if (Content.ContainsKey("SeatNo"))
+                        retList.Add("座號「" + Content["SeatNo"] + "」");
+                    if (Content.ContainsKey("NumberReduce"))
+                        retList.Add("減免人數「" + Content["NumberReduce"] + "」");
+                    if (Content.ContainsKey("DocNo"))
+                        retList.Add("文號「" + Content["DocNo"] + "」");
+
+                    if (Content.ContainsKey("EDoc"))
+                        retList.Add("相關證明文件網址「" + Content["EDoc"] + "」");
                     break;
 
                 case "調整班級":
