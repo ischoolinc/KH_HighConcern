@@ -32,19 +32,9 @@ namespace StudentClassItem_KH
         public static string SendData(string action, string IDNumber, string StudentNumber, string StudentName, string GradeYear, string ClassName, string SeatNo, string NewClassName, string ScheduleClassDate, string Reason, string FirstPriorityClassName, string EDoc, string SecondPriorityClassName)
         {
             string DSNS = FISCA.Authentication.DSAServices.AccessPoint;
-
-            string AccessPoint = @"j.kh.edu.tw";
-
-            if (FISCA.RTContext.IsDiagMode)
-            {
-                string accPoint = FISCA.RTContext.GetConstant("KH_AccessPoint");
-                if(!string.IsNullOrEmpty(accPoint))
-                    AccessPoint = accPoint;            
-            }
-            
+            string AccessPoint = @"j.kh.edu.tw";                    
             string Contract = "log";
             string ServiceName = "_.InsertLog";
-
             string errMsg = "";
             try {
 
@@ -78,6 +68,42 @@ namespace StudentClassItem_KH
             catch (Exception ex) { errMsg = ex.Message; }
 
             return errMsg;
+        }
+
+        public static string UpdateData(RspMsg updateRspMsg)
+        {
+            string DSNS = FISCA.Authentication.DSAServices.AccessPoint;
+            string AccessPoint = @"j.kh.edu.tw";                    
+            string Contract = "log";
+            string ServiceName = "_.UpdateLog";
+            string errMsg = "";
+            try
+            {
+
+                XElement xmlRoot = new XElement("Request");
+                XElement s1 = new XElement("SchoolLog");
+                XElement s2 = new XElement("Field");
+                XElement s3 = new XElement("Condition");
+                XElement Content = new XElement("Content");
+                s2.SetElementValue("isVerify", updateRspMsg.Verify);
+                foreach(string key in updateRspMsg.Content.Keys)
+                    Content.SetElementValue(key, updateRspMsg.Content[key]);
+
+                s2.Add(Content);
+                s3.SetElementValue("Uid", updateRspMsg.UID);
+                s1.Add(s2);
+                s1.Add(s3);
+                xmlRoot.Add(s1);
+                XmlHelper reqXML = new XmlHelper(xmlRoot.ToString());
+                FISCA.DSAClient.Connection cn = new FISCA.DSAClient.Connection();
+                cn.Connect(AccessPoint, Contract, DSNS, DSNS);
+                Envelope rsp = cn.SendRequest(ServiceName, new Envelope(reqXML));
+                XElement rspXML = XElement.Parse(rsp.XmlString);
+            }
+            catch (Exception ex) { errMsg = ex.Message; }
+
+            return errMsg;
+
         }
 
         /// <summary>
@@ -175,12 +201,12 @@ namespace StudentClassItem_KH
 
              string AccessPoint = @"j.kh.edu.tw";
 
-            if (FISCA.RTContext.IsDiagMode)
-            {
-                string accPoint = FISCA.RTContext.GetConstant("KH_AccessPoint");
-                if (!string.IsNullOrEmpty(accPoint))
-                    AccessPoint = accPoint;            
-            }
+            //if (FISCA.RTContext.IsDiagMode)
+            //{
+            //    string accPoint = FISCA.RTContext.GetConstant("KH_AccessPoint");
+            //    if (!string.IsNullOrEmpty(accPoint))
+            //        AccessPoint = accPoint;            
+            //}
             
             string Contract = "log";
             string ServiceName = "_.QueryLog";

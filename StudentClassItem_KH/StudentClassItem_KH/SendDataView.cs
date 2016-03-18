@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using FISCA.Presentation.Controls;
 
 namespace StudentClassItem_KH
 {
@@ -58,13 +59,17 @@ namespace StudentClassItem_KH
 
             _BeginDate = dtBeginDate.Value;
             _EndDate = dtEndDate.Value;
+            ReloadSelectData();            
 
+        }
+
+        private void ReloadSelectData()
+        {
             // 清空畫面資料
             dgData.Rows.Clear();
             btnQuery.Enabled = false;
             // 讀取資料
             _bgWork.RunWorkerAsync();
-
         }
 
         private void LoadDataToDataGrid()
@@ -101,6 +106,9 @@ DateTime:日期時間。
                         foreach (XElement elm in _RspXML.Element("Body").Element("Response").Elements("SchoolLog"))
                         {
                             RspMsg rm = new RspMsg ();
+
+                            if (elm.Element("UID") != null)
+                                rm.UID = elm.Element("UID").Value;
 
                                 if (elm.Element("Action") != null)
                                      rm.Action= elm.Element("Action").Value;
@@ -363,6 +371,38 @@ DateTime:日期時間。
             }
         }
 
-        
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            // 只支援單筆修改
+            if(dgData.SelectedRows.Count==1)
+            {
+                RspMsg rm = dgData.SelectedRows[0].Tag as RspMsg;
+
+                if(rm !=null)
+                {
+
+                    if(rm.Content.ContainsKey("EDoc"))
+                    {
+                        // 只有審核是空白或是不通過才能修改
+                        if (rm.Verify == "" || rm.Verify == "不通過")
+                        {
+                            EditSendData esd = new EditSendData();
+                            esd.SetRspMessage(rm);
+                            esd.ShowDialog();
+                        }
+                        else
+                        {
+                            MsgBox.Show("只能修改未審核或審核不通過");
+                        }
+                    }else
+                    {
+                        MsgBox.Show("不需要填寫 相關證明文件網址");
+                    }
+                    
+                    // 重新整理
+                    ReloadSelectData();
+                }
+            }
+        }        
     }
 }

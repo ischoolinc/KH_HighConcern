@@ -11,6 +11,7 @@ namespace StudentClassItem_KH
     public class RspMsg
     {
 
+        public string UID { get; set; }
 
         /// <summary>
         /// 日期時間。
@@ -33,7 +34,7 @@ namespace StudentClassItem_KH
         public string Comment { get; set; }
 
         /// <summary>
-        /// 審核結果。(空白,t:通過,f:未通過)
+        /// 審核結果。(空白,、通過、不通過、修正後通過)
         /// </summary>
         public string Verify { get; set; }
 
