@@ -373,6 +373,13 @@ DateTime:日期時間。
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
+            List<string> actionStrList = new List<string>();
+            actionStrList.Add("調整班級");
+            actionStrList.Add("取消特殊身分");
+            actionStrList.Add("鎖定班級");
+            actionStrList.Add("解除鎖定班級");
+            actionStrList.Add("變更特殊身分");
+
             // 只支援單筆修改
             if(dgData.SelectedRows.Count==1)
             {
@@ -381,10 +388,11 @@ DateTime:日期時間。
                 if(rm !=null)
                 {
                     bool chkReloadData = false;
-                    if(rm.Content.ContainsKey("EDoc"))
+                    
+                    if(actionStrList.Contains(rm.Action))
                     {
                         // 只有審核是空白或是不通過才能修改
-                        if (rm.Verify == "" || rm.Verify == "不通過")
+                        if (rm.Verify == "" || rm.Verify == "修正後通過")
                         {
                             EditSendData esd = new EditSendData();
                             esd.SetRspMessage(rm);
@@ -393,11 +401,11 @@ DateTime:日期時間。
                         }
                         else
                         {
-                            MsgBox.Show("只能修改未審核或審核不通過");
+                            MsgBox.Show("只能修改未審核或修正後通過。");
                         }
                     }else
                     {
-                        MsgBox.Show("不需要填寫 相關證明文件網址");
+                        MsgBox.Show("不需要填寫 相關證明文件網址。");
                     }
                     
                     // 重新整理
