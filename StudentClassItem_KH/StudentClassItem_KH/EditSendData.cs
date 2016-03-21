@@ -34,7 +34,7 @@ namespace StudentClassItem_KH
         {
             if(_RspMsg !=null)
             {
-                _RspMsg.Verify = "";
+                //_RspMsg.Verify = "";
                 if(_RspMsg.Content.ContainsKey("EDoc"))
                 {
                     _RspMsg.Content["EDoc"] = txtEDoc.Text;
