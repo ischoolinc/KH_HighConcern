@@ -380,7 +380,7 @@ DateTime:日期時間。
 
                 if(rm !=null)
                 {
-
+                    bool chkReloadData = false;
                     if(rm.Content.ContainsKey("EDoc"))
                     {
                         // 只有審核是空白或是不通過才能修改
@@ -389,6 +389,7 @@ DateTime:日期時間。
                             EditSendData esd = new EditSendData();
                             esd.SetRspMessage(rm);
                             esd.ShowDialog();
+                            chkReloadData = esd.GetChkReloadData();
                         }
                         else
                         {
@@ -400,7 +401,8 @@ DateTime:日期時間。
                     }
                     
                     // 重新整理
-                    ReloadSelectData();
+                    if(chkReloadData)
+                        ReloadSelectData();
                 }
             }
         }        
