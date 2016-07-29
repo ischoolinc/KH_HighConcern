@@ -392,7 +392,7 @@ DateTime:日期時間。
                     if(actionStrList.Contains(rm.Action))
                     {
                         // 只有審核是空白或是不通過才能修改
-                        if (rm.Verify == "" || rm.Verify == "修正後通過")
+                        if (rm.Verify == "" || rm.Verify == "待修正")
                         {
                             EditSendData esd = new EditSendData();
                             esd.SetRspMessage(rm);
@@ -401,7 +401,7 @@ DateTime:日期時間。
                         }
                         else
                         {
-                            MsgBox.Show("只能修改未審核或修正後通過。");
+                            MsgBox.Show("只能修改未審核或待修正。");
                         }
                     }else
                     {

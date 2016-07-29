@@ -34,7 +34,7 @@ namespace StudentClassItem_KH
         public string Comment { get; set; }
 
         /// <summary>
-        /// 審核結果。(空白,、通過、不通過、修正後通過)
+        /// 審核結果。(空白,、通過、不通過、待修正)
         /// </summary>
         public string Verify { get; set; }
 
