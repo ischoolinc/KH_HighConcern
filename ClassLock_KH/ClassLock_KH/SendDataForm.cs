@@ -46,6 +46,13 @@ namespace ClassLock_KH
                 return;
             }
 
+            //調整因高雄小組會議：[3-2] 鎖班時，其「備註」欄位也要修正成”必填”。
+            if (string.IsNullOrWhiteSpace(txtComment.Text))
+            {
+                FISCA.Presentation.Controls.MsgBox.Show("備註必填");
+                return;
+            }
+
             _strDate = dtDate.Value.ToShortDateString();
 
             if (!string.IsNullOrEmpty(txtComment.Text))
