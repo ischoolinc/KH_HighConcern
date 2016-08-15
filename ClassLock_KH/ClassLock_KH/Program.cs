@@ -51,11 +51,14 @@ namespace ClassLock_KH
             {
                 if (_UDT_ClassLockDict.ContainsKey(e.Key))
                 {
-
-                    if (_UDT_ClassLockDict[e.Key].UnAutoUnlock)
-                        e.Value = "鎖定(不自動解鎖)";
-                    else
-                        e.Value = "鎖定";
+                    // 當有鎖定再顯示
+                  if( _UDT_ClassLockDict[e.Key].isLock)
+                  {
+                      if (_UDT_ClassLockDict[e.Key].UnAutoUnlock)
+                          e.Value = "鎖定(不自動解鎖)";
+                      else
+                          e.Value = "鎖定";
+                  }
                 }
             };
             K12.Presentation.NLDPanels.Class.AddListPaneField(ClassLockField);
@@ -63,6 +66,7 @@ namespace ClassLock_KH
             ListPaneField ClassLockCommentField = new ListPaneField("鎖定備註");
             ClassLockCommentField.GetVariable += delegate(object sender, GetVariableEventArgs e)
             {
+                // 只要有資料就顯示
                 if (_UDT_ClassLockDict.ContainsKey(e.Key))
                 {
                     e.Value = _UDT_ClassLockDict[e.Key].Comment;
@@ -110,7 +114,8 @@ namespace ClassLock_KH
                     // 全部解鎖
                     UDTTransfer.UnlockAllClass();
 
-                    List<string> ClassNameList = (from data in _UDT_ClassLockDict.Values select data.ClassName).ToList();
+                    // 紀錄班級名稱條件：不自動解鎖false，鎖定 true
+                    List<string> ClassNameList = (from data in _UDT_ClassLockDict.Values where data.UnAutoUnlock==false && data.isLock == true  select data.ClassName).ToList();
 
                     string classNames = string.Join(",", ClassNameList.ToArray());
 
@@ -198,66 +203,72 @@ namespace ClassLock_KH
                         grYear = classRec.GradeYear.Value.ToString();
 
                     if (data == null)
+                        data = new UDT_ClassLock();
+                
+                // 當已被鎖定，問是否解鎖
+                if(data.isLock)
+                {
+                    MsgForm mf1 = new MsgForm();
+                    mf1.Text = "班級解鎖";
+                    mf1.SetMsg("「班級解鎖」，按下「是」確認後，局端會留解鎖紀錄。");
+                    //if (FISCA.Presentation.Controls.MsgBox.Show("「班級解鎖」，按下「是」確認後，局端會留解鎖紀錄。", "班級解鎖", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes)
+                    if (mf1.ShowDialog() == System.Windows.Forms.DialogResult.Yes)
                     {
-                        // 編班委員會會議日期
-                        string strDate = "";
-                        string strComment = "";
-                        string strDocNo = "";
-                        string strEDoc = "";
-
-                        SendDataForm sdf = new SendDataForm();
-                        if (sdf.ShowDialog() == System.Windows.Forms.DialogResult.Yes)
-                        {
-                            strDate = sdf.GetSendDate();
-                            strComment = sdf.GetComment();
-                            strDocNo = sdf.GetDocNo();
-                            strEDoc = sdf.GetEDoc();
-                            MsgForm mf = new MsgForm();
-                            mf.Text = "班級鎖定";
-                            mf.SetMsg("「班級鎖定」，按下「是」確認後，除集中式特殊班級，餘需函報教育局並由局端線上審核。");
-                            //if (FISCA.Presentation.Controls.MsgBox.Show("「班級鎖定」，按下「是」確認後，除集中式特殊班級，餘需函報教育局並由局端線上審核。", "班級鎖定", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes)
-                            if(mf.ShowDialog()== System.Windows.Forms.DialogResult.Yes)
-                            {
-                                // 沒有鎖定
-                                data = new UDT_ClassLock();
-                                data.ClassID = cid;
-                                data.ClassName = classRec.Name;
-                                data.Comment = strComment;
-                                data.DocNo = strDocNo;
-                                data.DateStr = strDate;
-                                data.EDoc = strEDoc;
-                                data.UnAutoUnlock = sdf.GetNUnLock();
-
-                                string errMsg = Utility.SendData(classRec.Name, grYear, "", "鎖定班級", strDate,strComment,strDocNo,strEDoc);
-                                if (errMsg != "")
-                                    FISCA.Presentation.Controls.MsgBox.Show(errMsg);
-                                else
-                                {
-                                    if (data.UnAutoUnlock)
-                                        FISCA.Presentation.Controls.MsgBox.Show("已鎖定(不自動解鎖)");
-                                    else
-                                        FISCA.Presentation.Controls.MsgBox.Show("已鎖定");
-                                }
-                            }
-                        }
+                        // 已被鎖定解鎖
+                        data.isLock = false;
+                        string errMsg = Utility.SendData(classRec.Name, grYear, "", "解除鎖定班級", "", "", "", "");
+                        if (errMsg != "")
+                            FISCA.Presentation.Controls.MsgBox.Show(errMsg);
+                        else
+                            FISCA.Presentation.Controls.MsgBox.Show("已解鎖");
                     }
-                    else
+                }else
+                {
+                   // 未鎖定，問是否要鎖定
+                    // 編班委員會會議日期
+                    string strDate = "";
+                    string strComment = "";
+                    string strDocNo = "";
+                    string strEDoc = "";
+
+                    SendDataForm sdf = new SendDataForm();
+                    if (sdf.ShowDialog() == System.Windows.Forms.DialogResult.Yes)
                     {
-                        MsgForm mf1 = new MsgForm();
-                        mf1.Text = "班級解鎖";
-                        mf1.SetMsg("「班級解鎖」，按下「是」確認後，局端會留解鎖紀錄。");
-                        //if (FISCA.Presentation.Controls.MsgBox.Show("「班級解鎖」，按下「是」確認後，局端會留解鎖紀錄。", "班級解鎖", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes)
-                        if(mf1.ShowDialog()== System.Windows.Forms.DialogResult.Yes)
+                        strDate = sdf.GetSendDate();
+                        strComment = sdf.GetComment();
+                        strDocNo = sdf.GetDocNo();
+                        strEDoc = sdf.GetEDoc();
+                        MsgForm mf = new MsgForm();
+                        mf.Text = "班級鎖定";
+                        mf.SetMsg("「班級鎖定」，按下「是」確認後，除集中式特殊班級，餘需函報教育局並由局端線上審核。");
+                        //if (FISCA.Presentation.Controls.MsgBox.Show("「班級鎖定」，按下「是」確認後，除集中式特殊班級，餘需函報教育局並由局端線上審核。", "班級鎖定", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes)
+                        if (mf.ShowDialog() == System.Windows.Forms.DialogResult.Yes)
                         {
-                            // 已被鎖定解鎖
-                            data.Deleted = true;
-                            string errMsg = Utility.SendData(classRec.Name, grYear, "", "解除鎖定班級", "","","","");
+                            // 沒有鎖定
+                            data = new UDT_ClassLock();
+                            data.ClassID = cid;
+                            data.ClassName = classRec.Name;
+                            data.Comment = strComment;
+                            data.DocNo = strDocNo;
+                            data.DateStr = strDate;
+                            data.EDoc = strEDoc;
+                            data.UnAutoUnlock = sdf.GetNUnLock();
+                            data.isLock = true;
+
+                            string errMsg = Utility.SendData(classRec.Name, grYear, "", "鎖定班級", strDate, strComment, strDocNo, strEDoc);
                             if (errMsg != "")
                                 FISCA.Presentation.Controls.MsgBox.Show(errMsg);
                             else
-                                FISCA.Presentation.Controls.MsgBox.Show("已解鎖");
+                            {
+                                if (data.UnAutoUnlock)
+                                    FISCA.Presentation.Controls.MsgBox.Show("已鎖定(不自動解鎖)");
+                                else
+                                    FISCA.Presentation.Controls.MsgBox.Show("已鎖定");
+                            }
                         }
                     }
+                }
+
                     // 儲存 UDT
                     if (data != null)
                     {
@@ -282,6 +293,19 @@ namespace ClassLock_KH
             UDTTransfer.CreateUDTTable();
 
             //FISCA.ServerModule.AutoManaged("http://module.ischool.com.tw/module/137/KHCentralOffice/udm.xml");
+
+           // 因為 UDT 調整，需要檢查不自動解鎖相對鎖定欄位是鎖定
+            List<UDT_ClassLock> classLockList = UDTTransfer.GetClassLocList();
+            if(classLockList.Count>0)
+            {
+                foreach (UDT_ClassLock data in classLockList)
+                {
+                    if (data.UnAutoUnlock)
+                        data.isLock = true;
+                }
+                classLockList.SaveAll();
+            }
+            
 
             // 檢查是否需要全部班級解鎖
             // 取得Server時間

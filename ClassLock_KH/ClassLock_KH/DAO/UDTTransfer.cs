@@ -45,13 +45,13 @@ namespace ClassLock_KH.DAO
                 if (data.UnAutoUnlock)
                     continue;
 
-                data.Deleted = true;
+                data.isLock = false;
             }
             dataList.SaveAll();
         }
 
         /// <summary>
-        /// 取的被鎖定班級
+        /// 取得所有鎖定/解鎖班級
         /// </summary>
         /// <returns></returns>
         public static List<UDT_ClassLock> GetClassLocList()
@@ -64,7 +64,7 @@ namespace ClassLock_KH.DAO
         }
 
         /// <summary>
-        /// 取得解鎖
+        /// 取得所有鎖定解鎖紀錄
         /// </summary>
         /// <returns></returns>
         public static List<UDT_ClassLock_Log> GetClassLock_LogList()

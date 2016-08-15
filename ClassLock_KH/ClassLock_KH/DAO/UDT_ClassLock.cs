@@ -54,5 +54,11 @@ namespace ClassLock_KH.DAO
         [Field(Field = "e_doc", Indexed = false)]
         public string EDoc { get; set; }
 
+        ///<summary>
+        /// 鎖定/解鎖
+        ///</summary>
+        [Field(Field = "is_lock", Indexed = false)]
+        public bool isLock { get; set; }
+
     }
 }
