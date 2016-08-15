@@ -11,6 +11,7 @@ using Campus.Windows;
 using FISCA.Presentation;
 using JHSchool.Data;
 using System.Xml.Linq;
+using ClassLock_KH.DAO;
 
 namespace StudentClassItem_KH
 {
@@ -270,7 +271,7 @@ namespace StudentClassItem_KH
             SetClassNameSeatNoForm scnsf = new SetClassNameSeatNoForm();
                 string gradeYear = "";
                 string oldClassName = "";
-
+                string oldClassID = "";
                 // 有班級
                 if (objStudent.Class != null)
                 {
@@ -285,6 +286,7 @@ namespace StudentClassItem_KH
 
                     // 原班級名稱
                     oldClassName = objStudent.Class.Name;
+                    oldClassID = objStudent.RefClassID;
                     // 填入年級
                     if (objStudent.Class.GradeYear.HasValue)
                         gradeYear = objStudent.Class.GradeYear.Value.ToString();
@@ -321,6 +323,9 @@ namespace StudentClassItem_KH
                         // 檢查是否傳送到局端,true才會送，主要修改當改座號不傳。
                         if (scnsf.GetChkSend())
                         {
+                            // 新增到班級學生變動紀錄
+                            UDTTransfer.AddClassSpecStudent(objStudent.ID, oldClassID, objStudent.RefClassID, oldClassName, className);
+
                             // 傳送至局端
                             string errMsg = Utility.SendData("調整班級", objStudent.IDNumber, objStudent.StudentNumber, objStudent.Name, gradeYear, oldClassName, scnsf.GetSeatNo(), className, scnsf.GetMettingDate(), scnsf.GetMemo(), FirstClassName, scnsf.GetEDoc(),SecondClassName);
                             if (errMsg != "")

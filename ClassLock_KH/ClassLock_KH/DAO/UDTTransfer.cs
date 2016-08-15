@@ -30,6 +30,7 @@ namespace ClassLock_KH.DAO
             FISCA.UDT.SchemaManager Manager = new SchemaManager(new DSConnection(FISCA.Authentication.DSAServices.DefaultDataSource));
             Manager.SyncSchema(new UDT_ClassLock());
             Manager.SyncSchema(new UDT_ClassLock_Log());
+            Manager.SyncSchema(new UDT_ClassSpecial());
         }
 
         /// <summary>
@@ -75,5 +76,66 @@ namespace ClassLock_KH.DAO
 
             return retVal;
         }
+
+        /// <summary>
+        /// 取得班級學生變動
+        /// </summary>
+        /// <param name="StudentID"></param>
+        /// <returns></returns>
+        public static UDT_ClassSpecial GetClassSpecStudentByStudID(string StudentID)
+        {
+            UDT_ClassSpecial value = new UDT_ClassSpecial();
+
+            if(!string.IsNullOrWhiteSpace(StudentID))
+            {
+                value.StudentID = int.Parse(StudentID);
+
+                AccessHelper accHelper = new AccessHelper();
+                string query = "ref_student_id=" + StudentID;
+                List<UDT_ClassSpecial> dataList = accHelper.Select<UDT_ClassSpecial>(query);
+                if (dataList.Count > 0)
+                    value = dataList[0];
+            }
+            return value;
+        }
+
+        /// <summary>
+        /// 新增單筆學生變動資料
+        /// </summary>
+        /// <param name="StudentID"></param>
+        /// <param name="oldClassID"></param>
+        /// <param name="ClassID"></param>
+        /// <param name="OldClassName"></param>
+        /// <param name="ClassName"></param>
+        public static void AddClassSpecStudent(string StudentID,string OldClassID,string ClassID,string OldClassName,string ClassName)
+        {
+            // 儲存班級學生變動
+            UDT_ClassSpecial ClassSpecStud = GetClassSpecStudentByStudID(StudentID);
+            ClassSpecStud.OldClassComment = ClassSpecStud.ClassComment;
+            if(!string.IsNullOrEmpty(OldClassID))
+                ClassSpecStud.OldClassID = int.Parse(OldClassID);
+            
+            if(!string.IsNullOrEmpty(ClassID))
+                ClassSpecStud.ClassID = int.Parse(ClassID);
+            ClassSpecStud.OldClassName = OldClassName;
+            ClassSpecStud.ClassName = ClassName;
+
+
+            // 取得班級鎖定相關資料
+            Dictionary<string, UDT_ClassLock> classLockDict = GetClassLockNameIDDict();
+            ClassSpecStud.ClassComment = "";
+            if (classLockDict.ContainsKey(ClassID))
+            {
+                ClassSpecStud.ClassComment = classLockDict[ClassID].Comment;
+            }
+
+            if(classLockDict.ContainsKey(OldClassID))
+            {
+                ClassSpecStud.OldClassComment = classLockDict[OldClassID].Comment;
+            }
+
+            ClassSpecStud.Save();
+        }
+
     }
 }

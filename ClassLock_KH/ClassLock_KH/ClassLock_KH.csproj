@@ -120,6 +120,7 @@
     <Compile Include="DAO\UDTTransfer.cs" />
     <Compile Include="DAO\UDT_ClassLock.cs" />
     <Compile Include="DAO\UDT_ClassLock_Log.cs" />
+    <Compile Include="DAO\UDT_ClassSpecial.cs" />
     <Compile Include="MsgForm.cs">
       <SubType>Form</SubType>
     </Compile>
