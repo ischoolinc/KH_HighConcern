@@ -36,7 +36,8 @@ namespace KH_HighConcernCalc
                 // 取得鎖定班級名稱
                 QueryHelper qh1 = new QueryHelper();
                 List<string> lockClassID = new List<string>();
-                string query1 = "select class_id from $kh.automatic.class.lock";
+                // 加入班級被鎖定判斷
+                string query1 = "select class_id from $kh.automatic.class.lock where is_lock = true";
                 DataTable dt1 = qh1.Select(query1);
                 foreach (DataRow dr in dt1.Rows)
                     lockClassID.Add(dr["class_id"].ToString());
@@ -170,7 +171,8 @@ namespace KH_HighConcernCalc
                 // 取得鎖定班級名稱
                 QueryHelper qh1 = new QueryHelper();
                 List<string> lockClassId = new List<string>();
-                string query1 = "select class_id from $kh.automatic.class.lock";
+                // 加入班級被鎖定判斷
+                string query1 = "select class_id from $kh.automatic.class.lock where is_lock = true";
                 DataTable dt1 = qh1.Select(query1);
                 foreach (DataRow dr in dt1.Rows)
                     lockClassId.Add(dr["class_id"].ToString());
