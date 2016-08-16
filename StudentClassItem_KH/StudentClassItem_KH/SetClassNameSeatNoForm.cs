@@ -279,6 +279,22 @@ namespace StudentClassItem_KH
             return retVal;
         }
 
+        /// <summary>
+        /// 取得第3順位班級名稱
+        /// </summary>
+        /// <returns></returns>
+        public string GetThridClassName()
+        {
+            string retVal = "";
+            if (cboClassName.Items.Count > 2)
+            {
+                string ccName = cboClassName.Items[2].ToString();
+                if (_ClassNameMapDict.ContainsKey(ccName))
+                    retVal = _ClassNameMapDict[ccName];
+            }
+            return retVal;
+        }
+
         public void SetCboGradeYearItems(List<string> items)
         {
             cboGradeYear.Items.AddRange(items.ToArray());

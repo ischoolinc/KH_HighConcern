@@ -304,10 +304,11 @@ namespace StudentClassItem_KH
 
                 if (scnsf.ShowDialog() == DialogResult.OK)
                 {
-                    string className = "", FirstClassName = "",SecondClassName;
+                    string className = "", FirstClassName = "",SecondClassName="",ThridClassName="";
                     className = scnsf.GetClassName();
                     FirstClassName = scnsf.GetFirstClassName();
                     SecondClassName = scnsf.GetSecondClassName();
+                    ThridClassName = scnsf.GetThridClassName();
                     _ClassNameIDDic = scnsf.GetClassNameDict();
                     int seatNo;
 
@@ -324,7 +325,7 @@ namespace StudentClassItem_KH
                         if (scnsf.GetChkSend())
                         {
                             // 新增到班級學生變動紀錄
-                            UDTTransfer.AddClassSpecStudent(objStudent.ID, oldClassID, objStudent.RefClassID, oldClassName, className);
+                            UDTTransfer.AddClassSpecStudent(objStudent.ID, oldClassID, objStudent.RefClassID, oldClassName, className,FirstClassName,SecondClassName,ThridClassName);
 
                             // 傳送至局端
                             string errMsg = Utility.SendData("調整班級", objStudent.IDNumber, objStudent.StudentNumber, objStudent.Name, gradeYear, oldClassName, scnsf.GetSeatNo(), className, scnsf.GetMettingDate(), scnsf.GetMemo(), FirstClassName, scnsf.GetEDoc(),SecondClassName);
