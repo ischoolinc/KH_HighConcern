@@ -190,20 +190,13 @@ namespace ClassLock_KH
 
             K12.Presentation.NLDPanels.Class.ListPaneContexMenu["班級鎖定/解鎖"].Click += delegate
             {
-                // 一次處理一筆
-                    // 取得 ClassLock UDT
-                    UDT_ClassLock data = null;
                     string cid = K12.Presentation.NLDPanels.Class.SelectedSource[0];
-                    if (_UDT_ClassLockDict.ContainsKey(cid))
-                        data = _UDT_ClassLockDict[cid];
-
+                    // 檢查並取得班級鎖定
+                    UDT_ClassLock data = UDTTransfer.GetClassLockByClassID(cid);
                     K12.Data.ClassRecord classRec = K12.Data.Class.SelectByID(cid);
                     string grYear = "";
                     if (classRec.GradeYear.HasValue)
                         grYear = classRec.GradeYear.Value.ToString();
-
-                    if (data == null)
-                        data = new UDT_ClassLock();
                 
                 // 當已被鎖定，問是否解鎖
                 if(data.isLock)
@@ -244,8 +237,6 @@ namespace ClassLock_KH
                         //if (FISCA.Presentation.Controls.MsgBox.Show("「班級鎖定」，按下「是」確認後，除集中式特殊班級，餘需函報教育局並由局端線上審核。", "班級鎖定", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes)
                         if (mf.ShowDialog() == System.Windows.Forms.DialogResult.Yes)
                         {
-                            // 沒有鎖定
-                            data = new UDT_ClassLock();
                             data.ClassID = cid;
                             data.ClassName = classRec.Name;
                             data.Comment = strComment;

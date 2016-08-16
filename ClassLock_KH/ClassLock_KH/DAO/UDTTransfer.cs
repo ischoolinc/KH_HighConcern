@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Linq;
 
 namespace ClassLock_KH.DAO
 {
@@ -18,9 +19,25 @@ namespace ClassLock_KH.DAO
             Dictionary<string, UDT_ClassLock> retVal = new Dictionary<string, UDT_ClassLock>();
             AccessHelper _AccessHelper = new AccessHelper();
             foreach (UDT_ClassLock data in _AccessHelper.Select<UDT_ClassLock>())
+                if(!retVal.ContainsKey(data.ClassID))
                 retVal.Add(data.ClassID,data);
             return retVal;
         }
+
+
+        public static UDT_ClassLock GetClassLockByClassID(string ClassID)
+        {
+            UDT_ClassLock value = new UDT_ClassLock();
+            value.ClassID = ClassID;
+            AccessHelper accHelper = new AccessHelper();
+            string query = "class_id='" + ClassID + "'";
+            List<UDT_ClassLock> dataList = accHelper.Select<UDT_ClassLock>(query);
+            if (dataList.Count > 0)
+                value = dataList[0];
+
+            return value;
+        }
+
 
         /// <summary>
         /// 建立使用到的 UDT Table
@@ -100,6 +117,29 @@ namespace ClassLock_KH.DAO
         }
 
         /// <summary>
+        /// 透過多筆學生ID取得班級學生變動
+        /// </summary>
+        /// <param name="StudentIDList"></param>
+        /// <returns></returns>
+        public static Dictionary<string,UDT_ClassSpecial> GetClassSpecStudentByIDList(List<string> StudentIDList)
+        {
+            Dictionary<string, UDT_ClassSpecial> value = new Dictionary<string, UDT_ClassSpecial>();
+            if(StudentIDList.Count>0)
+            {
+                AccessHelper accHelper = new AccessHelper();
+                string query ="ref_student_id in("+string.Join(",",StudentIDList.ToArray())+")";
+                List<UDT_ClassSpecial> dataList = accHelper.Select<UDT_ClassSpecial>(query);
+                foreach(UDT_ClassSpecial data in dataList)
+                {
+                    string SID = data.StudentID.ToString();
+                    if (!value.ContainsKey(SID))
+                        value.Add(SID, data);
+                }
+            }
+            return value;
+        }
+
+        /// <summary>
         /// 新增單筆學生變動資料
         /// </summary>
         /// <param name="StudentID"></param>
@@ -107,7 +147,7 @@ namespace ClassLock_KH.DAO
         /// <param name="ClassID"></param>
         /// <param name="OldClassName"></param>
         /// <param name="ClassName"></param>
-        public static void AddClassSpecStudent(string StudentID,string OldClassID,string ClassID,string OldClassName,string ClassName)
+        public static void AddClassSpecStudent(string StudentID,string OldClassID,string ClassID,string OldClassName,string ClassName,string FirstClassName,string SecondClassName,string ThridClassName)
         {
             // 儲存班級學生變動
             UDT_ClassSpecial ClassSpecStud = GetClassSpecStudentByStudID(StudentID);
@@ -133,6 +173,29 @@ namespace ClassLock_KH.DAO
             {
                 ClassSpecStud.OldClassComment = classLockDict[OldClassID].Comment;
             }
+
+            XElement elmRoot = null;
+            // 儲存學生班級順位名稱
+            if(string.IsNullOrEmpty(ClassSpecStud.Content))
+            {
+                elmRoot = new XElement("Content");
+            }
+            else
+            {
+                try
+                {
+                    elmRoot = XElement.Parse(ClassSpecStud.Content);
+                }
+                catch (Exception ex) { }
+            }
+
+            if(elmRoot !=null)
+            {
+                elmRoot.SetElementValue("FirstClassName", FirstClassName);
+                elmRoot.SetElementValue("SecondClassName", SecondClassName);
+                elmRoot.SetElementValue("ThridClassName", ThridClassName);
+            }
+            ClassSpecStud.Content = elmRoot.ToString();
 
             ClassSpecStud.Save();
         }
