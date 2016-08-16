@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Framework;
 using JHPermrec.UpdateRecord.Transfer;
 using JHPermrec.UpdateRecord;
+using ClassLock_KH.DAO;
 
 namespace StudentTransStudBase_KH
 {
@@ -246,6 +247,10 @@ namespace StudentTransStudBase_KH
                     {
                         FISCA.Presentation.Controls.MsgBox.Show("更新學生資料發生錯誤：" + ex.Message);
                     }
+
+                    // 寫入班級學生變動
+                    UDTTransfer.AddClassSpecStudent(_student.ID, "", _student.RefClassID, lblClassName.Text, lblNewClassName.Text, lblNewClassName.Text, "", "");
+
 
                     // 傳送至局端
                     string errMsg = Utility.SendData("自動轉入", _student.IDNumber, _student.StudentNumber, _student.Name, strGradeYear, lblClassName.Text, cboSeatNo.Text, lblNewClassName.Text, "", "");

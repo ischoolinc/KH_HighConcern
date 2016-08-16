@@ -20,6 +20,8 @@ using JHSchool.Legacy.ImportSupport.Validators;
 using JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls;
 using System.Xml.Linq;
 using JHSchool;
+using ClassLock_KH.DAO;
+using System.Linq;
 
 namespace StudentImportWizard_KH
 {
@@ -1429,7 +1431,69 @@ namespace StudentImportWizard_KH
                         }
                         // 當有勾選班級、狀態才需要傳送
                         if (Gobal._SendData)
+                        {
+                            #region 寫入班級學生變動
+                            try
+                            {
+                                // 取得並建立班級名稱ID對照
+                                Dictionary<string, int> classNameDict = new Dictionary<string, int>();
+                                List<K12.Data.ClassRecord> ClassRecList = K12.Data.Class.SelectAll();
+                                foreach (K12.Data.ClassRecord cr in ClassRecList)
+                                {
+                                    classNameDict.Add(cr.Name, int.Parse(cr.ID));
+                                }
+
+                                // 取得班級鎖定相關資料
+                                Dictionary<string, UDT_ClassLock> classLockDict = UDTTransfer.GetClassLockNameIDDict();
+
+                                // 取得班級學生變動資料
+                                List<string> StudentIDList = (from data in logStudList select data.StudentID).ToList();
+                                Dictionary<string, UDT_ClassSpecial> classSpecDict = UDTTransfer.GetClassSpecStudentByIDList(StudentIDList);
+                                List<UDT_ClassSpecial> ClassSpecList = new List<UDT_ClassSpecial>();
+
+                                foreach(logStud stud in logStudList)
+                                {
+                                    UDT_ClassSpecial cs = new UDT_ClassSpecial();
+                                    if(classSpecDict.ContainsKey(stud.StudentID))
+                                    {
+                                        cs = classSpecDict[stud.StudentID];
+                                        cs.OldClassComment = cs.ClassComment;
+                                    }else
+                                    {
+                                        cs.StudentID = int.Parse(stud.StudentID);
+                                    }
+
+                                    cs.OldClassName = stud.oClassName;
+                                    if (classNameDict.ContainsKey(cs.OldClassName))
+                                        cs.OldClassID = classNameDict[cs.OldClassName];
+                                    
+                                    cs.ClassName = stud.ClassName;
+                                    if (classNameDict.ContainsKey(cs.ClassName))
+                                        cs.ClassID = classNameDict[cs.ClassName];
+
+                                    string oldClassID = cs.OldClassID.ToString();
+                                    string classID = cs.ClassID.ToString();
+
+                                    if (classLockDict.ContainsKey(oldClassID))
+                                        cs.OldClassComment = classLockDict[oldClassID].Comment;
+
+                                    if (classLockDict.ContainsKey(classID))
+                                        cs.ClassComment = classLockDict[classID].Comment;
+
+                                    ClassSpecList.Add(cs);
+                                }
+
+                                if (ClassSpecList.Count > 0)
+                                    ClassSpecList.SaveAll();
+
+                            }catch(Exception ex)
+                            {
+                                FISCA.Presentation.Controls.MsgBox.Show("寫入學生變動UDT失敗," + ex.Message);
+                            }
+                            #endregion
+
                             Utility.SendDataList(ActionStr, logStudList, Context.ImportMode);
+                        }                            
                     }
                     catch (Exception ex)
                     {

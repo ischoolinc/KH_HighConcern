@@ -187,6 +187,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\ClassLock_KH\ClassLock_KH\ClassLock_KH.csproj">
+      <Project>{5ce9cc72-06ba-455f-8bc9-ec40081242d4}</Project>
+      <Name>ClassLock_KH</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\KH_HighConcernCalc\KH_HighConcernCalc\KH_HighConcernCalc.csproj">
       <Project>{8bb13d31-4959-4dc1-a9ff-4bf8a4731bb6}</Project>
       <Name>KH_HighConcernCalc</Name>

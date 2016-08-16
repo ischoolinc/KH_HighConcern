@@ -218,6 +218,12 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\ClassLock_KH\ClassLock_KH\ClassLock_KH.csproj">
+      <Project>{5ce9cc72-06ba-455f-8bc9-ec40081242d4}</Project>
+      <Name>ClassLock_KH</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
