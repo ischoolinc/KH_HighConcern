@@ -5,6 +5,9 @@ using System.Text;
 using FISCA;
 using FISCA.Permission;
 using FISCA.Presentation;
+using Campus.Message;
+using System.ComponentModel;
+using System.Xml.Linq;
 
 namespace StudentClassItem_KH
 {
@@ -37,7 +40,73 @@ namespace StudentClassItem_KH
                 sdv.ShowDialog();
             };
 
+            List<string> CheckRData1 = new List<string>();
+            // 載入自動編班審核狀態
+            BackgroundWorker bgWorker = new BackgroundWorker();
+            XElement _RspXML = null;
+            bgWorker.RunWorkerAsync();
+            bgWorker.DoWork += delegate {
+                List<string> itemList = new List<string>();
+                itemList.Add("通過"); itemList.Add("不通過"); itemList.Add("待修正");
+                _RspXML = Utility.QuerySendData(null, null, itemList);
 
+                List<RspMsg> RspMsgList = new List<RspMsg>();
+
+                RspMsgList = Utility.GetRspMsgList(_RspXML);
+            
+                // 填資料到畫面
+                if (RspMsgList.Count > 0)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    foreach (RspMsg rm in RspMsgList)
+                    {
+                        sb.Clear();
+                        sb.AppendLine("日期:" + rm.Date);
+                        sb.AppendLine("動作:" + rm.Action);
+                        sb.AppendLine("摘要:" + rm.GetContentString(false));
+                        sb.AppendLine("審核結果:" + rm.Verify);
+                        sb.AppendLine("局端備註:" + rm.Comment);
+                                                
+                        CheckRData1.Add(sb.ToString());
+                    }
+                }
+
+            };
+
+            bgWorker.RunWorkerCompleted += delegate {
+
+                if (CheckRData1.Count > 0)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    sb.AppendLine("局端備查紀錄已回傳：");
+                    foreach (string str in CheckRData1)
+                        sb.AppendLine(str);
+
+                    CustomRecord cr = new CustomRecord();
+                    cr.Title = "局端備查紀錄通知";
+                    cr.Content = sb.ToString();
+                    cr.Type = CrType.Type.Warning_Blue;
+
+                    name n = new name();
+                    n._messageTitle1 = "局端備查紀錄通知";
+                    n._value1 = sb.ToString();
+                    n.type = true;
+
+                    IsViewForm_Open open = new IsViewForm_Open(n);
+                    cr.OtherMore = open;
+
+                    Campus.Message.MessageRobot.AddMessage(cr);
+                }
+            };
         }
+    }
+
+    public class name
+    {
+        public string _messageTitle1 { get; set; }
+
+        public string _value1 { get; set; }
+
+        public bool type { get; set; }
     }
 }

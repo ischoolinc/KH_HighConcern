@@ -35,6 +35,11 @@
       <HintPath>Library\Aspose.Cells_201402.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Campus.Message, Version=1.0.0.9, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\Campus.Message.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Campus.Windows, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\Campus.Windows.dll</HintPath>
@@ -136,6 +141,12 @@
     <Compile Include="EditSendData.Designer.cs">
       <DependentUpon>EditSendData.cs</DependentUpon>
     </Compile>
+    <Compile Include="IsViewForm_Open.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IsViewForm_Open.Designer.cs">
+      <DependentUpon>IsViewForm_Open.cs</DependentUpon>
+    </Compile>
     <Compile Include="MsgForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -182,6 +193,9 @@
   <ItemGroup>
     <Content Include="Library\Aspose.Cells.xml" />
     <Content Include="Library\Aspose.Cells_201402.dll" />
+    <Content Include="Library\Campus.Message.dll" />
+    <Content Include="Library\Campus.Message.pdb" />
+    <Content Include="Library\Campus.Message.xml" />
     <Content Include="Library\Campus.Windows.dll" />
     <Content Include="Library\Campus.Windows.pdb" />
     <Content Include="Library\Campus.Windows.xml" />
@@ -231,6 +245,9 @@
   <ItemGroup>
     <EmbeddedResource Include="EditSendData.resx">
       <DependentUpon>EditSendData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IsViewForm_Open.resx">
+      <DependentUpon>IsViewForm_Open.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MsgForm.resx">
       <DependentUpon>MsgForm.cs</DependentUpon>

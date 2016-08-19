@@ -193,34 +193,42 @@ namespace StudentClassItem_KH
         /// <param name="beginDate"></param>
         /// <param name="endDate"></param>
         /// <returns></returns>
-        public static XElement QuerySendData(DateTime beginDate, DateTime endDate)
+        public static XElement QuerySendData(DateTime? beginDate, DateTime? endDate,List<string> isVerifyList)
         {
             XElement elmMsg = null;
 
              string DSNS = FISCA.Authentication.DSAServices.AccessPoint;
 
              string AccessPoint = @"j.kh.edu.tw";
-
-            //if (FISCA.RTContext.IsDiagMode)
-            //{
-            //    string accPoint = FISCA.RTContext.GetConstant("KH_AccessPoint");
-            //    if (!string.IsNullOrEmpty(accPoint))
-            //        AccessPoint = accPoint;            
-            //}
             
             string Contract = "log";
             string ServiceName = "_.QueryLog";
             
             try
             {
-
                 XElement xmlRoot = new XElement("Request");
                 XElement s1 = new XElement("Field");
                 s1.SetElementValue("All", "");
                 XElement s2 = new XElement("Condition");
+                
                 s2.SetElementValue("Dsns", DSNS);
-                s2.SetElementValue("StartDate", string.Format("{0:yyyy-MM-dd}", beginDate));
-                s2.SetElementValue("EndDate", string.Format("{0:yyyy-MM-dd}", endDate.AddDays(1)));
+                
+                if(beginDate.HasValue)
+                    s2.SetElementValue("StartDate", string.Format("{0:yyyy-MM-dd}", beginDate.Value));
+                if(endDate.HasValue)
+                    s2.SetElementValue("EndDate", string.Format("{0:yyyy-MM-dd}", endDate.Value.AddDays(1)));
+                
+                if(isVerifyList != null)
+                {
+                    foreach(string str in isVerifyList)
+                    {
+                        XElement elmV = new XElement("IsVerify");
+                        elmV.Value = str;
+                        s2.Add(elmV);
+                    }
+                        
+                }
+
                 xmlRoot.Add(s1);
                 xmlRoot.Add(s2);
 
@@ -311,6 +319,155 @@ namespace StudentClassItem_KH
                 }
             }
         }
-  
+
+
+
+        public static List<RspMsg> GetRspMsgList(XElement _RspXML)
+        {
+            List<RspMsg> RspMsgList = new List<RspMsg>();          
+            if (_RspXML != null)
+            {
+                if (_RspXML.Element("Body") != null)
+                    if (_RspXML.Element("Body").Element("Response") != null)
+                    {
+                        foreach (XElement elm in _RspXML.Element("Body").Element("Response").Elements("SchoolLog"))
+                        {
+                            RspMsg rm = new RspMsg();
+
+                            if (elm.Element("UID") != null)
+                                rm.UID = elm.Element("UID").Value;
+
+                            if (elm.Element("Action") != null)
+                                rm.Action = elm.Element("Action").Value;
+
+                            if (elm.Element("Comment") != null)
+                                rm.Comment = elm.Element("Comment").Value;
+
+                            if (elm.Element("isVerify") != null)
+                            {
+                                rm.Verify = elm.Element("isVerify").Value;
+
+                                //if (rm.Verify.Trim() == "t")
+                                //    rm.Verify = "通過";
+                                //else if (rm.Verify.Trim() == "f")
+                                //    rm.Verify = "未通過";
+                                //else
+                                //    rm.Verify = "";
+                            }
+
+                            if (elm.Element("Content") != null)
+                            {
+                                XElement xmlContent = elm.Element("Content");
+
+                                if (xmlContent.Element("GradeYear") != null)
+                                    rm.Content.Add("GradeYear", xmlContent.Element("GradeYear").Value);
+
+                                if (xmlContent.Element("IDNumber") != null)
+                                    rm.Content.Add("IDNumber", xmlContent.Element("IDNumber").Value);
+
+                                if (xmlContent.Element("StudentNumber") != null)
+                                    rm.Content.Add("StudentNumber", xmlContent.Element("StudentNumber").Value);
+
+                                if (xmlContent.Element("StudentName") != null)
+                                    rm.Content.Add("StudentName", xmlContent.Element("StudentName").Value);
+
+                                if (xmlContent.Element("ClassName") != null)
+                                    rm.Content.Add("ClassName", xmlContent.Element("ClassName").Value);
+
+                                if (xmlContent.Element("NewClassName") != null)
+                                    rm.Content.Add("NewClassName", xmlContent.Element("NewClassName").Value);
+
+                                if (xmlContent.Element("SeatNo") != null)
+                                    rm.Content.Add("SeatNo", xmlContent.Element("SeatNo").Value);
+
+                                if (xmlContent.Element("ScheduleClassDate") != null)
+                                    rm.Content.Add("ScheduleClassDate", xmlContent.Element("ScheduleClassDate").Value);
+
+                                if (xmlContent.Element("Reason") != null)
+                                    rm.Content.Add("Reason", xmlContent.Element("Reason").Value);
+
+                                if (xmlContent.Element("FirstPriorityClassName") != null)
+                                    rm.Content.Add("FirstPriorityClassName", xmlContent.Element("FirstPriorityClassName").Value);
+
+                                if (xmlContent.Element("SecondPriorityClassName") != null)
+                                    rm.Content.Add("SecondPriorityClassName", xmlContent.Element("SecondPriorityClassName").Value);
+
+
+                                if (xmlContent.Element("Summary") != null)
+                                    rm.Content.Add("Summary", xmlContent.Element("Summary").Value);
+
+                                if (xmlContent.Element("Comment") != null)
+                                    rm.Content.Add("Comment", xmlContent.Element("Comment").Value);
+
+                                if (xmlContent.Element("DocNo") != null)
+                                    rm.Content.Add("DocNo", xmlContent.Element("DocNo").Value);
+
+                                if (xmlContent.Element("NumberReduce") != null)
+                                    rm.Content.Add("NumberReduce", xmlContent.Element("NumberReduce").Value);
+
+                                if (xmlContent.Element("StudentStatus") != null)
+                                    rm.Content.Add("StudentStatus", xmlContent.Element("StudentStatus").Value);
+
+                                if (xmlContent.Element("NewStudentStatus") != null)
+                                    rm.Content.Add("NewStudentStatus", xmlContent.Element("NewStudentStatus").Value);
+
+                                if (xmlContent.Element("EDoc") != null)
+                                    rm.Content.Add("EDoc", xmlContent.Element("EDoc").Value);
+                            }
+
+                            // 詳細內容    
+                            if (elm.Element("Detail") != null)
+                            {
+                                foreach (XElement elms1 in elm.Element("Detail").Elements("Student"))
+                                {
+                                    RspStud rs = new RspStud();
+
+                                    if (elms1.Element("IDNumber") != null)
+                                        rs.IDNumber = elms1.Element("IDNumber").Value;
+
+                                    if (elms1.Element("ClassName") != null)
+                                        rs.ClassName = elms1.Element("ClassName").Value;
+
+                                    if (elms1.Element("StudentNumber") != null)
+                                        rs.StudentNumber = elms1.Element("StudentNumber").Value;
+
+                                    if (elms1.Element("NewClassName") != null)
+                                        rs.NewClassName = elms1.Element("NewClassName").Value;
+
+                                    if (elms1.Element("SeatNo") != null)
+                                        rs.SeatNo = elms1.Element("SeatNo").Value;
+
+                                    if (elms1.Element("GradeYear") != null)
+                                        rs.GradeYear = elms1.Element("GradeYear").Value;
+
+                                    if (elms1.Element("StudentName") != null)
+                                        rs.Name = elms1.Element("StudentName").Value;
+
+
+                                    if (elms1.Element("Reason") != null)
+                                        rs.Reason = elms1.Element("Reason").Value;
+
+                                    if (elms1.Element("StudentStatus") != null)
+                                        rs.Status = elms1.Element("StudentStatus").Value;
+
+                                    if (elms1.Element("NewStudentStatus") != null)
+                                        rs.NewStatus = elms1.Element("NewStudentStatus").Value;
+
+                                    if (elms1.Element("EDoc") != null)
+                                        rs.EDoc = elms1.Element("EDoc").Value;
+
+                                    rm.Detail.Add(rs);
+                                }
+                            }
+
+                            if (elm.Element("Timestamp") != null)
+                                rm.Date = DateTime.Parse(elm.Element("Timestamp").Value);
+
+                            RspMsgList.Add(rm);                         
+                        }
+                    }
+            }
+            return RspMsgList;
+        }
     }
 }

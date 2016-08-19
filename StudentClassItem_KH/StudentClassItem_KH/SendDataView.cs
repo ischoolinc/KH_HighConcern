@@ -35,7 +35,7 @@ namespace StudentClassItem_KH
 
         void _bgWork_DoWork(object sender, DoWorkEventArgs e)
         {
-            _RspXML = Utility.QuerySendData(_BeginDate, _EndDate);
+            _RspXML = Utility.QuerySendData(_BeginDate, _EndDate, null);
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -95,156 +95,9 @@ DateTime:日期時間。
             */
             lblMsg.Text = "";
 
-            List<RspMsg> RspMsgList = new List<RspMsg> ();
-              
-            int rowCot = 0;
-            if (_RspXML != null)
-            {
-                if (_RspXML.Element("Body") != null)
-                    if (_RspXML.Element("Body").Element("Response") != null)
-                    {
-                        foreach (XElement elm in _RspXML.Element("Body").Element("Response").Elements("SchoolLog"))
-                        {
-                            RspMsg rm = new RspMsg ();
-
-                            if (elm.Element("UID") != null)
-                                rm.UID = elm.Element("UID").Value;
-
-                                if (elm.Element("Action") != null)
-                                     rm.Action= elm.Element("Action").Value;
-
-                                if (elm.Element("Comment") != null)
-                                    rm.Comment = elm.Element("Comment").Value;
-
-                                if (elm.Element("isVerify") != null)
-                                {
-                                    rm.Verify = elm.Element("isVerify").Value;
-
-                                    //if (rm.Verify.Trim() == "t")
-                                    //    rm.Verify = "通過";
-                                    //else if (rm.Verify.Trim() == "f")
-                                    //    rm.Verify = "未通過";
-                                    //else
-                                    //    rm.Verify = "";
-                                }
-
-                                if (elm.Element("Content") != null)
-                                {
-                                    XElement xmlContent = elm.Element("Content");
-
-                                    if (xmlContent.Element("GradeYear") != null)
-                                        rm.Content.Add("GradeYear", xmlContent.Element("GradeYear").Value);
-
-                                    if (xmlContent.Element("IDNumber") != null)
-                                        rm.Content.Add("IDNumber", xmlContent.Element("IDNumber").Value);
-
-                                    if (xmlContent.Element("StudentNumber") != null)
-                                        rm.Content.Add("StudentNumber", xmlContent.Element("StudentNumber").Value);
-
-                                    if (xmlContent.Element("StudentName") != null)
-                                        rm.Content.Add("StudentName", xmlContent.Element("StudentName").Value);
-
-                                    if (xmlContent.Element("ClassName") != null)
-                                        rm.Content.Add("ClassName", xmlContent.Element("ClassName").Value);
-
-                                    if (xmlContent.Element("NewClassName") != null)
-                                        rm.Content.Add("NewClassName", xmlContent.Element("NewClassName").Value);
-
-                                    if (xmlContent.Element("SeatNo") != null)
-                                        rm.Content.Add("SeatNo", xmlContent.Element("SeatNo").Value);
-
-                                    if (xmlContent.Element("ScheduleClassDate") != null)
-                                        rm.Content.Add("ScheduleClassDate", xmlContent.Element("ScheduleClassDate").Value);
-
-                                    if (xmlContent.Element("Reason") != null)
-                                        rm.Content.Add("Reason", xmlContent.Element("Reason").Value);
-
-                                    if (xmlContent.Element("FirstPriorityClassName") != null)
-                                        rm.Content.Add("FirstPriorityClassName", xmlContent.Element("FirstPriorityClassName").Value);
-
-                                    if (xmlContent.Element("SecondPriorityClassName") != null)
-                                        rm.Content.Add("SecondPriorityClassName", xmlContent.Element("SecondPriorityClassName").Value);
-
-
-                                    if (xmlContent.Element("Summary") != null)
-                                        rm.Content.Add("Summary", xmlContent.Element("Summary").Value);
-
-                                    if (xmlContent.Element("Comment") != null)
-                                        rm.Content.Add("Comment", xmlContent.Element("Comment").Value);
-
-                                    if (xmlContent.Element("DocNo") != null)
-                                        rm.Content.Add("DocNo", xmlContent.Element("DocNo").Value);
-
-                                    if (xmlContent.Element("NumberReduce") != null)
-                                        rm.Content.Add("NumberReduce", xmlContent.Element("NumberReduce").Value);
-
-                                    if (xmlContent.Element("StudentStatus") != null)
-                                        rm.Content.Add("StudentStatus", xmlContent.Element("StudentStatus").Value);
-
-                                    if (xmlContent.Element("NewStudentStatus") != null)
-                                        rm.Content.Add("NewStudentStatus", xmlContent.Element("NewStudentStatus").Value);
-
-                                    if (xmlContent.Element("EDoc") != null)
-                                        rm.Content.Add("EDoc", xmlContent.Element("EDoc").Value);
-                                }
-
-                                // 詳細內容    
-                                if (elm.Element("Detail") != null)
-                                {
-                                    foreach (XElement elms1 in elm.Element("Detail").Elements("Student"))
-                                    {
-                                        RspStud rs = new RspStud();
-
-                                        if (elms1.Element("IDNumber") != null)
-                                            rs.IDNumber = elms1.Element("IDNumber").Value;
-
-                                        if (elms1.Element("ClassName") != null)
-                                            rs.ClassName = elms1.Element("ClassName").Value;
-
-                                        if (elms1.Element("StudentNumber") != null)
-                                            rs.StudentNumber = elms1.Element("StudentNumber").Value;
-
-                                        if (elms1.Element("NewClassName") != null)
-                                            rs.NewClassName = elms1.Element("NewClassName").Value;
-
-                                        if (elms1.Element("SeatNo") != null)
-                                            rs.SeatNo = elms1.Element("SeatNo").Value;
-
-                                        if (elms1.Element("GradeYear") != null)
-                                            rs.GradeYear = elms1.Element("GradeYear").Value;
-
-                                        if (elms1.Element("StudentName") != null)
-                                            rs.Name = elms1.Element("StudentName").Value;
-
-
-                                        if (elms1.Element("Reason") != null)
-                                            rs.Reason = elms1.Element("Reason").Value;
-
-                                        if (elms1.Element("StudentStatus") != null)
-                                            rs.Status = elms1.Element("StudentStatus").Value;
-
-                                        if (elms1.Element("NewStudentStatus") != null)
-                                            rs.NewStatus = elms1.Element("NewStudentStatus").Value;
-
-                                        if (elms1.Element("EDoc") != null)
-                                            rs.EDoc = elms1.Element("EDoc").Value;
-
-                                        rm.Detail.Add(rs);
-                                    }
-                                }
-
-                                if (elm.Element("Timestamp") != null)
-                                    rm.Date = DateTime.Parse(elm.Element("Timestamp").Value);
-
-                                RspMsgList.Add(rm);
-                                rowCot++;                            
-                        }
-
-                    }
-            }
-
-            // 依日期排序 日期新到舊
-            RspMsgList = (from data in RspMsgList orderby data.Date descending select data).ToList();
+            List<RspMsg> RspMsgList = new List<RspMsg>();
+            RspMsgList = Utility.GetRspMsgList(_RspXML);
+           
 
             // 填資料到畫面
             if (RspMsgList.Count > 0)
@@ -269,7 +122,7 @@ DateTime:日期時間。
                 
             }
 
-            lblMsg.Text = " 共 " + rowCot + " 筆";
+            lblMsg.Text = " 共 " + RspMsgList.Count + " 筆";
         }
 
     
