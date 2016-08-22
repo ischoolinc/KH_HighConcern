@@ -117,7 +117,7 @@ namespace StudentTransStudBase_KH
         /// <param name="ScheduleClassDate"></param>
         /// <param name="Reason"></param>
         /// <returns></returns>
-        public static string SendData(string action, string IDNumber, string StudentNumber, string StudentName, string GradeYear, string ClassName, string SeatNo, string NewClassName, string ScheduleClassDate, string Reason)
+        public static string SendData(string action, string IDNumber, string StudentNumber, string StudentName, string GradeYear, string ClassName, string SeatNo, string NewClassName, string ScheduleClassDate, string Reason, string StudentID, string ClassID, string ClassComment)
         {
             string DSNS = FISCA.Authentication.DSAServices.AccessPoint;
 
@@ -152,6 +152,9 @@ namespace StudentTransStudBase_KH
                 Content.SetElementValue("ScheduleClassDate", ScheduleClassDate);
                 Content.SetElementValue("StudentName", StudentName);
                 Content.SetElementValue("Reason", Reason);
+                Content.SetElementValue("StudentID", StudentID);
+                Content.SetElementValue("ClassID", ClassID);
+                Content.SetElementValue("ClassComment", ClassComment);
                 s2.Add(Content);
                 s1.Add(s2);
                 xmlRoot.Add(s1);

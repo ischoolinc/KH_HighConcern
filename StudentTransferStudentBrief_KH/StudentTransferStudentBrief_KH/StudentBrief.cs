@@ -613,10 +613,10 @@ namespace StudentTransferStudentBrief_KH
 
 
                 // 新增至班級學生變更                
-                UDTTransfer.AddClassSpecStudent(SRecord.ID, "", SRecord.RefClassID, "", txtClass.Text, txtClass.Text, "", "");
+                UDT_ClassSpecial StudSpec = UDTTransfer.AddClassSpecStudent(SRecord.ID, "", SRecord.RefClassID, "", txtClass.Text, txtClass.Text, "", "");
 
                 // 傳送至局端
-                string errMsg = Utility.SendData("自動轉入", SRecord.IDNumber, SRecord.StudentNumber, SRecord.Name, cboGender.Text, txtOClass.Text, cboSeatNo.Text, txtClass.Text, "", "");
+                string errMsg = Utility.SendData("自動轉入", SRecord.IDNumber, SRecord.StudentNumber, SRecord.Name, cboGender.Text, txtOClass.Text, cboSeatNo.Text, txtClass.Text, "", "",SRecord.ID,SRecord.RefClassID,StudSpec.ClassComment);
                 if (errMsg != "")
                     FISCA.Presentation.Controls.MsgBox.Show(errMsg);
 

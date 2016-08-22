@@ -249,11 +249,11 @@ namespace StudentTransStudBase_KH
                     }
 
                     // 寫入班級學生變動
-                    UDTTransfer.AddClassSpecStudent(_student.ID, "", _student.RefClassID, lblClassName.Text, lblNewClassName.Text, lblNewClassName.Text, "", "");
+                    UDT_ClassSpecial StudSpec = UDTTransfer.AddClassSpecStudent(_student.ID, "", _student.RefClassID, lblClassName.Text, lblNewClassName.Text, lblNewClassName.Text, "", "");
 
 
                     // 傳送至局端
-                    string errMsg = Utility.SendData("自動轉入", _student.IDNumber, _student.StudentNumber, _student.Name, strGradeYear, lblClassName.Text, cboSeatNo.Text, lblNewClassName.Text, "", "");
+                    string errMsg = Utility.SendData("自動轉入", _student.IDNumber, _student.StudentNumber, _student.Name, strGradeYear, lblClassName.Text, cboSeatNo.Text, lblNewClassName.Text, "", "", _student.ID, _student.RefClassID, StudSpec.ClassComment);
                     if (errMsg != "")
                         FISCA.Presentation.Controls.MsgBox.Show(errMsg);
 
