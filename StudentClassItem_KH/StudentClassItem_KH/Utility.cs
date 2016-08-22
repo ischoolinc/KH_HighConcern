@@ -29,7 +29,7 @@ namespace StudentClassItem_KH
         /// <param name="ScheduleClassDate"></param>
         /// <param name="Reason"></param>
         /// <returns></returns>
-        public static string SendData(string action, string IDNumber, string StudentNumber, string StudentName, string GradeYear, string ClassName, string SeatNo, string NewClassName, string ScheduleClassDate, string Reason, string FirstPriorityClassName, string EDoc, string SecondPriorityClassName)
+        public static string SendData(string action, string IDNumber, string StudentNumber, string StudentName, string GradeYear, string ClassName, string SeatNo, string NewClassName, string ScheduleClassDate, string Reason, string FirstPriorityClassName, string EDoc, string SecondPriorityClassName, string ThridPriorityClassName, string StudentID, string OldClassID, string ClassID, string OldClassContent, string ClassContent)
         {
             string DSNS = FISCA.Authentication.DSAServices.AccessPoint;
             string AccessPoint = @"j.kh.edu.tw";                    
@@ -46,6 +46,7 @@ namespace StudentClassItem_KH
                 s2.SetElementValue("Action", action);
                 XElement Content = new XElement("Content");
                 Content.SetElementValue("IDNumber", IDNumber);
+
                 Content.SetElementValue("StudentNumber", StudentNumber);
                 Content.SetElementValue("StudentName", StudentName);
                 Content.SetElementValue("ClassName", ClassName);
@@ -55,7 +56,14 @@ namespace StudentClassItem_KH
                 Content.SetElementValue("Reason", Reason);
                 Content.SetElementValue("FirstPriorityClassName", FirstPriorityClassName);
                 Content.SetElementValue("SecondPriorityClassName", SecondPriorityClassName);
+                Content.SetElementValue("ThridPriorityClassName", ThridPriorityClassName);
                 Content.SetElementValue("EDoc", EDoc);
+                Content.SetElementValue("StudentID", StudentID);
+                Content.SetElementValue("OldClassID", OldClassID);
+                Content.SetElementValue("ClassID", ClassID);
+                Content.SetElementValue("OldClassContent", OldClassContent);
+                Content.SetElementValue("ClassContent", ClassContent);
+
                 s2.Add(Content);
                 s1.Add(s2);
                 xmlRoot.Add(s1);

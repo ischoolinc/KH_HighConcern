@@ -325,10 +325,10 @@ namespace StudentClassItem_KH
                         if (scnsf.GetChkSend())
                         {
                             // 新增到班級學生變動紀錄
-                            UDTTransfer.AddClassSpecStudent(objStudent.ID, oldClassID, objStudent.RefClassID, oldClassName, className,FirstClassName,SecondClassName,ThridClassName);
+                            UDT_ClassSpecial StudSpec = UDTTransfer.AddClassSpecStudent(objStudent.ID, oldClassID, objStudent.RefClassID, oldClassName, className,FirstClassName,SecondClassName,ThridClassName);
 
                             // 傳送至局端
-                            string errMsg = Utility.SendData("調整班級", objStudent.IDNumber, objStudent.StudentNumber, objStudent.Name, gradeYear, oldClassName, scnsf.GetSeatNo(), className, scnsf.GetMettingDate(), scnsf.GetMemo(), FirstClassName, scnsf.GetEDoc(),SecondClassName);
+                            string errMsg = Utility.SendData("調整班級", objStudent.IDNumber, objStudent.StudentNumber, objStudent.Name, gradeYear, oldClassName, scnsf.GetSeatNo(), className, scnsf.GetMettingDate(), scnsf.GetMemo(), FirstClassName, scnsf.GetEDoc(), SecondClassName, ThridClassName, objStudent.ID, oldClassID, objStudent.RefClassID,StudSpec.OldClassComment,StudSpec.ClassComment);
                             if (errMsg != "")
                                 FISCA.Presentation.Controls.MsgBox.Show(errMsg);
                         }

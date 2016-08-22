@@ -147,7 +147,7 @@ namespace ClassLock_KH.DAO
         /// <param name="ClassID"></param>
         /// <param name="OldClassName"></param>
         /// <param name="ClassName"></param>
-        public static void AddClassSpecStudent(string StudentID,string OldClassID,string ClassID,string OldClassName,string ClassName,string FirstClassName,string SecondClassName,string ThridClassName)
+        public static UDT_ClassSpecial AddClassSpecStudent(string StudentID, string OldClassID, string ClassID, string OldClassName, string ClassName, string FirstClassName, string SecondClassName, string ThridClassName)
         {
             // 儲存班級學生變動
             UDT_ClassSpecial ClassSpecStud = GetClassSpecStudentByStudID(StudentID);
@@ -198,6 +198,8 @@ namespace ClassLock_KH.DAO
             ClassSpecStud.Content = elmRoot.ToString();
 
             ClassSpecStud.Save();
+
+            return ClassSpecStud;
         }
 
     }
