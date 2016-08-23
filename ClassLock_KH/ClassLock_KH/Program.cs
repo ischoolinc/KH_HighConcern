@@ -117,13 +117,14 @@ namespace ClassLock_KH
                     // 紀錄班級名稱條件：不自動解鎖false，鎖定 true
                     List<string> ClassNameList = (from data in _UDT_ClassLockDict.Values where data.UnAutoUnlock==false && data.isLock == true  select data.ClassName).ToList();
 
-                    string classNames = string.Join(",", ClassNameList.ToArray());
-
-
-                    string errMsg = Utility.SendData(classNames, "", "", "解除鎖定班級", "","","","");
-                    if (errMsg != "")
-                        FISCA.Presentation.Controls.MsgBox.Show(errMsg);
-                    else
+                    foreach( UDT_ClassLock data in _UDT_ClassLockDict.Values)
+                    {
+                        if(data.UnAutoUnlock == false && data.isLock == true)
+                        {
+                            Utility.SendData(data.ClassName,"","", "解除鎖定班級",data.DateStr, data.Comment, data.DocNo, data.EDoc,data.ClassID);
+                        }
+                    }
+                                   
                         FISCA.Presentation.Controls.MsgBox.Show("全部班級解鎖");
 
                     // 重新整理
@@ -209,7 +210,7 @@ namespace ClassLock_KH
                     {
                         // 已被鎖定解鎖
                         data.isLock = false;
-                        string errMsg = Utility.SendData(classRec.Name, grYear, "", "解除鎖定班級", "", "", "", "");
+                        string errMsg = Utility.SendData(classRec.Name, grYear, "", "解除鎖定班級", data.DateStr,data.Comment, data.DocNo, data.EDoc,data.ClassID);
                         if (errMsg != "")
                             FISCA.Presentation.Controls.MsgBox.Show(errMsg);
                         else
@@ -246,7 +247,7 @@ namespace ClassLock_KH
                             data.UnAutoUnlock = sdf.GetNUnLock();
                             data.isLock = true;
 
-                            string errMsg = Utility.SendData(classRec.Name, grYear, "", "鎖定班級", strDate, strComment, strDocNo, strEDoc);
+                            string errMsg = Utility.SendData(classRec.Name, grYear, "", "鎖定班級", strDate, strComment, strDocNo, strEDoc,data.ClassID);
                             if (errMsg != "")
                                 FISCA.Presentation.Controls.MsgBox.Show(errMsg);
                             else
