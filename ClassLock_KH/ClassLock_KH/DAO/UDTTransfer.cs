@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using FISCA.Data;
+using System.Data;
 
 namespace ClassLock_KH.DAO
 {
@@ -202,5 +204,62 @@ namespace ClassLock_KH.DAO
             return ClassSpecStud;
         }
 
+        /// <summary>
+        /// 透過班級ID調整所屬班級學生ID
+        /// </summary>
+        /// <param name="ClassID"></param>
+        /// <param name="OldClassComment"></param>
+        /// <param name="ClassComment"></param>
+        public static void UpdateUDTClassSepcByClassID(int ClassID,string ClassName,string OldClassComment,string ClassComment)
+        {
+            try
+            {
+                List<string> StudentIDList = new List<string>();
+                // 取得班級學生ID,學生狀態：一般、休學、中輟
+                QueryHelper qh = new QueryHelper();
+                string query = "select id from student where student.status in(1,4,8) and ref_class_id=" + ClassID;
+                DataTable dt = qh.Select(query);
+
+                foreach (DataRow dr in dt.Rows)
+                    StudentIDList.Add(dr[0].ToString());
+
+                // 取得特殊班學生資料
+                Dictionary<string, UDT_ClassSpecial> StudSpecDict = GetClassSpecStudentByIDList(StudentIDList);
+
+                List<UDT_ClassSpecial> StudSpecDataList = new List<UDT_ClassSpecial>();
+
+                foreach (string StudID in StudentIDList)
+                {
+                    if (StudSpecDict.ContainsKey(StudID))
+                    {
+                        StudSpecDict[StudID].OldClassID = StudSpecDict[StudID].ClassID;
+                        StudSpecDict[StudID].OldClassComment = StudSpecDict[StudID].ClassComment;
+                        StudSpecDict[StudID].OldClassName = StudSpecDict[StudID].ClassName;
+                        StudSpecDict[StudID].ClassID = ClassID;
+                        StudSpecDict[StudID].ClassName = ClassName;
+                        StudSpecDict[StudID].ClassComment = ClassComment;
+                        StudSpecDataList.Add(StudSpecDict[StudID]);
+                    }
+                    else
+                    {
+                        UDT_ClassSpecial cs = new UDT_ClassSpecial();
+                        cs.StudentID = int.Parse(StudID);
+                        cs.ClassID = ClassID;
+                        cs.ClassName = ClassName;
+                        cs.ClassComment = ClassComment;
+                        StudSpecDataList.Add(cs);
+                    }
+                }
+                if (StudSpecDataList.Count > 0)
+                {
+                    StudSpecDataList.SaveAll();
+                }
+
+            }catch(Exception ex)
+            {
+                FISCA.Presentation.Controls.MsgBox.Show("鎖定班級寫入資料發生錯誤," + ex.Message);
+            }
+           
+        }
     }
 }

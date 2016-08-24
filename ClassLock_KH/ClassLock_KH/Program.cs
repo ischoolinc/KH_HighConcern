@@ -238,6 +238,10 @@ namespace ClassLock_KH
                         //if (FISCA.Presentation.Controls.MsgBox.Show("「班級鎖定」，按下「是」確認後，除集中式特殊班級，餘需函報教育局並由局端線上審核。", "班級鎖定", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes)
                         if (mf.ShowDialog() == System.Windows.Forms.DialogResult.Yes)
                         {
+                            // 寫入相對班級學生變動
+                            int icid = int.Parse(cid);
+                            UDTTransfer.UpdateUDTClassSepcByClassID(icid, classRec.Name, data.Comment, strComment);
+
                             data.ClassID = cid;
                             data.ClassName = classRec.Name;
                             data.Comment = strComment;
@@ -245,7 +249,7 @@ namespace ClassLock_KH
                             data.DateStr = strDate;
                             data.EDoc = strEDoc;
                             data.UnAutoUnlock = sdf.GetNUnLock();
-                            data.isLock = true;
+                            data.isLock = true;                            
 
                             string errMsg = Utility.SendData(classRec.Name, grYear, "", "鎖定班級", strDate, strComment, strDocNo, strEDoc,data.ClassID);
                             if (errMsg != "")
