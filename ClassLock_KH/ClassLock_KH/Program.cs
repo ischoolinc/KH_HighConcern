@@ -290,17 +290,20 @@ namespace ClassLock_KH
 
             //FISCA.ServerModule.AutoManaged("http://module.ischool.com.tw/module/137/KHCentralOffice/udm.xml");
 
-           // 因為 UDT 調整，需要檢查不自動解鎖相對鎖定欄位是鎖定
-            List<UDT_ClassLock> classLockList = UDTTransfer.GetClassLocList();
-            if(classLockList.Count>0)
-            {
-                foreach (UDT_ClassLock data in classLockList)
-                {
-                    if (data.UnAutoUnlock)
-                        data.isLock = true;
-                }
-                classLockList.SaveAll();
-            }
+           //// 因為 UDT 調整，需要檢查不自動解鎖相對鎖定欄位是鎖定
+           // List<UDT_ClassLock> classLockList = UDTTransfer.GetClassLocList();
+           // if(classLockList.Count>0)
+           // {
+           //     foreach (UDT_ClassLock data in classLockList)
+           //     {
+           //         if(data.isLock == null)
+           //         {
+           //             if (data.UnAutoUnlock)
+           //                 data.isLock = true;
+           //         }                    
+           //     }
+           //     classLockList.SaveAll();
+           // }
             
 
             // 檢查是否需要全部班級解鎖
