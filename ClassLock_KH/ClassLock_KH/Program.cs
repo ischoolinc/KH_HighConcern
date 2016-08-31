@@ -210,12 +210,14 @@ namespace ClassLock_KH
                     {
                         // 已被鎖定解鎖
                         data.isLock = false;
-                        data.UnAutoUnlock = false;
+                        data.UnAutoUnlock = false;                        
                         string errMsg = Utility.SendData(classRec.Name, grYear, "", "解除鎖定班級", data.DateStr,data.Comment, data.DocNo, data.EDoc,data.ClassID);
                         if (errMsg != "")
                             FISCA.Presentation.Controls.MsgBox.Show(errMsg);
                         else
                             FISCA.Presentation.Controls.MsgBox.Show("已解鎖");
+                        // 解鎖清除鎖定備註
+                        data.Comment = "";
                     }
                 }else
                 {
