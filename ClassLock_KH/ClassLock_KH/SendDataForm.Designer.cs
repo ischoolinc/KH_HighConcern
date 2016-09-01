@@ -39,6 +39,7 @@
             this.chkNUnLock = new DevComponents.DotNetBar.Controls.CheckBoxX();
             this.txtEDoc = new DevComponents.DotNetBar.Controls.TextBoxX();
             this.labelX4 = new DevComponents.DotNetBar.LabelX();
+            this.btnUploadFile = new DevComponents.DotNetBar.ButtonX();
             ((System.ComponentModel.ISupportInitialize)(this.dtDate)).BeginInit();
             this.SuspendLayout();
             // 
@@ -113,9 +114,9 @@
             this.dtDate.MonthCalendar.TodayButtonVisible = true;
             this.dtDate.MonthCalendar.WeeklyMarkedDays = new System.DayOfWeek[0];
             this.dtDate.Name = "dtDate";
-            this.dtDate.Size = new System.Drawing.Size(169, 25);
+            this.dtDate.Size = new System.Drawing.Size(181, 25);
             this.dtDate.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.dtDate.TabIndex = 1;
+            this.dtDate.TabIndex = 0;
             // 
             // btnSend
             // 
@@ -123,11 +124,11 @@
             this.btnSend.AutoSize = true;
             this.btnSend.BackColor = System.Drawing.Color.Transparent;
             this.btnSend.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnSend.Location = new System.Drawing.Point(145, 181);
+            this.btnSend.Location = new System.Drawing.Point(145, 182);
             this.btnSend.Name = "btnSend";
             this.btnSend.Size = new System.Drawing.Size(75, 25);
             this.btnSend.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.btnSend.TabIndex = 2;
+            this.btnSend.TabIndex = 6;
             this.btnSend.Text = "傳送";
             this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
             // 
@@ -137,11 +138,11 @@
             this.btnExit.AutoSize = true;
             this.btnExit.BackColor = System.Drawing.Color.Transparent;
             this.btnExit.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnExit.Location = new System.Drawing.Point(239, 181);
+            this.btnExit.Location = new System.Drawing.Point(239, 182);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(75, 25);
             this.btnExit.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.btnExit.TabIndex = 3;
+            this.btnExit.TabIndex = 7;
             this.btnExit.Text = "離開";
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
@@ -154,8 +155,8 @@
             this.txtComment.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.txtComment.Location = new System.Drawing.Point(145, 54);
             this.txtComment.Name = "txtComment";
-            this.txtComment.Size = new System.Drawing.Size(169, 25);
-            this.txtComment.TabIndex = 4;
+            this.txtComment.Size = new System.Drawing.Size(181, 25);
+            this.txtComment.TabIndex = 1;
             this.txtComment.WatermarkText = "請填入體育班或美術班等";
             // 
             // labelX2
@@ -197,8 +198,8 @@
             this.txtDocNo.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.txtDocNo.Location = new System.Drawing.Point(145, 89);
             this.txtDocNo.Name = "txtDocNo";
-            this.txtDocNo.Size = new System.Drawing.Size(169, 25);
-            this.txtDocNo.TabIndex = 7;
+            this.txtDocNo.Size = new System.Drawing.Size(181, 25);
+            this.txtDocNo.TabIndex = 2;
             // 
             // chkNUnLock
             // 
@@ -212,7 +213,7 @@
             this.chkNUnLock.Name = "chkNUnLock";
             this.chkNUnLock.Size = new System.Drawing.Size(100, 23);
             this.chkNUnLock.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.chkNUnLock.TabIndex = 8;
+            this.chkNUnLock.TabIndex = 5;
             this.chkNUnLock.Text = "不自動解鎖";
             // 
             // txtEDoc
@@ -224,8 +225,8 @@
             this.txtEDoc.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.txtEDoc.Location = new System.Drawing.Point(145, 121);
             this.txtEDoc.Name = "txtEDoc";
-            this.txtEDoc.Size = new System.Drawing.Size(169, 25);
-            this.txtEDoc.TabIndex = 10;
+            this.txtEDoc.Size = new System.Drawing.Size(100, 25);
+            this.txtEDoc.TabIndex = 3;
             // 
             // labelX4
             // 
@@ -242,11 +243,26 @@
             this.labelX4.TabIndex = 9;
             this.labelX4.Text = "相關證明文件網址";
             // 
+            // btnUploadFile
+            // 
+            this.btnUploadFile.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
+            this.btnUploadFile.AutoSize = true;
+            this.btnUploadFile.BackColor = System.Drawing.Color.Transparent;
+            this.btnUploadFile.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
+            this.btnUploadFile.Location = new System.Drawing.Point(251, 121);
+            this.btnUploadFile.Name = "btnUploadFile";
+            this.btnUploadFile.Size = new System.Drawing.Size(75, 25);
+            this.btnUploadFile.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.btnUploadFile.TabIndex = 4;
+            this.btnUploadFile.Text = " 上傳檔案";
+            this.btnUploadFile.Click += new System.EventHandler(this.btnUploadFile_Click);
+            // 
             // SendDataForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(337, 214);
+            this.ClientSize = new System.Drawing.Size(347, 222);
+            this.Controls.Add(this.btnUploadFile);
             this.Controls.Add(this.txtEDoc);
             this.Controls.Add(this.labelX4);
             this.Controls.Add(this.chkNUnLock);
@@ -281,5 +297,6 @@
         private DevComponents.DotNetBar.Controls.CheckBoxX chkNUnLock;
         private DevComponents.DotNetBar.Controls.TextBoxX txtEDoc;
         private DevComponents.DotNetBar.LabelX labelX4;
+        private DevComponents.DotNetBar.ButtonX btnUploadFile;
     }
 }

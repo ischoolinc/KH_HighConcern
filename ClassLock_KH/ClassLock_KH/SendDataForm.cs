@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.IO;
 
 namespace ClassLock_KH
 {
@@ -21,6 +22,11 @@ namespace ClassLock_KH
 
         private bool _NUnLock = false;
 
+        private string _base64Data = "";
+
+        private string _FileName = "";
+
+
         public SendDataForm()
         {
             InitializeComponent();
@@ -30,6 +36,7 @@ namespace ClassLock_KH
         {
             this.MaximumSize = this.MinimumSize = this.Size;
             this.dtDate.IsEmpty = true;
+            txtEDoc.ReadOnly = true;
         }
 
         private void btnSend_Click(object sender, EventArgs e)
@@ -117,6 +124,50 @@ namespace ClassLock_KH
         public string GetEDoc()
         {
             return _strEDoc;
+        }
+
+        /// <summary>
+        /// 取得檔案轉 Base64 字串
+        /// </summary>
+        /// <returns></returns>
+        public string GetBase64DataString()
+        {
+            return _base64Data;
+        }
+
+        /// <summary>
+        /// 取得檔案名稱
+        /// </summary>
+        /// <returns></returns>
+        public string GetFileName()
+        {
+            return _FileName;
+        }
+
+        private void btnUploadFile_Click(object sender, EventArgs e)
+        {
+            Guid g = Guid.NewGuid();
+
+            string DSNS = FISCA.Authentication.DSAServices.AccessPoint;
+
+           OpenFileDialog ofd = new OpenFileDialog();            
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    // 取得檔案
+                    _FileName = g.ToString() + ofd.SafeFileName;
+                    txtEDoc.Text = "https://storage.googleapis.com/1campus-photo/"+DSNS+"/upload_" + _FileName;
+                    // 轉 Base64
+                    try
+                    {
+                        MemoryStream ms = new MemoryStream();
+                        ofd.OpenFile().CopyTo(ms);
+                        _base64Data = Convert.ToBase64String(ms.ToArray());
+
+                    }catch(Exception ex)
+                    {
+                        FISCA.Presentation.Controls.MsgBox.Show("讀取上傳檔案失敗," + ex.Message);
+                    }
+                }
         }
     }
 }

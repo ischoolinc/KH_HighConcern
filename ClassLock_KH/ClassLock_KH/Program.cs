@@ -255,6 +255,10 @@ namespace ClassLock_KH
                             data.isLock = true;                            
 
                             string errMsg = Utility.SendData(classRec.Name, grYear, "", "鎖定班級", strDate, strComment, strDocNo, strEDoc,data.ClassID);
+
+                            // 傳送檔案到局端
+                            Utility.UploadFile(data.ClassID, sdf.GetBase64DataString(), sdf.GetFileName());
+
                             if (errMsg != "")
                                 FISCA.Presentation.Controls.MsgBox.Show(errMsg);
                             else
