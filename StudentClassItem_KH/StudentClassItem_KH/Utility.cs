@@ -477,5 +477,52 @@ namespace StudentClassItem_KH
             }
             return RspMsgList;
         }
+
+        /// <summary>
+        /// 上傳檔案到局端
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <param name="Data"></param>
+        /// <param name="FileName"></param>
+        /// <returns></returns>
+        public static string UploadFile(string ID, string Data, string FileName)
+        {
+            string DSNS = FISCA.Authentication.DSAServices.AccessPoint;
+            string AccessPoint = @"j.kh.edu.tw";
+
+            if (FISCA.RTContext.IsDiagMode)
+            {
+                string accPoint = FISCA.RTContext.GetConstant("KH_AccessPoint");
+                if (!string.IsNullOrEmpty(accPoint))
+                    AccessPoint = accPoint;
+            }
+
+            string Contract = "log";
+            string ServiceName = "_.Upload";
+
+            string errMsg = "";
+            try
+            {
+                XElement xmlRoot = new XElement("Request");
+                xmlRoot.SetElementValue("ID", ID);
+                xmlRoot.SetElementValue("Data", Data);
+                xmlRoot.SetElementValue("FileName", FileName);
+                xmlRoot.SetElementValue("DSNS", DSNS);
+                xmlRoot.SetElementValue("Type", "student");
+                XmlHelper reqXML = new XmlHelper(xmlRoot.ToString());
+                FISCA.DSAClient.Connection cn = new FISCA.DSAClient.Connection();
+                cn.Connect(AccessPoint, Contract, DSNS, DSNS);
+                Envelope rsp = cn.SendRequest(ServiceName, new Envelope(reqXML));
+                XElement rspXML = XElement.Parse(rsp.XmlString);
+
+            }
+            catch (Exception ex)
+            {
+
+                errMsg = ex.Message;
+            }
+            return errMsg;
+        }
+
     }
 }

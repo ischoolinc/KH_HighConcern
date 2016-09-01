@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.IO;
 
 namespace StudentClassItem_KH
 {
@@ -18,6 +19,11 @@ namespace StudentClassItem_KH
         private string _Memo = "";
         private string _EDoc = "";
         private string _GradeYear = "";
+
+        // upload file name
+        private string _FileName = "";
+        private string _base64Data = "";
+
         // 是否傳送
         private bool _ChkSend = true;
         Dictionary<string, string> _ClassNameDict;
@@ -93,6 +99,24 @@ namespace StudentClassItem_KH
             return _EDoc;
         }
 
+        /// <summary>
+        /// 取得上傳檔案名稱
+        /// </summary>
+        /// <returns></returns>
+        public string GetFileName()
+        {
+            return _FileName;
+        }
+
+        /// <summary>
+        /// 取得轉 Base64 字串
+        /// </summary>
+        /// <returns></returns>
+        public string GetBase64DataString()
+        {
+            return _base64Data;
+        }
+
         private void btnExit_Click(object sender, EventArgs e)
         {
             this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
@@ -101,6 +125,7 @@ namespace StudentClassItem_KH
         private void SetClassNameSeatNoForm_Load(object sender, EventArgs e)
         {
             this.MinimumSize = this.MaximumSize = this.Size;
+            txtEDoc.ReadOnly = true;
 
             cboGradeYear.Text = _GradeYear;
 
@@ -317,6 +342,33 @@ namespace StudentClassItem_KH
         public Dictionary<string, string> GetClassNameDict()
         {
             return _ClassNameDict;
+        }
+
+        private void UploadFile_Click(object sender, EventArgs e)
+        {
+            Guid g = Guid.NewGuid();
+
+            string DSNS = FISCA.Authentication.DSAServices.AccessPoint;
+
+            OpenFileDialog ofd = new OpenFileDialog();
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                // 取得檔案
+                _FileName = g.ToString() + ofd.SafeFileName;
+                txtEDoc.Text = "https://storage.googleapis.com/1campus-photo/" + DSNS + "/upload_" + _FileName;
+                // 轉 Base64
+                try
+                {
+                    MemoryStream ms = new MemoryStream();
+                    ofd.OpenFile().CopyTo(ms);
+                    _base64Data = Convert.ToBase64String(ms.ToArray());
+
+                }
+                catch (Exception ex)
+                {
+                    FISCA.Presentation.Controls.MsgBox.Show("讀取上傳檔案失敗," + ex.Message);
+                }
+            }
         }
     }
 }

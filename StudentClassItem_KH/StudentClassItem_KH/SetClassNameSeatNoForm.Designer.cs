@@ -43,6 +43,7 @@
             this.labelX5 = new DevComponents.DotNetBar.LabelX();
             this.txtEDoc = new DevComponents.DotNetBar.Controls.TextBoxX();
             this.labelX6 = new DevComponents.DotNetBar.LabelX();
+            this.UploadFile = new DevComponents.DotNetBar.ButtonX();
             ((System.ComponentModel.ISupportInitialize)(this.dtMeetting)).BeginInit();
             this.SuspendLayout();
             // 
@@ -231,7 +232,7 @@
             this.btnSend.Name = "btnSend";
             this.btnSend.Size = new System.Drawing.Size(75, 25);
             this.btnSend.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.btnSend.TabIndex = 6;
+            this.btnSend.TabIndex = 7;
             this.btnSend.Text = "確定";
             this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
             // 
@@ -245,7 +246,7 @@
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(75, 25);
             this.btnExit.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.btnExit.TabIndex = 7;
+            this.btnExit.TabIndex = 8;
             this.btnExit.Text = "取消";
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
@@ -288,7 +289,7 @@
             this.txtEDoc.Location = new System.Drawing.Point(131, 171);
             this.txtEDoc.Multiline = true;
             this.txtEDoc.Name = "txtEDoc";
-            this.txtEDoc.Size = new System.Drawing.Size(295, 25);
+            this.txtEDoc.Size = new System.Drawing.Size(213, 25);
             this.txtEDoc.TabIndex = 5;
             // 
             // labelX6
@@ -306,11 +307,26 @@
             this.labelX6.TabIndex = 11;
             this.labelX6.Text = "相關證明文件網址";
             // 
+            // UploadFile
+            // 
+            this.UploadFile.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
+            this.UploadFile.AutoSize = true;
+            this.UploadFile.BackColor = System.Drawing.Color.Transparent;
+            this.UploadFile.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
+            this.UploadFile.Location = new System.Drawing.Point(349, 171);
+            this.UploadFile.Name = "UploadFile";
+            this.UploadFile.Size = new System.Drawing.Size(75, 25);
+            this.UploadFile.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.UploadFile.TabIndex = 6;
+            this.UploadFile.Text = "上傳檔案";
+            this.UploadFile.Click += new System.EventHandler(this.UploadFile_Click);
+            // 
             // SetClassNameSeatNoForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(436, 237);
+            this.Controls.Add(this.UploadFile);
             this.Controls.Add(this.txtEDoc);
             this.Controls.Add(this.labelX6);
             this.Controls.Add(this.cboGradeYear);
@@ -353,5 +369,6 @@
         private DevComponents.DotNetBar.LabelX labelX5;
         private DevComponents.DotNetBar.Controls.TextBoxX txtEDoc;
         private DevComponents.DotNetBar.LabelX labelX6;
+        private DevComponents.DotNetBar.ButtonX UploadFile;
     }
 }

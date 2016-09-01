@@ -327,6 +327,9 @@ namespace StudentClassItem_KH
                             // 新增到班級學生變動紀錄
                             UDT_ClassSpecial StudSpec = UDTTransfer.AddClassSpecStudent(objStudent.ID, oldClassID, objStudent.RefClassID, oldClassName, className,FirstClassName,SecondClassName,ThridClassName);
 
+                            // 傳送檔案到局端
+                            Utility.UploadFile(objStudent.ID, scnsf.GetBase64DataString(), scnsf.GetFileName());
+
                             // 傳送至局端
                             string errMsg = Utility.SendData("調整班級", objStudent.IDNumber, objStudent.StudentNumber, objStudent.Name, gradeYear, oldClassName, scnsf.GetSeatNo(), className, scnsf.GetMettingDate(), scnsf.GetMemo(), FirstClassName, scnsf.GetEDoc(), SecondClassName, ThridClassName, objStudent.ID, oldClassID, objStudent.RefClassID,StudSpec.OldClassComment,StudSpec.ClassComment);
                             if (errMsg != "")
