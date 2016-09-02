@@ -355,7 +355,7 @@ namespace StudentClassItem_KH
             {
                 // 取得檔案
                 _FileName = g.ToString() + ofd.SafeFileName;
-                txtEDoc.Text = "https://storage.googleapis.com/1campus-photo/" + DSNS + "/upload_" + _FileName;
+                txtEDoc.Text = "https://storage.googleapis.com/1campus-photo/j.kh.edu.tw/" + DSNS + "/upload_" + _FileName;
                 // 轉 Base64
                 try
                 {
