@@ -47,7 +47,8 @@ namespace StudentClassItem_KH
             bgWorker.RunWorkerAsync();
             bgWorker.DoWork += delegate {
                 List<string> itemList = new List<string>();
-                itemList.Add("通過"); itemList.Add("不通過"); itemList.Add("待修正");
+                //itemList.Add("通過"); //  通過不顯示
+                itemList.Add("不通過"); itemList.Add("待修正");
                 _RspXML = Utility.QuerySendData(null, null, itemList);
 
                 List<RspMsg> RspMsgList = new List<RspMsg>();
