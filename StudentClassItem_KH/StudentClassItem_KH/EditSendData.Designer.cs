@@ -32,6 +32,7 @@
             this.labelX1 = new DevComponents.DotNetBar.LabelX();
             this.btnSave = new DevComponents.DotNetBar.ButtonX();
             this.btnExit = new DevComponents.DotNetBar.ButtonX();
+            this.Upload = new DevComponents.DotNetBar.ButtonX();
             this.SuspendLayout();
             // 
             // txtEDoc
@@ -95,11 +96,27 @@
             this.btnExit.Text = "離開";
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
+            // Upload
+            // 
+            this.Upload.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
+            this.Upload.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.Upload.AutoSize = true;
+            this.Upload.BackColor = System.Drawing.Color.Transparent;
+            this.Upload.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
+            this.Upload.Location = new System.Drawing.Point(141, 108);
+            this.Upload.Name = "Upload";
+            this.Upload.Size = new System.Drawing.Size(75, 25);
+            this.Upload.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.Upload.TabIndex = 4;
+            this.Upload.Text = " 上傳檔案";
+            this.Upload.Click += new System.EventHandler(this.Upload_Click);
+            // 
             // EditSendData
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(391, 143);
+            this.Controls.Add(this.Upload);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.labelX1);
@@ -119,5 +136,6 @@
         private DevComponents.DotNetBar.LabelX labelX1;
         private DevComponents.DotNetBar.ButtonX btnSave;
         private DevComponents.DotNetBar.ButtonX btnExit;
+        private DevComponents.DotNetBar.ButtonX Upload;
     }
 }

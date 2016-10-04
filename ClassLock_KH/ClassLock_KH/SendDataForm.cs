@@ -36,7 +36,7 @@ namespace ClassLock_KH
         {
             this.MaximumSize = this.MinimumSize = this.Size;
             this.dtDate.IsEmpty = true;
-            txtEDoc.ReadOnly = true;
+          
         }
 
         private void btnSend_Click(object sender, EventArgs e)

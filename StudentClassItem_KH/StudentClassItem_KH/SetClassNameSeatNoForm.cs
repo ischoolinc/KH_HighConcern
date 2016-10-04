@@ -125,8 +125,7 @@ namespace StudentClassItem_KH
         private void SetClassNameSeatNoForm_Load(object sender, EventArgs e)
         {
             this.MinimumSize = this.MaximumSize = this.Size;
-            txtEDoc.ReadOnly = true;
-
+       
             cboGradeYear.Text = _GradeYear;
 
             if (cboClassName.Items.Count > 0)

@@ -485,7 +485,7 @@ namespace StudentClassItem_KH
         /// <param name="Data"></param>
         /// <param name="FileName"></param>
         /// <returns></returns>
-        public static string UploadFile(string ID, string Data, string FileName)
+        public static string UploadFile(string ID, string Data, string FileName,string type)
         {
             string DSNS = FISCA.Authentication.DSAServices.AccessPoint;
             string AccessPoint = @"j.kh.edu.tw";
@@ -508,7 +508,7 @@ namespace StudentClassItem_KH
                 xmlRoot.SetElementValue("Data", Data);
                 xmlRoot.SetElementValue("FileName", FileName);
                 xmlRoot.SetElementValue("DSNS", DSNS);
-                xmlRoot.SetElementValue("Type", "student");
+                xmlRoot.SetElementValue("Type", type);
                 XmlHelper reqXML = new XmlHelper(xmlRoot.ToString());
                 FISCA.DSAClient.Connection cn = new FISCA.DSAClient.Connection();
                 cn.Connect(AccessPoint, Contract, DSNS, DSNS);

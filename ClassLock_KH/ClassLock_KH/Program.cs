@@ -121,7 +121,7 @@ namespace ClassLock_KH
                     {
                         if(data.UnAutoUnlock == false && data.isLock == true)
                         {
-                            Utility.SendData(data.ClassName,"","", "解除鎖定班級",data.DateStr, data.Comment, data.DocNo, data.EDoc,data.ClassID);
+                            Utility.SendData(data.ClassName,"","", "解除鎖定班級",data.DateStr, data.Comment, data.DocNo, data.EDoc,data.ClassID,"","");
                         }
                     }
                                    
@@ -196,8 +196,26 @@ namespace ClassLock_KH
                     UDT_ClassLock data = UDTTransfer.GetClassLockByClassID(cid);
                     K12.Data.ClassRecord classRec = K12.Data.Class.SelectByID(cid);
                     string grYear = "";
+                    string SecondPriorityClassName = "", ThridPriorityClassName = "";
                     if (classRec.GradeYear.HasValue)
                         grYear = classRec.GradeYear.Value.ToString();
+
+                    Dictionary<string, int> classCot = new Dictionary<string, int>();
+
+                    List<KH_HighConcernCalc.ClassStudent> ClassStudentList = KH_HighConcernCalc.Calc.GetClassStudentList(grYear);
+                    int idx = 1;
+                    foreach (KH_HighConcernCalc.ClassStudent cs in ClassStudentList)
+                    {
+                        classCot.Add(cs.ClassName, cs.ClassStudentCount);
+                        if (idx == 2) // 第二順位
+                            SecondPriorityClassName = cs.ClassName;
+
+                        if (idx == 3)  // 第三順位
+                            ThridPriorityClassName = cs.ClassName;
+                        idx++;
+                    }
+
+
                 
                 // 當已被鎖定，問是否解鎖
                 if(data.isLock)
@@ -211,7 +229,7 @@ namespace ClassLock_KH
                         // 已被鎖定解鎖
                         data.isLock = false;
                         data.UnAutoUnlock = false;                        
-                        string errMsg = Utility.SendData(classRec.Name, grYear, "", "解除鎖定班級", data.DateStr,data.Comment, data.DocNo, data.EDoc,data.ClassID);
+                        string errMsg = Utility.SendData(classRec.Name, grYear, "", "解除鎖定班級", data.DateStr,data.Comment, data.DocNo, data.EDoc,data.ClassID,"","");
                         if (errMsg != "")
                             FISCA.Presentation.Controls.MsgBox.Show(errMsg);
                         else
@@ -252,9 +270,9 @@ namespace ClassLock_KH
                             data.DateStr = strDate;
                             data.EDoc = strEDoc;
                             data.UnAutoUnlock = sdf.GetNUnLock();
-                            data.isLock = true;                            
+                            data.isLock = true;
 
-                            string errMsg = Utility.SendData(classRec.Name, grYear, "", "鎖定班級", strDate, strComment, strDocNo, strEDoc,data.ClassID);
+                            string errMsg = Utility.SendData(classRec.Name, grYear, "", "鎖定班級", strDate, strComment, strDocNo, strEDoc, data.ClassID, SecondPriorityClassName, ThridPriorityClassName);
 
                             // 傳送檔案到局端
                             Utility.UploadFile(data.ClassID, sdf.GetBase64DataString(), sdf.GetFileName());

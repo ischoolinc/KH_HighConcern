@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using FISCA.Presentation.Controls;
+using System.IO;
 
 namespace StudentClassItem_KH
 {
@@ -14,6 +15,9 @@ namespace StudentClassItem_KH
     {
         RspMsg _RspMsg = null;
         private bool _chkReloadData = false;
+        // upload file name
+        private string _FileName = "";
+        private string _base64Data = "";
 
         public EditSendData()
         {
@@ -41,6 +45,9 @@ namespace StudentClassItem_KH
                 }
 
                 string errMsg=Utility.UpdateData(_RspMsg);
+                // 傳送檔案到局端
+                Utility.UploadFile(_RspMsg.UID, _base64Data, _FileName, "edit");
+
                 if (errMsg == "")
                 {
                     MsgBox.Show("更新完成");
@@ -71,6 +78,33 @@ namespace StudentClassItem_KH
             {
                 if (_RspMsg.Content.ContainsKey("EDoc"))
                     txtEDoc.Text = _RspMsg.Content["EDoc"];
+            }
+        }
+
+        private void Upload_Click(object sender, EventArgs e)
+        {
+            Guid g = Guid.NewGuid();
+
+            string DSNS = FISCA.Authentication.DSAServices.AccessPoint;
+
+            OpenFileDialog ofd = new OpenFileDialog();
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                // 取得檔案
+                _FileName = g.ToString() + ofd.SafeFileName;
+                txtEDoc.Text = "https://storage.googleapis.com/1campus-photo/j.kh.edu.tw/" + DSNS + "/upload_" + _FileName;
+                // 轉 Base64
+                try
+                {
+                    MemoryStream ms = new MemoryStream();
+                    ofd.OpenFile().CopyTo(ms);
+                    _base64Data = Convert.ToBase64String(ms.ToArray());
+
+                }
+                catch (Exception ex)
+                {
+                    FISCA.Presentation.Controls.MsgBox.Show("讀取上傳檔案失敗," + ex.Message);
+                }
             }
         }
     }
