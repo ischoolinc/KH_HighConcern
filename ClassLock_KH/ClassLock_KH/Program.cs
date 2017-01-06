@@ -9,6 +9,7 @@ using System.ComponentModel;
 using FISCA;
 using FISCA.Presentation;
 using FISCA.Permission;
+using JHSchool.Data;
 
 namespace ClassLock_KH
 {
@@ -195,6 +196,12 @@ namespace ClassLock_KH
                     // 檢查並取得班級鎖定
                     UDT_ClassLock data = UDTTransfer.GetClassLockByClassID(cid);
                     K12.Data.ClassRecord classRec = K12.Data.Class.SelectByID(cid);
+
+                    List<JHClassTagRecord> recList = JHClassTag.SelectByClassID(cid);
+
+                    bool Class_Has_Standard_Category = false;
+
+
                     string grYear = "";
                     string SecondPriorityClassName = "", ThridPriorityClassName = "";
                     if (classRec.GradeYear.HasValue)
@@ -213,6 +220,18 @@ namespace ClassLock_KH
                         if (idx == 3)  // 第三順位
                             ThridPriorityClassName = cs.ClassName;
                         idx++;
+                    }
+
+                    //穎驊新增， 用來檢查，此班級 是否有高雄定義的標準班級分類， 其定義了十種標準子類別在 KH_HighConcern專案 Program 下面程式碼，
+                    // 定義了普通班、體育班、美術班、音樂班、舞蹈班、資優班、資源班、特教班、技藝專班、機構式非學校自學班，
+                    //2016/12 高雄局端，希望在所有班級鎖班之前，都必須要有標準"班級分類"，以利作業。
+
+                    foreach(var rec in recList)
+                    {
+                        if (rec.Prefix == "班級分類") 
+                        {
+                            Class_Has_Standard_Category = true;                        
+                        }                    
                     }
 
 
@@ -237,59 +256,68 @@ namespace ClassLock_KH
                         // 解鎖清除鎖定備註
                         data.Comment = "";
                     }
-                }else
+                }
+                else
                 {
-                   // 未鎖定，問是否要鎖定
-                    // 編班委員會會議日期
-                    string strDate = "";
-                    string strComment = "";
-                    string strDocNo = "";
-                    string strEDoc = "";
-
-                    SendDataForm sdf = new SendDataForm();
-                    if (sdf.ShowDialog() == System.Windows.Forms.DialogResult.Yes)
+                    if (Class_Has_Standard_Category)
                     {
-                        strDate = sdf.GetSendDate();
-                        strComment = sdf.GetComment();
-                        strDocNo = sdf.GetDocNo();
-                        strEDoc = sdf.GetEDoc();
-                        MsgForm mf = new MsgForm();
-                        mf.Text = "班級鎖定";
-                        mf.SetMsg("「班級鎖定」，按下「是」確認後，除集中式特殊班級，餘需函報教育局並由局端線上審核。");
-                        //if (FISCA.Presentation.Controls.MsgBox.Show("「班級鎖定」，按下「是」確認後，除集中式特殊班級，餘需函報教育局並由局端線上審核。", "班級鎖定", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes)
-                        if (mf.ShowDialog() == System.Windows.Forms.DialogResult.Yes)
+                        // 未鎖定，問是否要鎖定                                         
+                        // 編班委員會會議日期
+                        string strDate = "";
+                        string strComment = "";
+                        string strDocNo = "";
+                        string strEDoc = "";
+
+                        SendDataForm sdf = new SendDataForm();
+                        if (sdf.ShowDialog() == System.Windows.Forms.DialogResult.Yes)
                         {
-                            // 寫入相對班級學生變動
-                            int icid = int.Parse(cid);
-                            UDTTransfer.UpdateUDTClassSepcByClassID(icid, classRec.Name, data.Comment, strComment);
-
-                            data.ClassID = cid;
-                            data.ClassName = classRec.Name;
-                            data.Comment = strComment;
-                            data.DocNo = strDocNo;
-                            data.DateStr = strDate;
-                            data.EDoc = strEDoc;
-                            data.UnAutoUnlock = sdf.GetNUnLock();
-                            data.isLock = true;
-
-                            string errMsg = Utility.SendData(classRec.Name, grYear, "", "鎖定班級", strDate, strComment, strDocNo, strEDoc, data.ClassID, SecondPriorityClassName, ThridPriorityClassName);
-
-                            // 傳送檔案到局端
-                            Utility.UploadFile(data.ClassID, sdf.GetBase64DataString(), sdf.GetFileName());
-
-                            if (errMsg != "")
-                                FISCA.Presentation.Controls.MsgBox.Show(errMsg);
-                            else
+                            strDate = sdf.GetSendDate();
+                            strComment = sdf.GetComment();
+                            strDocNo = sdf.GetDocNo();
+                            strEDoc = sdf.GetEDoc();
+                            MsgForm mf = new MsgForm();
+                            mf.Text = "班級鎖定";
+                            mf.SetMsg("「班級鎖定」，按下「是」確認後，除集中式特殊班級，餘需函報教育局並由局端線上審核。");
+                            //if (FISCA.Presentation.Controls.MsgBox.Show("「班級鎖定」，按下「是」確認後，除集中式特殊班級，餘需函報教育局並由局端線上審核。", "班級鎖定", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes)
+                            if (mf.ShowDialog() == System.Windows.Forms.DialogResult.Yes)
                             {
-                                if (data.UnAutoUnlock)
-                                    FISCA.Presentation.Controls.MsgBox.Show("已鎖定(不自動解鎖)");
+                                // 寫入相對班級學生變動
+                                int icid = int.Parse(cid);
+                                UDTTransfer.UpdateUDTClassSepcByClassID(icid, classRec.Name, data.Comment, strComment);
+
+                                data.ClassID = cid;
+                                data.ClassName = classRec.Name;
+                                data.Comment = strComment;
+                                data.DocNo = strDocNo;
+                                data.DateStr = strDate;
+                                data.EDoc = strEDoc;
+                                data.UnAutoUnlock = sdf.GetNUnLock();
+                                data.isLock = true;
+
+                                string errMsg = Utility.SendData(classRec.Name, grYear, "", "鎖定班級", strDate, strComment, strDocNo, strEDoc, data.ClassID, SecondPriorityClassName, ThridPriorityClassName);
+
+                                // 傳送檔案到局端
+                                Utility.UploadFile(data.ClassID, sdf.GetBase64DataString(), sdf.GetFileName());
+
+                                if (errMsg != "")
+                                    FISCA.Presentation.Controls.MsgBox.Show(errMsg);
                                 else
-                                    FISCA.Presentation.Controls.MsgBox.Show("已鎖定");
+                                {
+                                    if (data.UnAutoUnlock)
+                                        FISCA.Presentation.Controls.MsgBox.Show("已鎖定(不自動解鎖)");
+                                    else
+                                        FISCA.Presentation.Controls.MsgBox.Show("已鎖定");
+                                }
                             }
                         }
                     }
-                }
+                    else
+                    {
+                        FISCA.Presentation.Controls.MsgBox.Show("鎖班前，請將本班級先加入'班級分類:'中任一類別", "警告", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Warning);
 
+                        return;        
+                    }                           
+                }                
                     // 儲存 UDT
                     if (data != null)
                     {
