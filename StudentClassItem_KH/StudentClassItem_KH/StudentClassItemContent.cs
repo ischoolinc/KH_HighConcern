@@ -129,47 +129,49 @@ namespace StudentClassItem_KH
         {
             DataListener.SuspendListen();
 
-            if (objStudent.Class != null)
+            if (objStudent != null)
             {
-                lblClassName.Text = objStudent.Class.Name;
-                
-                this._DefaultClassName = objStudent.Class.Name;
-            }
-            else
-                lblClassName.Text = string.Empty;
-
-
-            lblSeatNo.Text = string.Empty;
-            this._DefaultSeatNo = string.Empty;
-
-            // 當有座號
-            if (objStudent.SeatNo.HasValue)
-                if (objStudent.SeatNo.Value > 0)
+                if (objStudent.Class != null)
                 {
-                    string strSeatNo = objStudent.SeatNo.Value.ToString();
-                    lblSeatNo.Text = strSeatNo;
-                    this._DefaultSeatNo = strSeatNo;
+                    lblClassName.Text = objStudent.Class.Name;
+
+                    this._DefaultClassName = objStudent.Class.Name;
+                }
+                else
+                    lblClassName.Text = string.Empty;
+
+
+                lblSeatNo.Text = string.Empty;
+                this._DefaultSeatNo = string.Empty;
+
+                // 當有座號
+                if (objStudent.SeatNo.HasValue)
+                    if (objStudent.SeatNo.Value > 0)
+                    {
+                        string strSeatNo = objStudent.SeatNo.Value.ToString();
+                        lblSeatNo.Text = strSeatNo;
+                        this._DefaultSeatNo = strSeatNo;
+                    }
+
+
+                // 當有學號
+                if (string.IsNullOrEmpty(objStudent.StudentNumber))
+                {
+                    this._DefaultStudNum = string.Empty;
+                    txtStudentNumber.Text = string.Empty;
+                }
+                else
+                {
+                    txtStudentNumber.Text = objStudent.StudentNumber;
+                    this._DefaultStudNum = objStudent.StudentNumber;
                 }
 
+                prlp.SetBeforeSaveText("班級", lblClassName.Text);
+                prlp.SetBeforeSaveText("座號", lblSeatNo.Text);
+                prlp.SetBeforeSaveText("學號", txtStudentNumber.Text);
 
-            // 當有學號
-            if (string.IsNullOrEmpty(objStudent.StudentNumber))
-            {
-                this._DefaultStudNum = string.Empty;
-                txtStudentNumber.Text = string.Empty;
+                tmpClassName = lblClassName.Text;
             }
-            else
-            {
-                txtStudentNumber.Text = objStudent.StudentNumber;
-                this._DefaultStudNum = objStudent.StudentNumber;
-            }
-
-            prlp.SetBeforeSaveText("班級", lblClassName.Text);
-            prlp.SetBeforeSaveText("座號", lblSeatNo.Text);
-            prlp.SetBeforeSaveText("學號", txtStudentNumber.Text);
-
-            tmpClassName = lblClassName.Text;        
-
             DataListener.Reset();
             DataListener.ResumeListen();
             this.Loading = false;

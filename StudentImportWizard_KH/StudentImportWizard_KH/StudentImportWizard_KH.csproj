@@ -95,12 +95,11 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="IRewriteAPI_JH">
-      <HintPath>..\..\..\JHCore\IRewriteAPI_JH\bin\Debug\IRewriteAPI_JH.dll</HintPath>
+      <HintPath>Library\IRewriteAPI_JH.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="JHSchool, Version=1.0.4.2, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\JHCore\JHSchool\bin\Debug\JHSchool.dll</HintPath>
+    <Reference Include="JHSchool">
+      <HintPath>Library\JHSchool.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="JHSchool.Data, Version=2.0.0.2, Culture=neutral, processorArchitecture=MSIL">
@@ -139,6 +138,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DAO\UDT_NationalityMapping.cs" />
     <Compile Include="Gobal.cs" />
     <Compile Include="logStud.cs" />
     <Compile Include="MsgForm.cs">
@@ -222,6 +222,7 @@
     <ProjectReference Include="..\..\ClassLock_KH\ClassLock_KH\ClassLock_KH.csproj">
       <Project>{5ce9cc72-06ba-455f-8bc9-ec40081242d4}</Project>
       <Name>ClassLock_KH</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

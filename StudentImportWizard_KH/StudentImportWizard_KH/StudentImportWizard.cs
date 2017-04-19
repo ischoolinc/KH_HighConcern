@@ -22,6 +22,8 @@ using System.Xml.Linq;
 using JHSchool;
 using ClassLock_KH.DAO;
 using System.Linq;
+using FISCA.UDT;
+
 
 namespace StudentImportWizard_KH
 {
@@ -724,6 +726,10 @@ namespace StudentImportWizard_KH
                 ProgressMessage("檢查識別欄正確性資料…");
                 ValidateKey(importRecords, rowMessages);
 
+                //驗證國籍欄 
+                ProgressMessage("檢查國籍正確性資料…");
+                ValidateNationColumn(rowMessages);
+
                 //輸出錯誤資訊。
                 ProgressMessage("輸出錯誤資訊…");
                 pgValidProgress.Minimum = 0;
@@ -807,6 +813,63 @@ namespace StudentImportWizard_KH
             }
         }
 
+
+        //2017/4/18 穎驊新增，驗證 國籍欄位，基本上 是仿寫下面ValidateKey()
+        private void ValidateNationColumn(Dictionary<int, RowMessage> rowMessages)
+        {
+            SheetReader reader = Context.SourceReader;
+            reader.Reset();
+
+            List<DAO.UDT_NationalityMapping> nation_list = new List<DAO.UDT_NationalityMapping>();
+            AccessHelper accessHelper = new AccessHelper();
+            nation_list = accessHelper.Select<DAO.UDT_NationalityMapping>();
+
+            List<string> nation_name_list = new List<string>();
+
+            foreach (DAO.UDT_NationalityMapping item in nation_list)
+            {
+                nation_name_list.Add(item.Name);                        
+            }
+
+            while (reader.MoveNext())
+            {
+                if (Context.SelectedFields.ContainsKey("國籍"))
+                {
+                    if (!nation_name_list.Contains(reader.GetValue("國籍")) && reader.GetValue("國籍")!="")
+                    {
+                        rowMessages[reader.RelativelyIndex].ReportMessage("國籍", MessageType.Warning,"此國籍名稱，不存在於教務作業>對照/代碼>國籍中英文對照表 的設定中，建議檢察。");
+
+                    }                                
+                }
+                if (Context.SelectedFields.ContainsKey("監護人國籍"))
+                {
+                    if (!nation_name_list.Contains(reader.GetValue("監護人國籍")) && reader.GetValue("監護人國籍") != "")
+                    {
+                        rowMessages[reader.RelativelyIndex].ReportMessage("監護人國籍", MessageType.Warning, "此國籍名稱，不存在於教務作業>對照/代碼>國籍中英文對照表 的設定中，建議檢察。");
+
+                    }
+                }
+                if (Context.SelectedFields.ContainsKey("父親國籍"))
+                {
+                    if (!nation_name_list.Contains(reader.GetValue("父親國籍")) && reader.GetValue("父親國籍") != "")
+                    {
+                        rowMessages[reader.RelativelyIndex].ReportMessage("父親國籍", MessageType.Warning, "此國籍名稱，不存在於教務作業>對照/代碼>國籍中英文對照表 的設定中，建議檢察。");
+
+                    }
+                }
+                if (Context.SelectedFields.ContainsKey("母親國籍"))
+                {
+                    if (!nation_name_list.Contains(reader.GetValue("母親國籍")) && reader.GetValue("母親國籍") != "")
+                    {
+                        rowMessages[reader.RelativelyIndex].ReportMessage("母親國籍", MessageType.Warning, "此國籍名稱，不存在於教務作業>對照/代碼>國籍中英文對照表 的設定中，建議檢察。");
+
+                    }
+                }
+            }
+
+        
+        }
+
         private void ValidateKey(ImportRecordCollection importRecords, Dictionary<int, RowMessage> rowMessages)
         {
             string id = "學生系統編號", snum = "學號", ssn = "身分證號", login = "登入帳號", StudStatus = "一般"; //StudStatus 預設為一般生
@@ -877,21 +940,40 @@ namespace StudentImportWizard_KH
                     }
                     else if (Context.IdentifyField == snum)
                     {
-                        if (!importRecords.ContainStudentNumber(reader.GetValue(snum) + StudStatus))
+                        if (StudStatus != "一般" && StudStatus!="")
                         {
                             rowMessages[reader.RelativelyIndex].ReportMessage(snum, MessageType.Error,
-                                "此資料並不存在於資料庫中，無法更新此筆資料。");
+                                    "若要匯入更新狀態非一般的學生基本資料，請使用學生系統編號作為驗證欄位");
                             _error_count++;
                         }
+                        else
+                        {
+                            if (!importRecords.ContainStudentNumber(reader.GetValue(snum) + StudStatus))
+                            {
+                                rowMessages[reader.RelativelyIndex].ReportMessage(snum, MessageType.Error,
+                                    "此資料並不存在於資料庫中，無法更新此筆資料，請確認學號是、狀態否輸入錯誤。");
+                                _error_count++;
+                            }
+                        } 
+                        
                     }
                     else if (Context.IdentifyField == ssn)
                     {
-                        if (!importRecords.ContainIdNumber(reader.GetValue(ssn) + StudStatus))
+                        if (StudStatus != "一般" && StudStatus != "")
                         {
-                            rowMessages[reader.RelativelyIndex].ReportMessage(ssn, MessageType.Error,
-                                "此資料並不存在於資料庫中，無法更新此筆資料。");
+                            rowMessages[reader.RelativelyIndex].ReportMessage(snum, MessageType.Error,
+                                    "若要匯入更新狀態非一般的學生基本資料，請使用學生系統編號作為驗證欄位");
                             _error_count++;
                         }
+                        else
+                        {
+                            if (!importRecords.ContainIdNumber(reader.GetValue(ssn) + StudStatus))
+                            {
+                                rowMessages[reader.RelativelyIndex].ReportMessage(ssn, MessageType.Error,
+                                    "此資料並不存在於資料庫中，無法更新此筆資料，請確認學號是、狀態否輸入錯誤。");
+                                _error_count++;
+                            }
+                        }                        
                     }
                 }
 
@@ -1167,6 +1249,30 @@ namespace StudentImportWizard_KH
             // 取得需要傳送到局資料
             List<logStud> logStudList = new List<logStud>();
 
+            // 2017/4/18 穎驊新增，仿製 ValidateKey() 內驗證的方式，以importRecords 記錄每一筆現存的學生資料，
+            //假如是ImportMode.Update 更新模式 ，不論是 以 學號、身分字號當 KEY ，最後都會轉換取得 StudentID ，
+            //以學生系統編號  ref_student_id 當key上傳資料，詳情可見下行
+            //bulkdesc.GenerateUpdateRequest(Context.SourceReader, columns, record, Context.IdentifyField, Context.ShiftCheckField, ref_student_id);                                        
+            ImportRecordCollection importRecords = new ImportRecordCollection();
+
+            // 讀取所有狀態學生
+            foreach (JHSchool.Data.JHStudentRecord studRec in JHSchool.Data.JHStudent.SelectAll())
+            {
+                //    string str1 = studRec.StudentNumber;
+                //    string str2 = studRec.IDNumber;
+
+                //    // 建立用學號對應編號
+                //    if (!StudIDByStudNum.ContainsKey(str1))
+                //        StudIDByStudNum.Add(str1, studRec.ID);
+
+                //    // 建立用身分證號對應編號
+                //    if (!StudIDByStudIDNumber.ContainsKey(str2))
+                //        StudIDByStudIDNumber.Add(str2, studRec.ID);
+
+                importRecords.Add(new ImportRecord(studRec));
+            }
+
+
             // 檢查匯入狀況
             bool chkImportPass = false;
 
@@ -1273,11 +1379,31 @@ namespace StudentImportWizard_KH
 
                     logStudList.Add(ls);
 
-
+                    
                     if (Context.ImportMode == ImportMode.Insert)
                         bulkdesc.GenerateInsertRequest(Context.SourceReader, columns, record);
                     else
-                        bulkdesc.GenerateUpdateRequest(Context.SourceReader, columns, record, Context.IdentifyField, Context.ShiftCheckField);
+                    //假如是ImportMode.Update 更新模式
+                    {
+                        //2017/4/18 穎驊新增，新增取得 ref_student_id 作為固定上傳 KEY值使用
+                        string ref_student_id = "";
+
+                        if (Context.IdentifyField == "學生系統編號") 
+                        {
+                            ref_student_id = Context.SourceReader.GetValue("學生系統編號");                                                
+                        }
+                        if (Context.IdentifyField == "學號") 
+                        {
+                            ref_student_id = importRecords.GetByStudentNumber(Context.SourceReader.GetValue("學號")+"一般").Identity;                        
+                        }
+                        if (Context.IdentifyField == "身分證號") 
+                        {
+                            ref_student_id = importRecords.GetByIdNumber(Context.SourceReader.GetValue("身分證號") + "一般").Identity;                        
+                        }
+                        
+                        bulkdesc.GenerateUpdateRequest(Context.SourceReader, columns, record, Context.IdentifyField, Context.ShiftCheckField, ref_student_id);                                        
+                    }
+                     
 
                     output.AppendChild(record);
 
@@ -1348,7 +1474,14 @@ namespace StudentImportWizard_KH
                     //    checkUpdate = false;
 
                     //if(checkUpdate)
-                        StudentBulkProcess.UpdateImportStudent(output);
+
+                    // 2017/4/18 穎驊更新，  若為 匯入更新學生資料，在正式 Update之前，必須要先抓取 舊班級資訊，否則會抓到新的(如果本次更新有含班級資料的話)。
+
+                    logStudList = Utility.ConveroClassName(logStudList);    
+                    
+                    StudentBulkProcess.UpdateImportStudent(output);
+
+                        
 
                     //// 更新學生狀態
                     //if(StudStatusDict.Count >0)
@@ -1415,6 +1548,7 @@ namespace StudentImportWizard_KH
             // 當匯入成功再處理
             if(chkImportPass)
             {
+               
                 // 傳送至高雄局端
                 if (logStudList.Count > 0)
                 {
@@ -1427,65 +1561,90 @@ namespace StudentImportWizard_KH
                         {
                             ActionStr = "匯入更新";
                             // 取得原班級學號只處理學生狀態為一般。
-                            logStudList = Utility.ConveroClassName(logStudList);
+                            //logStudList = Utility.ConveroClassName(logStudList);
                         }
                         // 當有勾選班級、狀態才需要傳送
                         if (Gobal._SendData)
                         {
                             #region 寫入班級學生變動
+
                             try
                             {
-                                // 取得並建立班級名稱ID對照
-                                Dictionary<string, int> classNameDict = new Dictionary<string, int>();
-                                List<K12.Data.ClassRecord> ClassRecList = K12.Data.Class.SelectAll();
-                                foreach (K12.Data.ClassRecord cr in ClassRecList)
+                                //2017/4/17 穎驊筆記 ，在與恩正、均泰、高雄確認 僅有匯入更新資料時 需要寫入班級變動之後
+                                //在此加上條件，
+                                
+                                if(Context.ImportMode == ImportMode.Update)
                                 {
-                                    classNameDict.Add(cr.Name, int.Parse(cr.ID));
-                                }
+                                    //假如匯入的EXCEL 表上沒有 學生系統編號，在此幫他補上
+                                    List<K12.Data.StudentRecord> new_student_list = K12.Data.Student.SelectAll();
 
-                                // 取得班級鎖定相關資料
-                                Dictionary<string, UDT_ClassLock> classLockDict = UDTTransfer.GetClassLockNameIDDict();
-
-                                // 取得班級學生變動資料
-                                List<string> StudentIDList = (from data in logStudList select data.StudentID).ToList();
-                                Dictionary<string, UDT_ClassSpecial> classSpecDict = UDTTransfer.GetClassSpecStudentByIDList(StudentIDList);
-                                List<UDT_ClassSpecial> ClassSpecList = new List<UDT_ClassSpecial>();
-
-                                foreach(logStud stud in logStudList)
-                                {
-                                    UDT_ClassSpecial cs = new UDT_ClassSpecial();
-                                    if(classSpecDict.ContainsKey(stud.StudentID))
+                                    foreach (logStud ls in logStudList)
                                     {
-                                        cs = classSpecDict[stud.StudentID];
-                                        cs.OldClassComment = cs.ClassComment;
-                                    }else
-                                    {
-                                        cs.StudentID = int.Parse(stud.StudentID);
+                                        if (ls.StudentID == "")
+                                        {
+                                            foreach (K12.Data.StudentRecord sr in new_student_list)
+                                            {
+                                                if (sr.Status == K12.Data.StudentRecord.StudentStatus.一般 && sr.IDNumber == ls.IDNumber)
+                                                {
+                                                    ls.StudentID = sr.ID;
+                                                }
+                                            }
+                                        }
                                     }
 
-                                    cs.OldClassName = stud.oClassName;
-                                    if (classNameDict.ContainsKey(cs.OldClassName))
-                                        cs.OldClassID = classNameDict[cs.OldClassName];
-                                    
-                                    cs.ClassName = stud.ClassName;
-                                    if (classNameDict.ContainsKey(cs.ClassName))
-                                        cs.ClassID = classNameDict[cs.ClassName];
+                                    // 取得並建立班級名稱ID對照
+                                    Dictionary<string, int> classNameDict = new Dictionary<string, int>();
+                                    List<K12.Data.ClassRecord> ClassRecList = K12.Data.Class.SelectAll();
+                                    foreach (K12.Data.ClassRecord cr in ClassRecList)
+                                    {
+                                        classNameDict.Add(cr.Name, int.Parse(cr.ID));
+                                    }
 
-                                    string oldClassID = cs.OldClassID.ToString();
-                                    string classID = cs.ClassID.ToString();
+                                    // 取得班級鎖定相關資料
+                                    Dictionary<string, UDT_ClassLock> classLockDict = UDTTransfer.GetClassLockNameIDDict();
 
-                                    if (classLockDict.ContainsKey(oldClassID))
-                                        cs.OldClassComment = classLockDict[oldClassID].Comment;
+                                    // 取得班級學生變動資料
+                                    List<string> StudentIDList = (from data in logStudList select data.StudentID).ToList();
+                                    Dictionary<string, UDT_ClassSpecial> classSpecDict = UDTTransfer.GetClassSpecStudentByIDList(StudentIDList);
+                                    List<UDT_ClassSpecial> ClassSpecList = new List<UDT_ClassSpecial>();
 
-                                    if (classLockDict.ContainsKey(classID))
-                                        cs.ClassComment = classLockDict[classID].Comment;
+                                    foreach (logStud stud in logStudList)
+                                    {
+                                        UDT_ClassSpecial cs = new UDT_ClassSpecial();
+                                        if (classSpecDict.ContainsKey(stud.StudentID))
+                                        {
+                                            cs = classSpecDict[stud.StudentID];
+                                            cs.OldClassComment = cs.ClassComment;
+                                        }
+                                        else
+                                        {
+                                            cs.StudentID = int.Parse(stud.StudentID);
+                                        }
 
-                                    ClassSpecList.Add(cs);
+                                        cs.OldClassName = stud.oClassName;
+                                        if (classNameDict.ContainsKey(cs.OldClassName))
+                                            cs.OldClassID = classNameDict[cs.OldClassName];
+
+                                        cs.ClassName = stud.ClassName;
+                                        if (classNameDict.ContainsKey(cs.ClassName))
+                                            cs.ClassID = classNameDict[cs.ClassName];
+
+                                        string oldClassID = cs.OldClassID.ToString();
+                                        string classID = cs.ClassID.ToString();
+
+                                        if (classLockDict.ContainsKey(oldClassID))
+                                            cs.OldClassComment = classLockDict[oldClassID].Comment;
+
+                                        if (classLockDict.ContainsKey(classID))
+                                            cs.ClassComment = classLockDict[classID].Comment;
+
+                                        ClassSpecList.Add(cs);
+                                    }
+
+                                    if (ClassSpecList.Count > 0)
+                                        ClassSpecList.SaveAll();                                
                                 }
-
-                                if (ClassSpecList.Count > 0)
-                                    ClassSpecList.SaveAll();
-
+                                
                             }catch(Exception ex)
                             {
                                 FISCA.Presentation.Controls.MsgBox.Show("寫入學生變動UDT失敗," + ex.Message);
