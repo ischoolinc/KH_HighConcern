@@ -331,8 +331,19 @@ namespace StudentImportWizard_KH
                         each.Enabled = true;
                 }
 
-                if (!hide_column)
-                    lvSourceFieldList.Items.Add(each);
+                if (!hide_column) 
+                {
+                    // 2017/4/27 穎驊新增，因應高雄小組會議 項目 [10-05][04] 匯入學生基本資料彈出奇怪的錯誤訊息 後續
+                    // 局端決議 在使用者 匯入新增時，將所有預設勾的選項都拿掉，請使用者務必清楚勾選自己要匯入的欄位
+                    // 且 如果姓名(必匯入欄位)沒有勾選，將無法下一步。
+                    if (Context.ImportMode == ImportMode.Insert)
+                    {
+                        each.Checked = false;                    
+                    }
+
+                    lvSourceFieldList.Items.Add(each);                
+                }
+                
             }
         }
 
@@ -359,8 +370,14 @@ namespace StudentImportWizard_KH
                 {
                     if (column.BindingBulkColumn != null && column.BindingBulkColumn.IsRequired)
                     {
-                        each.Checked = true;
-                        each.Locked = true;
+                        
+
+                        // 2017/4/27 穎驊新增，因應高雄小組會議 項目 [10-05][04] 匯入學生基本資料彈出奇怪的錯誤訊息 後續
+                        // 局端決議 在使用者 匯入新增時，將所有預設勾的選項都拿掉，請使用者務必清楚勾選自己要匯入的欄位
+                        // 且 如果姓名(必匯入欄位)沒有勾選，將無法下一步，在此將 姓名Locked 屬性註解掉，使使用者可以勾選姓名。
+                        //each.Checked = true;
+                        //each.Locked = true;
+
                         each.ToolTipText = "此欄位是必要欄位。";
                     }
                 }
@@ -496,6 +513,32 @@ namespace StudentImportWizard_KH
                 if (item.Locked)
                     e.NewValue = e.CurrentValue;
             }
+        }
+
+        // 2017/4/27 穎驊新增，因應高雄小組會議 項目 [10-05][04] 匯入學生基本資料彈出奇怪的錯誤訊息 後續
+        // 局端決議 在使用者 匯入新增時，將所有預設勾的選項都拿掉，請使用者務必清楚勾選自己要匯入的欄位
+        // 且 如果姓名(必匯入欄位)沒有勾選，將無法下一步
+        private void lvSourceFieldList_ItemChecked(object sender, ItemCheckedEventArgs e)
+        {
+            if (Context.ImportMode == ImportMode.Insert) 
+            {
+                ImportItem item = lvSourceFieldList.Items[e.Item.Index] as ImportItem;
+
+                if (item != null)
+                {
+                    if (item.Text == "姓名")
+                    {
+                        if (!item.Checked)
+                        {
+                            this.wpSelectField.NextButtonEnabled = eWizardButtonState.False;
+                        }
+                        else
+                        {
+                            this.wpSelectField.NextButtonEnabled = eWizardButtonState.True;
+                        }
+                    }
+                }                        
+            }            
         }
 
         private void chkSelectAll_CheckedChanged(object sender, System.EventArgs e)
@@ -1898,5 +1941,7 @@ namespace StudentImportWizard_KH
 
             #endregion
         }
+
+        
     }
 }

@@ -661,6 +661,7 @@ namespace StudentImportWizard_KH
             this.lvSourceFieldList.UseCompatibleStateImageBehavior = false;
             this.lvSourceFieldList.View = System.Windows.Forms.View.List;
             this.lvSourceFieldList.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.lvSourceFieldList_ItemCheck);
+            this.lvSourceFieldList.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.lvSourceFieldList_ItemChecked);
             // 
             // wpValidation
             // 
