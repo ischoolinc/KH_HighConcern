@@ -7,6 +7,9 @@ using FISCA.Data;
 using System.Xml.Linq;
 using FISCA.DSAClient;
 using JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls;
+using System.Net;
+using System.IO;
+
 
 namespace StudentImportWizard_KH
 {
@@ -31,61 +34,91 @@ namespace StudentImportWizard_KH
             string errMsg = "";
             try
             {
-
-                XElement xmlRoot = new XElement("Request");
-                XElement s1 = new XElement("SchoolLog");
-                XElement s2 = new XElement("Field");
-
-                s2.SetElementValue("DSNS", DSNS);
-                s2.SetElementValue("Action", action);
-                XElement Content = new XElement("Content");
-                string summaryTxt = action + " 共 " + logStudList.Count + " 筆";
-                Content.SetElementValue("Summary", summaryTxt);
-                XElement Detail = new XElement("Detail");
-
-                if (importMode == ImportMode.Insert)
                 {
-                    foreach (logStud ls in logStudList)
+                    XElement xmlRoot = new XElement("Request");
+                    XElement s1 = new XElement("SchoolLog");
+                    XElement s2 = new XElement("Field");
+
+                    s2.SetElementValue("DSNS", DSNS);
+                    s2.SetElementValue("Action", action);
+                    XElement Content = new XElement("Content");
+                    string summaryTxt = action + " 共 " + logStudList.Count + " 筆";
+                    Content.SetElementValue("Summary", summaryTxt);
+                    XElement Detail = new XElement("Detail");
+
+                    if (importMode == ImportMode.Insert)
                     {
-                        XElement StudentXML = new XElement("Student");
-                        StudentXML.SetElementValue("IDNumber", ls.IDNumber);
-                        StudentXML.SetElementValue("StudentNumber", ls.StudentNumber);
-                        StudentXML.SetElementValue("StudentName", ls.StudentName);
-                        StudentXML.SetElementValue("ClassName", ls.ClassName);                        
-                        StudentXML.SetElementValue("SeatNo", ls.SeatNo);
-                        StudentXML.SetElementValue("GradeYear", ls.GradeYear);
-                        StudentXML.SetElementValue("StudentStatus", ls.StudentStatus);
-                        Detail.Add(StudentXML);
+                        foreach (logStud ls in logStudList)
+                        {
+                            XElement StudentXML = new XElement("Student");
+                            StudentXML.SetElementValue("IDNumber", ls.IDNumber);
+                            StudentXML.SetElementValue("StudentNumber", ls.StudentNumber);
+                            StudentXML.SetElementValue("StudentName", ls.StudentName);
+                            StudentXML.SetElementValue("ClassName", ls.ClassName);
+                            StudentXML.SetElementValue("SeatNo", ls.SeatNo);
+                            StudentXML.SetElementValue("GradeYear", ls.GradeYear);
+                            StudentXML.SetElementValue("StudentStatus", ls.StudentStatus);
+                            Detail.Add(StudentXML);
+                        }
                     }
-                }
-                else
-                {
-                    //  更新
-                    foreach (logStud ls in logStudList)
+                    else
                     {
-                        XElement StudentXML = new XElement("Student");
-                        StudentXML.SetElementValue("IDNumber", ls.IDNumber);
-                        StudentXML.SetElementValue("StudentNumber", ls.StudentNumber);
-                        StudentXML.SetElementValue("StudentName", ls.StudentName);
-                        StudentXML.SetElementValue("ClassName", ls.oClassName);
-                        StudentXML.SetElementValue("NewClassName", ls.ClassName);
-                        StudentXML.SetElementValue("SeatNo", ls.SeatNo);
-                        StudentXML.SetElementValue("GradeYear", ls.GradeYear);
-                        StudentXML.SetElementValue("StudentStatus",ls.oStudentStatus);
-                        StudentXML.SetElementValue("NewStudentStatus",ls.StudentStatus);
-                        Detail.Add(StudentXML);
-                    }                
-                }               
+                        //  更新
+                        foreach (logStud ls in logStudList)
+                        {
+                            XElement StudentXML = new XElement("Student");
+                            StudentXML.SetElementValue("IDNumber", ls.IDNumber);
+                            StudentXML.SetElementValue("StudentNumber", ls.StudentNumber);
+                            StudentXML.SetElementValue("StudentName", ls.StudentName);
+                            StudentXML.SetElementValue("ClassName", ls.oClassName);
+                            StudentXML.SetElementValue("NewClassName", ls.ClassName);
+                            StudentXML.SetElementValue("SeatNo", ls.SeatNo);
+                            StudentXML.SetElementValue("GradeYear", ls.GradeYear);
+                            StudentXML.SetElementValue("StudentStatus", ls.oStudentStatus);
+                            StudentXML.SetElementValue("NewStudentStatus", ls.StudentStatus);
+                            Detail.Add(StudentXML);
+                        }
+                    }
 
-                s2.Add(Content);
-                s2.Add(Detail);
-                s1.Add(s2);
-                xmlRoot.Add(s1);
-                XmlHelper reqXML = new XmlHelper(xmlRoot.ToString());
-                FISCA.DSAClient.Connection cn = new FISCA.DSAClient.Connection();
-                cn.Connect(AccessPoint, Contract, DSNS, DSNS);
-                Envelope rsp = cn.SendRequest(ServiceName, new Envelope(reqXML));
-                XElement rspXML = XElement.Parse(rsp.XmlString);
+                    s2.Add(Content);
+                    s2.Add(Detail);
+                    s1.Add(s2);
+                    xmlRoot.Add(s1);
+                    XmlHelper reqXML = new XmlHelper(xmlRoot.ToString());
+                    FISCA.DSAClient.Connection cn = new FISCA.DSAClient.Connection();
+                    cn.Connect(AccessPoint, Contract, DSNS, DSNS);
+                    Envelope rsp = cn.SendRequest(ServiceName, new Envelope(reqXML));
+                    XElement rspXML = XElement.Parse(rsp.XmlString);
+                                
+                }
+                
+
+                //2017/6/7 穎驊新增 高雄項目 [03-01][03] 巨耀局端介接學生資料欄位 巨耀自動編班 更新Service                
+                try
+                {
+                    string urlString = "http://163.32.129.9/khdc/ito";
+                    // 準備 Http request
+                    HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(urlString);
+                    req.Method = "POST";
+
+                    // 呼叫並取得結果
+                    HttpWebResponse rsp;
+                    rsp = (HttpWebResponse)req.GetResponse();
+
+                    Stream dataStream = rsp.GetResponseStream();
+                    StreamReader reader = new StreamReader(dataStream);
+
+                    string response = reader.ReadToEnd(); //檢查使用，若成功回傳，response 值為 "00"
+
+                    reader.Close();
+                    dataStream.Close();
+                    rsp.Close();
+                }
+                catch (Exception e)
+                {
+
+                }
+
             }
             catch (Exception ex) { errMsg = ex.Message; }
 

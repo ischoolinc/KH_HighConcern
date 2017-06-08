@@ -6,6 +6,8 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using System.Net;
+using System.IO;
 
 namespace StudentTransferStudentBrief_KH
 {
@@ -86,33 +88,60 @@ namespace StudentTransferStudentBrief_KH
             string errMsg = "";
             try
             {
+                {
+                    XElement xmlRoot = new XElement("Request");
+                    XElement s1 = new XElement("SchoolLog");
+                    XElement s2 = new XElement("Field");
 
-                XElement xmlRoot = new XElement("Request");
-                XElement s1 = new XElement("SchoolLog");
-                XElement s2 = new XElement("Field");
+                    s2.SetElementValue("DSNS", DSNS);
+                    s2.SetElementValue("Action", action);
+                    XElement Content = new XElement("Content");
+                    Content.SetElementValue("IDNumber", IDNumber);
+                    Content.SetElementValue("StudentNumber", StudentNumber);
+                    Content.SetElementValue("ClassName", ClassName);
+                    Content.SetElementValue("NewClassName", NewClassName);
+                    Content.SetElementValue("SeatNo", SeatNo);
+                    Content.SetElementValue("ScheduleClassDate", ScheduleClassDate);
+                    Content.SetElementValue("StudentName", StudentName);
+                    Content.SetElementValue("Reason", Reason);
+                    Content.SetElementValue("StudentID", StudentID);
+                    Content.SetElementValue("ClassID", ClassID);
+                    Content.SetElementValue("ClassComment", ClassComment);
+                    s2.Add(Content);
+                    s1.Add(s2);
+                    xmlRoot.Add(s1);
+                    XmlHelper reqXML = new XmlHelper(xmlRoot.ToString());
+                    FISCA.DSAClient.Connection cn = new FISCA.DSAClient.Connection();
+                    cn.Connect(AccessPoint, Contract, DSNS, DSNS);
+                    Envelope rsp = cn.SendRequest(ServiceName, new Envelope(reqXML));
+                    XElement rspXML = XElement.Parse(rsp.XmlString);                                
+                }
+                
+                //2017/6/7 穎驊新增 高雄項目 [03-01][03] 巨耀局端介接學生資料欄位 巨耀自動編班 更新Service                
+                try
+                {
+                    string urlString = "http://163.32.129.9/khdc/ito";
+                    // 準備 Http request
+                    HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(urlString);
+                    req.Method = "POST";
 
-                s2.SetElementValue("DSNS", DSNS);
-                s2.SetElementValue("Action", action);
-                XElement Content = new XElement("Content");
-                Content.SetElementValue("IDNumber", IDNumber);
-                Content.SetElementValue("StudentNumber", StudentNumber);
-                Content.SetElementValue("ClassName", ClassName);
-                Content.SetElementValue("NewClassName", NewClassName);
-                Content.SetElementValue("SeatNo", SeatNo);
-                Content.SetElementValue("ScheduleClassDate", ScheduleClassDate);
-                Content.SetElementValue("StudentName", StudentName);
-                Content.SetElementValue("Reason", Reason);
-                Content.SetElementValue("StudentID", StudentID);
-                Content.SetElementValue("ClassID", ClassID);
-                Content.SetElementValue("ClassComment", ClassComment);
-                s2.Add(Content);
-                s1.Add(s2);
-                xmlRoot.Add(s1);
-                XmlHelper reqXML = new XmlHelper(xmlRoot.ToString());
-                FISCA.DSAClient.Connection cn = new FISCA.DSAClient.Connection();
-                cn.Connect(AccessPoint, Contract, DSNS, DSNS);
-                Envelope rsp = cn.SendRequest(ServiceName, new Envelope(reqXML));
-                XElement rspXML = XElement.Parse(rsp.XmlString);
+                    // 呼叫並取得結果
+                    HttpWebResponse rsp;
+                    rsp = (HttpWebResponse)req.GetResponse();
+
+                    Stream dataStream = rsp.GetResponseStream();
+                    StreamReader reader = new StreamReader(dataStream);
+
+                    string response = reader.ReadToEnd(); //檢查使用，若成功回傳，response 值為 "00"
+
+                    reader.Close();
+                    dataStream.Close();
+                    rsp.Close();
+                }
+                catch (Exception e)
+                {
+
+                }
             }
             catch (Exception ex) { errMsg = ex.Message; }
 
