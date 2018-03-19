@@ -107,7 +107,7 @@
             // btnNext
             // 
             this.btnNext.Location = new System.Drawing.Point(504, 551);
-            this.btnNext.TabIndex = 2;            
+            this.btnNext.TabIndex = 2;
             // 
             // btnPrevious
             // 
@@ -1268,6 +1268,7 @@
             this.cboSeatNo.Name = "cboSeatNo";
             this.cboSeatNo.Size = new System.Drawing.Size(143, 25);
             this.cboSeatNo.TabIndex = 1;
+            this.cboSeatNo.SelectedIndexChanged += new System.EventHandler(this.cboSeatNo_SelectedIndexChanged);
             // 
             // labelX12
             // 

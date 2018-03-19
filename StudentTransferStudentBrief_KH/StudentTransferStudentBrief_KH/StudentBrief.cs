@@ -51,6 +51,10 @@ namespace StudentTransferStudentBrief_KH
 
         private string _ClassID { get; set; }
 
+        private int seatno_Max;
+
+        List<string> sameClassStudentIDList = new List<string>();
+
         public StudentBrief(ArgDictionary args)
             : base(args)
         {
@@ -277,35 +281,64 @@ namespace StudentTransferStudentBrief_KH
 
             try
             {
-                //目前有的座號。
-                List<int> currents = new List<int>();
-                string cmd = string.Format("select seat_no from student where ref_class_id='{0}' and status='1' group by seat_no order by seat_no", classId);
-                DataTable seatNoList = Query.Select(cmd);
+                ////目前有的座號。
+                //List<int> currents = new List<int>();
+                //string cmd = string.Format("select seat_no from student where ref_class_id='{0}' and status='1' group by seat_no order by seat_no", classId);
+                //DataTable seatNoList = Query.Select(cmd);
 
-                foreach (DataRow row in seatNoList.Rows)
-                {
-                    int seatno;
-                    if (int.TryParse(row["seat_no"].ToString(), out seatno))
-                        currents.Add(seatno);
-                }
+                //foreach (DataRow row in seatNoList.Rows)
+                //{
+                //    int seatno;
+                //    if (int.TryParse(row["seat_no"].ToString(), out seatno))
+                //        currents.Add(seatno);
+                //}
 
-                //算人數。
-                int count = 0;
-                cmd = string.Format("select case when count(*)>max(seat_no) then count(*) else max(seat_no) end  count from student where ref_class_id='{0}' and status='1'", classId);
-                DataTable peopleCount = Query.Select(cmd);
+                ////算人數。
+                //int count = 0;
+                //cmd = string.Format("select case when count(*)>max(seat_no) then count(*) else max(seat_no) end  count from student where ref_class_id='{0}' and status='1'", classId);
+                //DataTable peopleCount = Query.Select(cmd);
 
-                foreach (DataRow row in peopleCount.Rows)
-                    count = int.Parse(row["count"].ToString());
+                //foreach (DataRow row in peopleCount.Rows)
+                //    count = int.Parse(row["count"].ToString());
+
+                //HashSet<int> allseatno = new HashSet<int>();
+                //for (int i = 1; i <= count; i++)
+                //    allseatno.Add(i);
+
+                //allseatno.ExceptWith(currents);
+
+                //if (!allseatno.Contains(count + 1))
+                //    allseatno.Add(count + 1);
+
+                //2018/3/15 穎驊註解，因應高雄小組 [09-04][02] 轉入生學號怎麼了? 項目， 日後 轉入學生的建議號碼，一律是該班用過的最大號碼加一(不管學生的狀態)，
+                //如此一來，系統建議提供的建議學號，就不會有重覆的問題
 
                 HashSet<int> allseatno = new HashSet<int>();
-                for (int i = 1; i <= count; i++)
-                    allseatno.Add(i);
+                
+                //不管狀態，該班有用過的號碼通通拿出來
+                string cmd = string.Format("select id,seat_no from student where ref_class_id='{0}'order by seat_no", classId);
 
-                allseatno.ExceptWith(currents);
+                DataTable seatNoList = Query.Select(cmd);
 
-                if (!allseatno.Contains(count + 1))
-                    allseatno.Add(count + 1);
+                int seatno = 0;
+                seatno_Max = 0;
+                foreach (DataRow row in seatNoList.Rows)
+                {
+                    if (int.TryParse(row["seat_no"].ToString(), out seatno))
+                    {
+                        //取最大號碼
+                        if (seatno > seatno_Max)
+                        {
+                            seatno_Max = seatno;
+                        }
+                    }
 
+                    sameClassStudentIDList.Add(row["id"].ToString());
+                }
+                
+                // 最大號碼加一 為建議
+                allseatno.Add(seatno_Max + 1);
+                
                 return allseatno;
             }
             catch (Exception e)
@@ -318,6 +351,7 @@ namespace StudentTransferStudentBrief_KH
         #region 產生建議學號項目
         private void FillStudentNumberLast(string currentStuNumber)
         {
+            cboStudentNumber.Items.Clear();
             //算出最後一個學號。
             int stuNumber = 0;
             string cmd = "select student_number from student where status=1 and not student_number is null order by student_number desc limit 1";
@@ -341,6 +375,114 @@ namespace StudentTransferStudentBrief_KH
                         cboStudentNumber.Items.Add(currentStuNumber);
                     cboStudentNumber.Items.Add(t.Result.ToString());
                 }
+
+                //2018/3/15 穎驊註解，因應高雄小組 [09-04][02] 轉入生學號怎麼了? 項目， 日後 轉入學生的建議號碼，一律是該班用過的最大號碼加一(不管學生的狀態)，
+                //如此一來，系統建議提供的建議學號，就不會有重覆的問題
+                if (_ClassID != null && cboSeatNo.Text!="")
+                {
+                    cmd = string.Format("select id,seat_no from student where ref_class_id='{0}'order by seat_no", _ClassID);
+
+                    DataTable seatNoList = Query.Select(cmd);
+
+                    int seatno = 0;
+                    seatno_Max = 0;
+                    foreach (DataRow row in seatNoList.Rows)
+                    {
+                        if (int.TryParse(row["seat_no"].ToString(), out seatno))
+                        {
+                            //取最大號碼
+                            if (seatno > seatno_Max)
+                            {
+                                seatno_Max = seatno;
+                            }
+                        }
+
+                        sameClassStudentIDList.Add(row["id"].ToString());
+                    }
+
+                    List<K12.Data.UpdateRecordRecord> updateRecod_List = K12.Data.UpdateRecord.SelectByStudentIDs(sameClassStudentIDList);
+
+                    //整理入學年度的字典
+                    Dictionary<int?, int> entrySchoolYearDict = new Dictionary<int?, int>();
+
+                    foreach (K12.Data.UpdateRecordRecord ur in updateRecod_List)
+                    {
+                        //為新生異動，整理個學年度入學的人數
+                        if (ur.UpdateCode == "1")
+                        {
+                            if (!entrySchoolYearDict.ContainsKey(ur.SchoolYear))
+                            {
+                                entrySchoolYearDict.Add(ur.SchoolYear, 1);
+                            }
+                            else
+                            {
+                                entrySchoolYearDict[ur.SchoolYear]++;
+                            }
+                        }
+                    }
+
+                    int? majorEntrySchoolYear = 0;
+                    int count = 0;
+
+                    //找尋最多人入學的那一年
+                    foreach (KeyValuePair<int?, int> p in entrySchoolYearDict)
+                    {
+                        if (p.Value > count)
+                        {
+                            majorEntrySchoolYear = p.Key;
+                            count = p.Value;
+                        }
+                    }
+
+                    string majorEntrySchoolYear_string = "" + majorEntrySchoolYear;
+
+                    // 入學年超過三碼 只取後兩碼(如106 >> 06)
+                    if (majorEntrySchoolYear_string.Length > 2)
+                    {
+                        majorEntrySchoolYear_string = majorEntrySchoolYear_string.Remove(0, 1);
+                    }
+
+                    // 產生學號的性別碼(男=1,女=2)
+                    int genderCode;
+                    if (cboGender.Text == "男")
+                    {
+                        genderCode = 1;
+                    }
+                    else
+                    {
+                        genderCode = 2;
+                    }
+
+                    cmd = string.Format("select * from class where id='{0}'", _ClassID);
+
+                    DataTable classList = Query.Select(cmd);
+
+                    //  抓取 學號的班級序號
+                    string classOrder = "";
+
+                    classOrder = "" + classList.Rows[0]["display_order"];
+
+                    // 假如班級序號僅有一碼，補零(1>>01)
+                    if (classOrder.Length == 1)
+                    {
+                        classOrder = "0" + classOrder;
+                    }
+                    // 假如建議座號僅有一碼，補零(1>>01)
+                    string seatno_Max_string = "" + (int.Parse(cboSeatNo.Text));
+
+                    if (seatno_Max_string.Length == 1)
+                    {
+                        seatno_Max_string = "0" + seatno_Max_string;
+                    }
+
+                    string suggestStudentNumber = majorEntrySchoolYear_string + genderCode + classOrder + seatno_Max_string;
+
+                    // 加入建議學號
+                    cboStudentNumber.Items.Add(suggestStudentNumber);
+                }
+
+                
+
             }, TaskScheduler.FromCurrentSynchronizationContext());
         }
         #endregion
@@ -776,5 +918,14 @@ namespace StudentTransferStudentBrief_KH
             }
         }
 
+        //選擇號碼後，帶出學號
+        private void cboSeatNo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // 處理學號
+            if (SRecord != null)
+                FillStudentNumberLast(SRecord.StudentNumber);
+            else
+                FillStudentNumberLast(string.Empty);
+        }
     }
 }
