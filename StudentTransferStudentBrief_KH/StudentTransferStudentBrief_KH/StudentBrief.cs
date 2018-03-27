@@ -457,16 +457,41 @@ namespace StudentTransferStudentBrief_KH
 
                     DataTable classList = Query.Select(cmd);
 
+                    //抓班級名稱
+                    string className = "" + classList.Rows[0]["class_name"];
+
+                    int className_int;
                     //  抓取 學號的班級序號
                     string classOrder = "";
 
-                    classOrder = "" + classList.Rows[0]["display_order"];
-
-                    // 假如班級序號僅有一碼，補零(1>>01)
-                    if (classOrder.Length == 1)
+                    // 2018/3/27 穎驊註解，假如抓出來的班級名稱無法順利的轉成int 型別，代表其班級命名方式
+                    // 有異於目前95%以上的高雄國中班級編碼模式(101、202、303等等)
+                    // 可能為1A、國一忠、三年一班 這種格式
+                    //如果出現此格式，則去抓它的班級排列序號
+                    if (!int.TryParse(className, out className_int))
                     {
-                        classOrder = "0" + classOrder;
+
+                        classOrder = "" + classList.Rows[0]["display_order"];
+
+                        // 假如班級序號僅有一碼，補零(1>>01)
+                        if (classOrder.Length == 1)
+                        {
+                            classOrder = "0" + classOrder;
+                        }
+
                     }
+                    else
+                    {
+                        classOrder = "" + className_int;
+
+                        //取後兩碼
+                        if (classOrder.Length>2)
+                        {
+                            classOrder = classOrder.Remove(0, 1);
+                        }
+                    }
+                    
+                                        
                     // 假如建議座號僅有一碼，補零(1>>01)
                     string seatno_Max_string = "" + (int.Parse(cboSeatNo.Text));
 

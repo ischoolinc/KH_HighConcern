@@ -6,6 +6,8 @@ using Framework;
 using JHPermrec.UpdateRecord.Transfer;
 using JHPermrec.UpdateRecord;
 using ClassLock_KH.DAO;
+using System.Data;
+using FISCA.Data;
 
 namespace StudentTransStudBase_KH
 {
@@ -18,7 +20,8 @@ namespace StudentTransStudBase_KH
         private JHSchool.Data.JHStudentRecord  _student;
         private AddTransStudStatus _status;
         private JHSchool.Data.JHPhoneRecord _StudentPhone;
-
+        private int seatno_Max;
+        private List<string> sameClassStudentIDList = new List<string>();
 
         private EnhancedErrorProvider Errors { get; set; }
 
@@ -292,6 +295,8 @@ namespace StudentTransStudBase_KH
             this.Close();
         }
 
+        // 2018/3/27 穎驊 註解，稍微尋找一下後，控制項根本沒有cboClassName 這項，
+        // 應該是隨著法規的更改，不再讓使用者選擇班級，因此控制項改用Label
         private void cboClassName_TextChanged(object sender, EventArgs e)
         {
 
@@ -304,7 +309,12 @@ namespace StudentTransStudBase_KH
         {
             cbotStudentNumber.Items.Clear();
             cbotStudentNumber.Items.Add(lblStudentNum.Text);
-            cbotStudentNumber.Items.Add(JHPermrec.UpdateRecord.DAL.DALTransfer2.GetGradeYearLastStudentNumber(lblNewClassName.Text));
+
+            if (JHPermrec.UpdateRecord.DAL.DALTransfer2.GetGradeYearLastStudentNumber(lblNewClassName.Text)!="")
+            {
+                cbotStudentNumber.Items.Add(JHPermrec.UpdateRecord.DAL.DALTransfer2.GetGradeYearLastStudentNumber(lblNewClassName.Text));
+            }
+            
             if (lblStudentNum.Text != "")
                 cbotStudentNumber.Items.Add("");
         }
@@ -314,8 +324,12 @@ namespace StudentTransStudBase_KH
         {
             cboSeatNo.Items.Clear();
             cboSeatNo.Items.Add("");
+            
             foreach (int no in Utility.GetClassSeatNoList(lblNewClassName.Text))
+            {
                 cboSeatNo.Items.Add(no);
+            }
+                        
             //cboSeatNo.Items.AddRange(JHPermrec.UpdateRecord.DAL.DALTransfer2.GetClassNullNoList(cboClass.Text).ToArray());
         }
 
@@ -377,9 +391,164 @@ namespace StudentTransStudBase_KH
                 lblNewClassName.Text = Utility.GetClassNameFirst(cboGradeYear.Text);
             cboSeatNo.Text = "";
             // 班級座號
-            setClassNo();
+            //setClassNo();
             // 取得學號
-            cbotStudentNumber.Text = Utility.GetStudentNumber(cboGradeYear.Text);
-        }   
+            //cbotStudentNumber.Text = Utility.GetStudentNumber(cboGradeYear.Text);
+
+            //2018/3/27 穎驊註解 ，因應 高雄小組項目 [09-04][02] 轉入生學號怎麼了? 更正 產生學號的邏輯
+
+            List<KH_HighConcernCalc.ClassStudent> ClassStudentList = KH_HighConcernCalc.Calc.GetClassStudentList(cboGradeYear.Text);
+
+            string _ClassID ="";
+
+            //取得建議班級的ID
+            if (ClassStudentList.Count > 0)
+            {
+                _ClassID = ClassStudentList[0].ClassID;
+            }
+
+            string cmd;
+                        
+            //2018/3/15 穎驊註解，因應高雄小組 [09-04][02] 轉入生學號怎麼了? 項目， 日後 轉入學生的建議號碼，一律是該班用過的最大號碼加一(不管學生的狀態)，
+            //如此一來，系統建議提供的建議學號，就不會有重覆的問題
+            if (_ClassID != null)
+            {
+                cmd = string.Format("select id,seat_no from student where ref_class_id='{0}'order by seat_no", _ClassID);
+
+                QueryHelper Query = new QueryHelper();
+
+                DataTable seatNoList = Query.Select(cmd);
+
+                int seatno = 0;
+                seatno_Max = 0;
+                foreach (DataRow row in seatNoList.Rows)
+                {
+                    if (int.TryParse(row["seat_no"].ToString(), out seatno))
+                    {
+                        //取最大號碼
+                        if (seatno > seatno_Max)
+                        {
+                            seatno_Max = seatno;
+                        }
+                    }
+                    sameClassStudentIDList.Add(row["id"].ToString());
+                }
+
+                List<K12.Data.UpdateRecordRecord> updateRecod_List = K12.Data.UpdateRecord.SelectByStudentIDs(sameClassStudentIDList);
+
+                //最大號碼加一
+                cboSeatNo.Items.Clear();
+                cboSeatNo.Items.Add("");
+                cboSeatNo.Items.Add(seatno_Max+1);
+                cboSeatNo.Text = ""+(seatno_Max+1);
+
+                //整理入學年度的字典
+                Dictionary<int?, int> entrySchoolYearDict = new Dictionary<int?, int>();
+
+                foreach (K12.Data.UpdateRecordRecord ur in updateRecod_List)
+                {
+                    //為新生異動，整理個學年度入學的人數
+                    if (ur.UpdateCode == "1")
+                    {
+                        if (!entrySchoolYearDict.ContainsKey(ur.SchoolYear))
+                        {
+                            entrySchoolYearDict.Add(ur.SchoolYear, 1);
+                        }
+                        else
+                        {
+                            entrySchoolYearDict[ur.SchoolYear]++;
+                        }
+                    }
+                }
+
+                int? majorEntrySchoolYear = 0;
+                int count = 0;
+
+                //找尋最多人入學的那一年
+                foreach (KeyValuePair<int?, int> p in entrySchoolYearDict)
+                {
+                    if (p.Value > count)
+                    {
+                        majorEntrySchoolYear = p.Key;
+                        count = p.Value;
+                    }
+                }
+
+                string majorEntrySchoolYear_string = "" + majorEntrySchoolYear;
+
+                // 入學年超過三碼 只取後兩碼(如106 >> 06)
+                if (majorEntrySchoolYear_string.Length > 2)
+                {
+                    majorEntrySchoolYear_string = majorEntrySchoolYear_string.Remove(0, 1);
+                }
+
+                // 產生學號的性別碼(男=1,女=2)
+                int genderCode;
+                if (cboNewGender.Text == "男")
+                {
+                    genderCode = 1;
+                }
+                else
+                {
+                    genderCode = 2;
+                }
+
+                cmd = string.Format("select * from class where id='{0}'", _ClassID);
+
+                DataTable classList = Query.Select(cmd);
+
+                //抓班級名稱
+                string className = "" + classList.Rows[0]["class_name"];
+
+                int className_int;
+                //  抓取 學號的班級序號
+                string classOrder = "";
+
+                // 2018/3/27 穎驊註解，假如抓出來的班級名稱無法順利的轉成int 型別，代表其班級命名方式
+                // 有異於目前95%以上的高雄國中班級編碼模式(101、202、303等等)
+                // 可能為1A、國一忠、三年一班 這種格式
+                //如果出現此格式，則去抓它的班級排列序號
+                if (!int.TryParse(className, out className_int))
+                {
+
+                    classOrder = "" + classList.Rows[0]["display_order"];
+
+                    // 假如班級序號僅有一碼，補零(1>>01)
+                    if (classOrder.Length == 1)
+                    {
+                        classOrder = "0" + classOrder;
+                    }
+
+                }
+                else
+                {
+                    classOrder = "" + className_int;
+
+                    //取後兩碼
+                    if (classOrder.Length > 2)
+                    {
+                        classOrder = classOrder.Remove(0, 1);
+                    }
+                }
+
+
+                // 假如建議座號僅有一碼，補零(1>>01)
+                string seatno_Max_string = "" + (int.Parse(cboSeatNo.Text));
+
+                if (seatno_Max_string.Length == 1)
+                {
+                    seatno_Max_string = "0" + seatno_Max_string;
+                }
+
+                string suggestStudentNumber = majorEntrySchoolYear_string + genderCode + classOrder + seatno_Max_string;
+
+                // 加入建議學號
+                cbotStudentNumber.Items.Add(suggestStudentNumber);
+                cbotStudentNumber.Items.Add(Utility.GetStudentNumber(cboGradeYear.Text));
+                cbotStudentNumber.Text = suggestStudentNumber;
+            }
+
+
+        }
     }
 }
