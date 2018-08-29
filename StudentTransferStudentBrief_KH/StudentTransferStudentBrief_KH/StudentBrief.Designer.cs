@@ -1329,6 +1329,7 @@
             this.ClientSize = new System.Drawing.Size(591, 582);
             this.Controls.Add(this.gpTransfer);
             this.Controls.Add(this.gpOrigin);
+            this.MaximumSize = new System.Drawing.Size(607, 621);
             this.Name = "StudentBrief";
             this.Text = "線上轉學精靈 (轉入) - 建立基本資料";
             this.Load += new System.EventHandler(this.StudentBrief_Load);

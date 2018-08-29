@@ -18,7 +18,7 @@ namespace StudentTransferStudentBrief_KH
         /// </summary>
         /// <param name="GradeYear"></param>
         /// <returns></returns>
-        public static Dictionary<string,string> GetClassNameFirst(string GradeYear)
+        public static Dictionary<string, string> GetClassNameFirst(string GradeYear)
         {
             Dictionary<string, string> retVal = new Dictionary<string, string>();
 
@@ -32,12 +32,35 @@ namespace StudentTransferStudentBrief_KH
 
             foreach (KH_HighConcernCalc.ClassStudent cs in ClassStudentList)
             {
-                retVal.Add(cs.ClassName, cs.ClassID); 
+                retVal.Add(cs.ClassName, cs.ClassID);
                 break;
             }
-            
+
             return retVal;
         }
+
+        /// <summary>
+        /// 取得符合班級名稱(List<KH_HighConcernCalc.ClassStudent>)
+        /// </summary>
+        /// <param name="GradeYear"></param>
+        /// <returns></returns>
+        public static List<KH_HighConcernCalc.ClassStudent> GetClassNameFirst_List(string GradeYear)
+        {
+            List<KH_HighConcernCalc.ClassStudent> retVal = new List<KH_HighConcernCalc.ClassStudent>();
+
+            //QueryHelper qh = new QueryHelper();
+            //string query = @"select class.class_name,count(student.id) as studCot,class.id from class inner join student on class.id=student.ref_class_id  where student.status=1 and (class_name not in(select class_name from $kh.automatic.class.lock) and class_name not in(select distinct class_name from $kh.automatic.placement.high.concern)) and class.grade_year=" + GradeYear + " group by class.class_name,class.id order by count(student.id),class.class_name,class.id limit 1";
+            //DataTable dt = qh.Select(query);
+            //foreach (DataRow dr in dt.Rows)
+            //{
+
+            List<KH_HighConcernCalc.ClassStudent> ClassStudentList = KH_HighConcernCalc.Calc.GetClassStudentList(GradeYear);
+
+            retVal = ClassStudentList;
+
+            return retVal;
+        }
+
 
         /// <summary>
         /// 取得班級年級(有學生且狀態為一般)

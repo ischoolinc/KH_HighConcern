@@ -157,7 +157,27 @@ namespace StudentTransferStudentBrief_KH
 
                     // 如果學生是同校轉出又轉入，回到原班
                     if (CRecord != null)
-                        txtClass.Text = CRecord.Name;
+                    {
+                        // 2018/8/29 穎驊因應 高雄專案 [08-02][02]轉入學生編班  修正規則， 
+                        // 如果學生本為同校生，則會有有選項，讓使用者選擇是否要回原班級，或是依照局端規則，優先提供轉入班級
+                        List<KH_HighConcernCalc.ClassStudent> grClassList = Utility.GetClassNameFirst_List("" + CRecord.GradeYear);
+
+                        string msgString = "";
+                        msgString = @"本轉入生在本學校發現其原本班級:" + CRecord.Name + "(編班人數:" + grClassList.Find(c => c.ClassID == CRecord.ID).ClassStudentCount + ")" +
+                        "請問是否轉入原班級?" +"\r\n" + "若選擇為否，則會依局端系統規則優先轉入班級:" + grClassList[0].ClassName + "(編班人數:" + grClassList[0].ClassStudentCount + ")";
+
+
+                        if (FISCA.Presentation.Controls.MsgBox.Show(msgString, "提醒!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                        {
+                            txtClass.Text = CRecord.Name;
+
+                        }
+                        else
+                        {
+                            txtClass.Text = grClassList[0].ClassName;
+                        }                        
+                    }
+                    
 
                     txtClass.ReadOnly = true;
 
@@ -588,7 +608,7 @@ namespace StudentTransferStudentBrief_KH
         private void SingleMode()
         {
             gpTransfer.Location = new System.Drawing.Point(12, 12);
-            Size = new System.Drawing.Size(316, 582);
+            Size = new System.Drawing.Size(316, 621);
         }
 
         /// <summary>
