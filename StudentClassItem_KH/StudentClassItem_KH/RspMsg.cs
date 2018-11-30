@@ -241,7 +241,22 @@ namespace StudentClassItem_KH
                     if (Content.ContainsKey("Reason"))
                         retList.Add("備註「" + Content["Reason"] + "」");
 
-                    break;     
+                    break;
+                case "調整班級導師":
+                    retList.Add(selAction);
+                    if (Content.ContainsKey("ClassName"))
+                        retList.Add("班級「" + Content["ClassName"] + "」");
+
+                    if (Content.ContainsKey("OldTeacherName") && Content.ContainsKey("NewTeacherName"))
+                        retList.Add("班導師從「" + Content["OldTeacherName"] + "」調整為「" + Content["NewTeacherName"] + "」");
+      
+                    if (Content.ContainsKey("Reason"))
+                        retList.Add("備註：「" + Content["Reason"] + "」");
+
+                    if (Content.ContainsKey("EDoc"))
+                        retList.Add("相關證明文件網址：「" + Content["EDoc"] + "」");
+
+                    break;
             }
 
             if (newLine)

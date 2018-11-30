@@ -45,6 +45,10 @@
       <HintPath>Library\Campus.Windows.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="ClassLock_KH">
+      <HintPath>Library\ClassLock_KH.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="DevComponents.DotNetBar2, Version=9.5.0.1, Culture=neutral, PublicKeyToken=7eb7c3a35b91de04, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\DevComponents.DotNetBar2.dll</HintPath>
@@ -271,13 +275,6 @@
     <EmbeddedResource Include="StudentClassItemContent.resx">
       <DependentUpon>StudentClassItemContent.cs</DependentUpon>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\ClassLock_KH\ClassLock_KH\ClassLock_KH.csproj">
-      <Project>{5ce9cc72-06ba-455f-8bc9-ec40081242d4}</Project>
-      <Name>ClassLock_KH</Name>
-      <Private>False</Private>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

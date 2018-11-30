@@ -454,6 +454,12 @@ namespace StudentClassItem_KH
 
                                 if (xmlContent.Element("EDoc") != null)
                                     rm.Content.Add("EDoc", xmlContent.Element("EDoc").Value);
+
+                                if (xmlContent.Element("OldTeacherName") != null)
+                                    rm.Content.Add("OldTeacherName", xmlContent.Element("OldTeacherName").Value);
+
+                                if (xmlContent.Element("NewTeacherName") != null)
+                                    rm.Content.Add("NewTeacherName", xmlContent.Element("NewTeacherName").Value);
                             }
 
                             // 詳細內容    
