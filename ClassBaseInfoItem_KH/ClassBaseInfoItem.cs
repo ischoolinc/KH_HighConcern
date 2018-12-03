@@ -620,9 +620,14 @@ namespace ClassBaseInfoItem_KH
             if (sctf.ShowDialog() == DialogResult.OK)
             {
                 string TeacherName = sctf.GetTeacherName();
-                string TeacherNameID = _TeacherNameToIDDic[TeacherName];
+                string TeacherNameID = ""; 
 
-                _ClassRecord.RefTeacherID = TeacherNameID; // 將新的老師 指定過去
+                if (_TeacherNameToIDDic.ContainsKey(TeacherName))
+                {
+                    TeacherNameID = _TeacherNameToIDDic[TeacherName];
+                }
+
+                _ClassRecord.RefTeacherID = TeacherNameID; // 將新的老師 指定過去， 空的老師的話，則指定空值
 
                 // 傳送檔案到局端
                 //Utility.UploadFile(_ClassRecord.ID, sctf.GetBase64DataString(), sctf.GetFileName(), "student");

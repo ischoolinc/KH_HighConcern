@@ -121,7 +121,7 @@
             this.cboTeacher.DisplayMember = "FullName";
             this.cboTeacher.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cboTeacher.FormattingEnabled = true;
-            this.cboTeacher.Location = new System.Drawing.Point(244, 48);
+            this.cboTeacher.Location = new System.Drawing.Point(244, 52);
             this.cboTeacher.Name = "cboTeacher";
             this.cboTeacher.Size = new System.Drawing.Size(131, 26);
             this.cboTeacher.TabIndex = 3;
@@ -161,7 +161,7 @@
             // 
             this.labelX6.BackgroundStyle.Class = "";
             this.labelX6.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX6.Location = new System.Drawing.Point(18, 50);
+            this.labelX6.Location = new System.Drawing.Point(18, 53);
             this.labelX6.Name = "labelX6";
             this.labelX6.Size = new System.Drawing.Size(60, 24);
             this.labelX6.TabIndex = 13;
@@ -174,7 +174,7 @@
             // 
             this.txtSortOrder.Border.Class = "TextBoxBorder";
             this.txtSortOrder.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.txtSortOrder.Location = new System.Drawing.Point(84, 50);
+            this.txtSortOrder.Location = new System.Drawing.Point(84, 53);
             this.txtSortOrder.Name = "txtSortOrder";
             this.txtSortOrder.Size = new System.Drawing.Size(151, 25);
             this.txtSortOrder.TabIndex = 14;
@@ -188,7 +188,7 @@
             // lnkSend
             // 
             this.lnkSend.AutoSize = true;
-            this.lnkSend.Location = new System.Drawing.Point(406, 52);
+            this.lnkSend.Location = new System.Drawing.Point(406, 55);
             this.lnkSend.Name = "lnkSend";
             this.lnkSend.Size = new System.Drawing.Size(86, 17);
             this.lnkSend.TabIndex = 211;
@@ -203,7 +203,7 @@
             // 
             this.lblTeacherName.BackgroundStyle.Class = "";
             this.lblTeacherName.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.lblTeacherName.Location = new System.Drawing.Point(409, 19);
+            this.lblTeacherName.Location = new System.Drawing.Point(411, 22);
             this.lblTeacherName.Name = "lblTeacherName";
             this.lblTeacherName.Size = new System.Drawing.Size(126, 23);
             this.lblTeacherName.TabIndex = 212;
