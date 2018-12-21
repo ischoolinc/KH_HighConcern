@@ -28,6 +28,8 @@ namespace ClassBaseInfoItem_KH
         private string _FileName = "";
         private string _base64Data = "";
 
+        private bool _Validated =false;
+
         // 是否傳送
         private bool _ChkSend = true;
         Dictionary<string, string> _TeacherNameDic;
@@ -209,6 +211,48 @@ namespace ClassBaseInfoItem_KH
             nameList.Sort();
 
             cboTeacherName.Items.AddRange(nameList.ToArray());
+        }
+
+        private void cboTeacherName_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // 必填欄位填上才給確認
+            if (cboTeacherName.Text != "" && txtMemo.Text != "" && txtEDoc.Text != "")
+            {
+                btnSend.Enabled = true;
+            }
+            else
+            {
+                btnSend.Enabled = false;
+            }
+
+        }
+
+        private void txtMemo_TextChanged(object sender, EventArgs e)
+        {
+            // 必填欄位填上才給確認
+            if (cboTeacherName.Text != "" && txtMemo.Text != "" && txtEDoc.Text != "")
+            {
+                btnSend.Enabled = true;
+            }
+            else
+            {
+                btnSend.Enabled = false;
+            }
+
+        }
+
+        private void txtEDoc_TextChanged(object sender, EventArgs e)
+        {
+            // 必填欄位填上才給確認
+            if (cboTeacherName.Text != "" && txtMemo.Text != "" && txtEDoc.Text != "")
+            {
+                btnSend.Enabled = true;
+            }
+            else
+            {
+                btnSend.Enabled = false;
+            }
+
         }
     }
 }

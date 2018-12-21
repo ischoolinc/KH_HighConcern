@@ -51,9 +51,9 @@
             this.lblMsg.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lblMsg.Location = new System.Drawing.Point(13, 13);
             this.lblMsg.Name = "lblMsg";
-            this.lblMsg.Size = new System.Drawing.Size(221, 21);
+            this.lblMsg.Size = new System.Drawing.Size(449, 21);
             this.lblMsg.TabIndex = 0;
-            this.lblMsg.Text = "說明：班級導師修改傳送至局端備查";
+            this.lblMsg.Text = "說明：班級導師修改傳送至局端備查，班導師、備註、文件網址為必填欄位";
             this.lblMsg.WordWrap = true;
             // 
             // labelX4
@@ -83,6 +83,7 @@
             this.txtMemo.Name = "txtMemo";
             this.txtMemo.Size = new System.Drawing.Size(373, 25);
             this.txtMemo.TabIndex = 4;
+            this.txtMemo.TextChanged += new System.EventHandler(this.txtMemo_TextChanged);
             // 
             // btnSend
             // 
@@ -90,6 +91,7 @@
             this.btnSend.AutoSize = true;
             this.btnSend.BackColor = System.Drawing.Color.Transparent;
             this.btnSend.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
+            this.btnSend.Enabled = false;
             this.btnSend.Location = new System.Drawing.Point(281, 169);
             this.btnSend.Name = "btnSend";
             this.btnSend.Size = new System.Drawing.Size(75, 25);
@@ -124,6 +126,7 @@
             this.txtEDoc.Name = "txtEDoc";
             this.txtEDoc.Size = new System.Drawing.Size(213, 25);
             this.txtEDoc.TabIndex = 5;
+            this.txtEDoc.TextChanged += new System.EventHandler(this.txtEDoc_TextChanged);
             // 
             // labelX6
             // 
@@ -165,6 +168,7 @@
             this.cboTeacherName.Size = new System.Drawing.Size(110, 25);
             this.cboTeacherName.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.cboTeacherName.TabIndex = 12;
+            this.cboTeacherName.SelectedIndexChanged += new System.EventHandler(this.cboTeacherName_SelectedIndexChanged);
             // 
             // labelX7
             // 
