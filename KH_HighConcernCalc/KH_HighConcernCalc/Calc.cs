@@ -43,8 +43,13 @@ namespace KH_HighConcernCalc
                     lockClassID.Add(dr["class_id"].ToString());
 
                 // 取得班級人數(一般生,休學,輟學 1,4,8) 2015/11/30 因小組會議討論後加入休學狀態
+                // 2019/02/11 穎驊執行高雄小組 [09-01][03]技藝班班級 項目 ， 
+                //調整後邏輯如下
+                //1.班級內完全沒有學生：顯示
+                //2.班級內有一般生、休學、輟學：顯示
+                //3.班級內有學生但都非一般生、休學、輟學：不顯示
                 QueryHelper qh2 = new QueryHelper();
-                string query2 = "select class.class_name,class.id as classid,count(student.id) as stud_count from student inner join class on student.ref_class_id=class.id where class.grade_year=" + GradeYear + " and student.status in(1,4,8) group by class.class_name,classid order by stud_count;";
+                string query2 = "select class.class_name,class.id as classid,count(student.id) as stud_count from class left join student on student.ref_class_id=class.id and student.status in(1,4,8) where class.grade_year=" + GradeYear + "  group by class.class_name,classid order by stud_count;";
                 DataTable dt2 = qh2.Select(query2);
                 foreach (DataRow dr in dt2.Rows)
                 {
