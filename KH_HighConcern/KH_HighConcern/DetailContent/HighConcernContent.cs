@@ -217,6 +217,8 @@ namespace KH_HighConcern.DetailContent
                             newData.NumberReduce = bb;
                             newData.DocNo = txtDocNo.Text;
                             newData.Save();
+                            //2019/2/21 俊緯更新 解決新增特殊生後直接修改特殊生相關資料在儲存後特殊生人數顯示異常的問題，這邊直接讓他重新再判斷一次是不是特殊生
+                            OnPrimaryKeyChanged(null);
                         }
                         // 傳送至局端
                         string errMsg = Utility.SendData("變更特殊身分", IDNumber, StudentNumber, StudentName, ClassName, SeatNo, DocNo, NumberReduce, EDoc);
