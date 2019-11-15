@@ -150,7 +150,7 @@ namespace StudentTransferStudentBrief_KH
                     {
                         cboSeatNo.Text = SRecord.SeatNo + "";
                         cboStudentNumber.Text = SRecord.StudentNumber;
-                        
+
                         //if (CRecord != null)
                         //    cboClass.SelectedIndex = cboClass.FindStringExact(CRecord.Name);
                     }
@@ -161,13 +161,10 @@ namespace StudentTransferStudentBrief_KH
                         // 2018/8/29 穎驊因應 高雄專案 [08-02][02]轉入學生編班  修正規則， 
                         // 如果學生本為同校生，則會有有選項，讓使用者選擇是否要回原班級，或是依照局端規則，優先提供轉入班級
                         List<KH_HighConcernCalc.ClassStudent> grClassList = Utility.GetClassNameFirst_List("" + CRecord.GradeYear);
-
-                        string msgString = "";
-                        msgString = @"本轉入生在本學校發現其原本班級:" + CRecord.Name + "(編班人數:" + grClassList.Find(c => c.ClassID == CRecord.ID).ClassStudentCount + ")" +
-                        "請問是否轉入原班級?" +"\r\n" + "若選擇為否，則會依局端系統規則優先轉入班級:" + grClassList[0].ClassName + "(編班人數:" + grClassList[0].ClassStudentCount + ")";
-
-
-                        if (FISCA.Presentation.Controls.MsgBox.Show(msgString, "提醒!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                        
+                        ClassMessage cm = new ClassMessage(CRecord.Name, grClassList.Find(c => c.ClassID == CRecord.ID).ClassStudentCount, grClassList[0].ClassName, grClassList[0].ClassStudentCount);
+                        DialogResult dr = cm.ShowDialog();
+                        if (cm.DialogResult == DialogResult.Yes)
                         {
                             txtClass.Text = CRecord.Name;
 
@@ -175,9 +172,9 @@ namespace StudentTransferStudentBrief_KH
                         else
                         {
                             txtClass.Text = grClassList[0].ClassName;
-                        }                        
+                        }
                     }
-                    
+
 
                     txtClass.ReadOnly = true;
 
@@ -252,7 +249,7 @@ namespace StudentTransferStudentBrief_KH
         #endregion
 
         #region 產生空座號
-        private void FillEmptySeatNos(int? currentSeatNo,string ClassID)
+        private void FillEmptySeatNos(int? currentSeatNo, string ClassID)
         {
             string classId = "0";
 
@@ -260,7 +257,7 @@ namespace StudentTransferStudentBrief_KH
             SeatNoRunning.Visible = true;
 
             HashSet<int> EmptySeatNos = new HashSet<int>();
-            
+
             classId = ClassID;
 
             Task task = new Task(() =>
@@ -334,7 +331,7 @@ namespace StudentTransferStudentBrief_KH
                 //如此一來，系統建議提供的建議學號，就不會有重覆的問題
 
                 HashSet<int> allseatno = new HashSet<int>();
-                
+
                 //不管狀態，該班有用過的號碼通通拿出來
                 string cmd = string.Format("select id,seat_no from student where ref_class_id='{0}'order by seat_no", classId);
 
@@ -355,10 +352,10 @@ namespace StudentTransferStudentBrief_KH
 
                     sameClassStudentIDList.Add(row["id"].ToString());
                 }
-                
+
                 // 最大號碼加一 為建議
                 allseatno.Add(seatno_Max + 1);
-                
+
                 return allseatno;
             }
             catch (Exception e)
@@ -398,7 +395,7 @@ namespace StudentTransferStudentBrief_KH
 
                 //2018/3/15 穎驊註解，因應高雄小組 [09-04][02] 轉入生學號怎麼了? 項目， 日後 轉入學生的建議號碼，一律是該班用過的最大號碼加一(不管學生的狀態)，
                 //如此一來，系統建議提供的建議學號，就不會有重覆的問題
-                if (_ClassID != null && cboSeatNo.Text!="")
+                if (_ClassID != null && cboSeatNo.Text != "")
                 {
                     cmd = string.Format("select id,seat_no from student where ref_class_id='{0}'order by seat_no", _ClassID);
 
@@ -505,13 +502,13 @@ namespace StudentTransferStudentBrief_KH
                         classOrder = "" + className_int;
 
                         //取後兩碼
-                        if (classOrder.Length>2)
+                        if (classOrder.Length > 2)
                         {
                             classOrder = classOrder.Remove(0, 1);
                         }
                     }
-                    
-                                        
+
+
                     // 假如建議座號僅有一碼，補零(1>>01)
                     string seatno_Max_string = "" + (int.Parse(cboSeatNo.Text));
 
@@ -526,7 +523,7 @@ namespace StudentTransferStudentBrief_KH
                     cboStudentNumber.Items.Add(suggestStudentNumber);
                 }
 
-                
+
 
             }, TaskScheduler.FromCurrentSynchronizationContext());
         }
@@ -803,7 +800,7 @@ namespace StudentTransferStudentBrief_KH
                 UDT_ClassSpecial StudSpec = UDTTransfer.AddClassSpecStudent(SRecord.ID, "", SRecord.RefClassID, "", txtClass.Text, txtClass.Text, "", "");
 
                 // 傳送至局端
-                string errMsg = Utility.SendData("自動轉入", SRecord.IDNumber, SRecord.StudentNumber, SRecord.Name, cboGender.Text, txtOClass.Text, cboSeatNo.Text, txtClass.Text, "", "",SRecord.ID,SRecord.RefClassID,StudSpec.ClassComment);
+                string errMsg = Utility.SendData("自動轉入", SRecord.IDNumber, SRecord.StudentNumber, SRecord.Name, cboGender.Text, txtOClass.Text, cboSeatNo.Text, txtClass.Text, "", "", SRecord.ID, SRecord.RefClassID, StudSpec.ClassComment);
                 if (errMsg != "")
                     FISCA.Presentation.Controls.MsgBox.Show(errMsg);
 
@@ -839,18 +836,18 @@ namespace StudentTransferStudentBrief_KH
             else
                 srecord.SeatNo = null;
 
-            if(_ClassID==null)
-            foreach(ClassRecord cr in Class.SelectAll())
-            {
-                if (cr.Name == txtClass.Text)
+            if (_ClassID == null)
+                foreach (ClassRecord cr in Class.SelectAll())
                 {
-                    _ClassID = cr.ID;
-                    break;
+                    if (cr.Name == txtClass.Text)
+                    {
+                        _ClassID = cr.ID;
+                        break;
+                    }
                 }
-            }
 
-                srecord.RefClassID = _ClassID;
-                (Arguments[Consts.TransferInGridItem] as StatusForm.TransferInItem).ClassName = txtClass.Text;
+            srecord.RefClassID = _ClassID;
+            (Arguments[Consts.TransferInGridItem] as StatusForm.TransferInItem).ClassName = txtClass.Text;
         }
 
         private bool IsIDNumberExists(string selfPrimaryKey, string idNumber)
@@ -868,7 +865,7 @@ namespace StudentTransferStudentBrief_KH
         }
 
         private bool SuspenSelectedValueChanged = false;
-       
+
 
         #region 新竹市專用 WS Call
         private void CallTransferInWS()
@@ -932,7 +929,7 @@ namespace StudentTransferStudentBrief_KH
         #endregion
 
         private void cboGradeYear_SelectedIndexChanged(object sender, EventArgs e)
-        {   
+        {
             if (!string.IsNullOrEmpty(cboGradeYear.Text))
             {
                 // 當學生沒有原班級才處理，有原班回到原班
