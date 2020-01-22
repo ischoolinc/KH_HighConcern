@@ -66,8 +66,8 @@
             // 
             // lblMsg
             // 
-            this.lblMsg.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.lblMsg.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblMsg.BackColor = System.Drawing.Color.Transparent;
             // 
@@ -107,6 +107,7 @@
             this.DoubleBuffered = true;
             this.Name = "MsgForm";
             this.Text = "MsgForm";
+            this.Load += new System.EventHandler(this.MsgForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

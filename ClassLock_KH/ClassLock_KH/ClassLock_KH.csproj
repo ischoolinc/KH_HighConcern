@@ -121,10 +121,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FrmApplyLock.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmApplyLock.Designer.cs">
+      <DependentUpon>FrmApplyLock.cs</DependentUpon>
+    </Compile>
     <Compile Include="DAO\UDTTransfer.cs" />
     <Compile Include="DAO\UDT_ClassLock.cs" />
     <Compile Include="DAO\UDT_ClassLock_Log.cs" />
     <Compile Include="DAO\UDT_ClassSpecial.cs" />
+    <Compile Include="FrmDistrictNotification.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmDistrictNotification.Designer.cs">
+      <DependentUpon>FrmDistrictNotification.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Model\ApplyStatus.cs" />
     <Compile Include="MsgForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -186,6 +199,12 @@
     <Content Include="Library\K12.Presentation.xml" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="FrmApplyLock.resx">
+      <DependentUpon>FrmApplyLock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmDistrictNotification.resx">
+      <DependentUpon>FrmDistrictNotification.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MsgForm.resx">
       <DependentUpon>MsgForm.cs</DependentUpon>
     </EmbeddedResource>

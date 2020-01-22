@@ -38,5 +38,10 @@ namespace ClassLock_KH
         {
             this.lblMsg.Text = msg;
         }
+
+        private void MsgForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

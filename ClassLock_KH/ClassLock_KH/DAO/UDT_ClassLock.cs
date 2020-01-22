@@ -60,5 +60,28 @@ namespace ClassLock_KH.DAO
         [Field(Field = "is_lock", Indexed = false)]
         public bool isLock { get; set; }
 
+        /// <summary>
+        /// 局端備註
+        /// </summary>
+        [Field(Field = "district_comment", Indexed = false)]
+        public string DistrictComment  { get; set; }
+
+        /// <summary>
+        /// 解鎖申請狀態 (null、解鎖申請中、局端退回、局端解鎖)
+        /// </summary>
+        [Field(Field = "lock_appling_status", Indexed = false)]
+        public string LockApplingStatus { get; set; }
+
+
+        /////<summary>
+        /////  是否 解鎖申請中
+        /////</summary>
+        //[Field(Field = "lock_appling", Indexed = false)]
+        //public bool LockAppling { get; set; }
+
+
+
+   
+       
     }
 }

@@ -66,9 +66,9 @@ namespace ClassLock_KH
                     FISCA.DSAClient.Connection cn = new FISCA.DSAClient.Connection();
                     cn.Connect(AccessPoint, Contract, DSNS, DSNS);
                     Envelope rsp = cn.SendRequest(ServiceName, new Envelope(reqXML));
-                    XElement rspXML = XElement.Parse(rsp.XmlString);                                
+                    XElement rspXML = XElement.Parse(rsp.XmlString);
                 }
-                
+
                 //2017/6/7 穎驊新增 高雄項目 [03-01][03] 巨耀局端介接學生資料欄位 巨耀自動編班 更新Service                
                 try
                 {
@@ -96,9 +96,11 @@ namespace ClassLock_KH
                 }
 
             }
-            catch (Exception ex) { 
-                
-                errMsg = ex.Message; }
+            catch (Exception ex)
+            {
+
+                errMsg = ex.Message;
+            }
             return errMsg;
         }
 
@@ -249,7 +251,7 @@ namespace ClassLock_KH
         /// <param name="Data"></param>
         /// <param name="FileName"></param>
         /// <returns></returns>
-        public static string UploadFile(string ID, string Data,string FileName)
+        public static string UploadFile(string ID, string Data, string FileName)
         {
             string DSNS = FISCA.Authentication.DSAServices.AccessPoint;
             string AccessPoint = @"j.kh.edu.tw";
@@ -286,6 +288,50 @@ namespace ClassLock_KH
                 errMsg = ex.Message;
             }
             return errMsg;
+        }
+
+
+
+
+        /// <summary>
+        ///確認是否有要通知局端解鎖
+        /// </summary>
+        /// <returns></returns>
+        public static string CheckDistrictUnlockCount()
+        {
+
+            string result = "";
+            QueryHelper qh = new QueryHelper();
+            string sql = @"
+SELECT 
+		   (xpath('/District/IsShow/text()',xmlparse(content content)))[1] AS is_show   
+		 , (xpath('/District/LogID/text()',xmlparse(content content)))[1] AS log_id   
+FROM list 
+WHERE name = '高雄_局端解鎖_通知設定' ";
+
+            try
+            {
+                DataTable dt = qh.Select(sql);
+
+                if (dt.Rows.Count != 0)
+                {
+                    string IsShow = dt.Rows[0][0] + "";
+                    string LogID = dt.Rows[0][1] + "";
+                    if (!string.IsNullOrEmpty(IsShow) && IsShow == "true")
+                    {
+                        result = LogID;
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+               
+
+            }
+
+
+            return result;
         }
 
     }
