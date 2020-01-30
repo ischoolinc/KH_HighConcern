@@ -208,7 +208,7 @@ namespace ClassLock_KH.DAO
         /// 是否自己鎖班之後會超過1/2
         /// </summary>
         /// <returns></returns>
-        public static Boolean CheckIfOneHalf()
+        public static Boolean CheckIfOneHalf(string classID)
         {
             Boolean result = false;
             QueryHelper qh = new QueryHelper();
@@ -227,21 +227,23 @@ WITH   class_lock AS (
     ON 	class.id = $kh.automatic.class.lock.class_id::INT  
 ),gradeYear_matrix   AS (
     SELECT count (*)  FROM class_lock WHERE 
-	    grade_year =(SELECT grade_year  FROM class WHERE   id =593   ) 
+	    grade_year =(SELECT grade_year  FROM class WHERE  id = {0}   ) 
 	    AND  class_lock.unauto_unlock =false
 ),gradeYear_molecule  AS (
     SELECT count (*)  FROM class_lock WHERE 
-	    grade_year =(SELECT grade_year  FROM class WHERE   id =593 ) 
+	    grade_year =(SELECT grade_year  FROM class WHERE  id = {0} ) 
 	    AND class_lock.unauto_unlock = false 
 	    AND class_lock.is_lock= true 
 )SELECT 
-	(gradeYear_molecule.count)+1 ::INT /(gradeYear_matrix.count) 
-	
+((gradeYear_molecule.count)+1) ::Decimal  /(gradeYear_matrix.count)
 FROM 
 		gradeYear_molecule 
 	CROSS JOIN 
 		gradeYear_matrix
 ";
+
+            sql = string.Format(sql, classID);
+
             DataTable dt = qh.Select(sql);
 
             string count = dt.Rows[0][0] + "";

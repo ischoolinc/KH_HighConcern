@@ -302,6 +302,18 @@ namespace ClassLock_KH
 
             string result = "";
             QueryHelper qh = new QueryHelper();
+            //先確認資料庫是否有這一個
+            string checkHasDistrictNote = @"SELECT count(*) FROM  list  WHERE name = '高雄_局端解鎖_通知設定' ";
+
+            DataTable  dtcheckCount  =qh.Select(checkHasDistrictNote);
+
+            string count= dtcheckCount.Rows[0][0] + "";
+            
+            //如果沒有通知設定檔
+            if (count=="0")
+            {
+                return "";
+            }
             string sql = @"
 SELECT 
 		   (xpath('/District/IsShow/text()',xmlparse(content content)))[1] AS is_show   

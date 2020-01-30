@@ -397,7 +397,7 @@ namespace ClassLock_KH
                         if (sendDataForm.ShowDialog() == System.Windows.Forms.DialogResult.Yes) //當按下確定時
                         {
                             //todo
-                            if (UDTTransfer.CheckIfOneHalf() ) //204班  當(鎖班數超過1/2)
+                            if (UDTTransfer.CheckIfOneHalf(cid) ) //204班  當(鎖班數超過1/2)
                             {
                                 FrmApplyLock frmApplyLock = new FrmApplyLock(); //1.詢問是否提出申請
 
@@ -491,23 +491,23 @@ namespace ClassLock_KH
 
                                 //傳送檔案到局端 ( $upload_url ) <申請也要> <直接鎖班也要>
                                 Utility.UploadFile(data.ClassID, sendDataForm.GetBase64DataString(), sendDataForm.GetFileName());
-                            }
 
-
-                            if (errMsg != "")
-                                FISCA.Presentation.Controls.MsgBox.Show(errMsg);
-                            else
-                            {   // todo 
-                                if (IsApplyLock)
-                                {
-
-                                }
+                                //正常途徑鎖定
+                                if (errMsg != "")
+                                    FISCA.Presentation.Controls.MsgBox.Show(errMsg);
                                 else
-                                {
-                                    if (data.UnAutoUnlock)
-                                        MsgBox.Show("已鎖定(不自動解鎖)");
+                                {   // todo 
+                                    if (IsApplyLock)
+                                    {
+
+                                    }
                                     else
-                                        MsgBox.Show("已鎖定");
+                                    {
+                                        if (data.UnAutoUnlock)
+                                            MsgBox.Show("已鎖定(不自動解鎖)");
+                                        else
+                                            MsgBox.Show("已鎖定");
+                                    }
                                 }
                             }
                         }
