@@ -329,7 +329,7 @@ WHERE name = '高雄_局端解鎖_通知設定' ";
                 {
                     string IsShow = dt.Rows[0][0] + "";
                     string LogID = dt.Rows[0][1] + "";
-                    if (!string.IsNullOrEmpty(IsShow) && IsShow == "true")
+                    if (!string.IsNullOrEmpty(IsShow) && IsShow.Trim() == "true")
                     {
                         result = LogID;
 

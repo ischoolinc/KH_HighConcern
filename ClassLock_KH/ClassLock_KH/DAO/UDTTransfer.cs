@@ -250,7 +250,7 @@ FROM
 
             double lockCountRate;
             Double.TryParse(count, out lockCountRate);
-            if (lockCountRate > 1 / 2)
+            if (lockCountRate > 0.5)
             {
                 result = true;
             }

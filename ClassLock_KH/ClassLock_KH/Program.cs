@@ -485,29 +485,35 @@ namespace ClassLock_KH
 
                                     data.isLock = true;
 
-                                }
-                                //將資料送到局端 ( $school_log ) <申請也要> <直接鎖班也要>
-                                errMsg = Utility.SendData(classRec.Name, grYear, "", "鎖定班級", strDate, strComment, strDocNo, strEDoc, data.ClassID, SecondPriorityClassName, ThridPriorityClassName);
 
-                                //傳送檔案到局端 ( $upload_url ) <申請也要> <直接鎖班也要>
-                                Utility.UploadFile(data.ClassID, sendDataForm.GetBase64DataString(), sendDataForm.GetFileName());
+                                    //將資料送到局端 ( $school_log ) <申請也要> <直接鎖班也要>
+                                    errMsg = Utility.SendData(classRec.Name, grYear, "", "鎖定班級", strDate, strComment, strDocNo, strEDoc, data.ClassID, SecondPriorityClassName, ThridPriorityClassName);
 
-                                //正常途徑鎖定
-                                if (errMsg != "")
-                                    FISCA.Presentation.Controls.MsgBox.Show(errMsg);
-                                else
-                                {   // todo 
-                                    if (IsApplyLock)
-                                    {
+                                    //傳送檔案到局端 ( $upload_url ) <申請也要> <直接鎖班也要>
+                                    Utility.UploadFile(data.ClassID, sendDataForm.GetBase64DataString(), sendDataForm.GetFileName());
 
-                                    }
+                                    //正常途徑鎖定
+                                    if (errMsg != "")
+                                        FISCA.Presentation.Controls.MsgBox.Show(errMsg);
                                     else
-                                    {
-                                        if (data.UnAutoUnlock)
-                                            MsgBox.Show("已鎖定(不自動解鎖)");
+                                    {   // todo 
+                                        if (IsApplyLock)
+                                        {
+
+                                        }
                                         else
-                                            MsgBox.Show("已鎖定");
+                                        {
+                                            if (data.UnAutoUnlock)
+                                                MsgBox.Show("已鎖定(不自動解鎖)");
+                                            else
+                                                MsgBox.Show("已鎖定");
+                                        }
                                     }
+
+                                }
+                                else 
+                                {
+                                    return;
                                 }
                             }
                         }

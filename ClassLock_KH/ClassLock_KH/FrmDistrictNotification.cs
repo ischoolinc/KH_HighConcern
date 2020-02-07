@@ -50,9 +50,9 @@ namespace ClassLock_KH
             if (chkNotShow.Checked) //如果不要在顯示
             {
                 // update list 
-                string contentStr = "<District> <LogID>" + this._LogIDD + "</LogID> <IsShow> false </IsShow> </District> RETURNING *";
+                string contentStr = "<District> <LogID>" + this._LogIDD + "</LogID> <IsShow> false </IsShow> </District> ";
 
-                string sql = $"UPDATE list SET content = '{contentStr}' WHERE  name  = '高雄_局端解鎖_通知設定'";
+                string sql = $"UPDATE list SET content = '{contentStr}' WHERE  name  = '高雄_局端解鎖_通知設定' RETURNING * ";
 
                 try
                 {
@@ -63,13 +63,6 @@ namespace ClassLock_KH
                 {
                     MsgBox.Show("發生錯誤 : "+ ex.Message);
                 }
-
-            }
-            else
-            {
-
-
-
             }
 
             this.Close();
