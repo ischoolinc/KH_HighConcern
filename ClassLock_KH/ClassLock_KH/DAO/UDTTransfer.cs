@@ -228,7 +228,7 @@ WITH   class_lock AS (
 ),gradeYear_matrix   AS (
     SELECT count (*)  FROM class_lock WHERE 
 	    grade_year =(SELECT grade_year  FROM class WHERE  id = {0}   ) 
-	    AND  class_lock.unauto_unlock =false
+	    AND ( class_lock.unauto_unlock =false  OR  unauto_unlock IS NULL)
 ),gradeYear_molecule  AS (
     SELECT count (*)  FROM class_lock WHERE 
 	    grade_year =(SELECT grade_year  FROM class WHERE  id = {0} ) 

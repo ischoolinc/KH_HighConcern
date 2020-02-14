@@ -124,7 +124,7 @@ namespace ClassLock_KH
 
             K12.Presentation.NLDPanels.Class.AddListPaneField(ClassLockField);
 
-            ListPaneField ClassLockCommentField = new ListPaneField("鎖定備註");
+          ListPaneField ClassLockCommentField = new ListPaneField("鎖定備註");
             ClassLockCommentField.GetVariable += delegate (object sender, GetVariableEventArgs e)
             {
                 // 只要有資料就顯示

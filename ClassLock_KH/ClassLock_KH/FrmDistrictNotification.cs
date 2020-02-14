@@ -36,6 +36,7 @@ namespace ClassLock_KH
                 string description = dt.Rows[0][0] + "";
 
                 this.labelX2.Text = description;
+                //this.textInfo.Text = description;
             }
             catch (Exception ex)
             {

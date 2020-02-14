@@ -31,20 +31,18 @@
             this.btnSend = new DevComponents.DotNetBar.ButtonX();
             this.chkNotShow = new DevComponents.DotNetBar.Controls.CheckBoxX();
             this.labelX1 = new DevComponents.DotNetBar.LabelX();
-            this.labelX2 = new DevComponents.DotNetBar.LabelX();
             this.wizard1 = new DevComponents.DotNetBar.Wizard();
+            this.labelX2 = new DevComponents.DotNetBar.LabelX();
             this.SuspendLayout();
             // 
             // btnSend
             // 
             this.btnSend.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
-            this.btnSend.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSend.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSend.AutoSize = true;
             this.btnSend.BackColor = System.Drawing.Color.Transparent;
             this.btnSend.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnSend.Location = new System.Drawing.Point(590, 138);
+            this.btnSend.Location = new System.Drawing.Point(569, 136);
             this.btnSend.Name = "btnSend";
             this.btnSend.Size = new System.Drawing.Size(75, 25);
             this.btnSend.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -54,15 +52,16 @@
             // 
             // chkNotShow
             // 
+            this.chkNotShow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.chkNotShow.BackColor = System.Drawing.Color.Transparent;
             // 
             // 
             // 
             this.chkNotShow.BackgroundStyle.Class = "";
             this.chkNotShow.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.chkNotShow.Location = new System.Drawing.Point(12, 138);
+            this.chkNotShow.Location = new System.Drawing.Point(438, 136);
             this.chkNotShow.Name = "chkNotShow";
-            this.chkNotShow.Size = new System.Drawing.Size(171, 23);
+            this.chkNotShow.Size = new System.Drawing.Size(108, 23);
             this.chkNotShow.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.chkNotShow.TabIndex = 8;
             this.chkNotShow.Text = "不再顯示通知";
@@ -76,28 +75,11 @@
             // 
             this.labelX1.BackgroundStyle.Class = "";
             this.labelX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX1.Location = new System.Drawing.Point(22, 25);
+            this.labelX1.Location = new System.Drawing.Point(12, 12);
             this.labelX1.Name = "labelX1";
             this.labelX1.Size = new System.Drawing.Size(90, 21);
             this.labelX1.TabIndex = 9;
             this.labelX1.Text = "高雄局端通知:";
-            // 
-            // labelX2
-            // 
-            this.labelX2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelX2.AutoSize = true;
-            this.labelX2.BackColor = System.Drawing.Color.Transparent;
-            // 
-            // 
-            // 
-            this.labelX2.BackgroundStyle.Class = "";
-            this.labelX2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX2.Location = new System.Drawing.Point(22, 52);
-            this.labelX2.Name = "labelX2";
-            this.labelX2.Size = new System.Drawing.Size(0, 0);
-            this.labelX2.TabIndex = 10;
             // 
             // wizard1
             // 
@@ -132,11 +114,29 @@
             this.wizard1.Size = new System.Drawing.Size(548, 375);
             this.wizard1.TabIndex = 0;
             // 
+            // labelX2
+            // 
+            this.labelX2.AutoSize = true;
+            this.labelX2.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX2.BackgroundStyle.Class = "";
+            this.labelX2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX2.Location = new System.Drawing.Point(12, 39);
+            this.labelX2.Margin = new System.Windows.Forms.Padding(3, 3, 3, 8);
+            this.labelX2.Name = "labelX2";
+            this.labelX2.Size = new System.Drawing.Size(60, 21);
+            this.labelX2.TabIndex = 10;
+            this.labelX2.Text = "通知內容";
+            this.labelX2.WordWrap = true;
+            // 
             // FrmDistrictNotification
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(690, 173);
+            this.AutoSize = true;
+            this.ClientSize = new System.Drawing.Size(656, 169);
             this.Controls.Add(this.labelX2);
             this.Controls.Add(this.labelX1);
             this.Controls.Add(this.chkNotShow);
@@ -156,7 +156,7 @@
         private DevComponents.DotNetBar.ButtonX btnSend;
         private DevComponents.DotNetBar.Controls.CheckBoxX chkNotShow;
         private DevComponents.DotNetBar.LabelX labelX1;
-        private DevComponents.DotNetBar.LabelX labelX2;
         private DevComponents.DotNetBar.Wizard wizard1;
+        private DevComponents.DotNetBar.LabelX labelX2;
     }
 }
