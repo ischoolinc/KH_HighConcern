@@ -73,6 +73,9 @@ namespace ClassLock_KH.DAO
         public string LockApplingStatus { get; set; }
 
 
+        [Field(Field = "district_nulock_date", Indexed = false)]
+        public DateTime? DistrictNulockDate { get; set; }
+
         /////<summary>
         /////  是否 解鎖申請中
         /////</summary>
@@ -81,7 +84,7 @@ namespace ClassLock_KH.DAO
 
 
 
-   
-       
+
+
     }
 }

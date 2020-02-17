@@ -397,7 +397,7 @@ namespace ClassLock_KH
                         if (sendDataForm.ShowDialog() == System.Windows.Forms.DialogResult.Yes) //當按下確定時
                         {
                             //todo
-                            if (UDTTransfer.CheckIfOneHalf(cid) ) //204班  當(鎖班數超過1/2)
+                            if (UDTTransfer.CheckIfOneHalf(cid)) //204班  當(鎖班數超過1/2)
                             {
                                 FrmApplyLock frmApplyLock = new FrmApplyLock(); //1.詢問是否提出申請
 
@@ -554,13 +554,18 @@ namespace ClassLock_KH
                     try
                     {
                         UDTTransfer.CancelAppling(cid);
-                        MsgBox.Show("已取消取消鎖班申請(超過年級鎖班數1/2)!");
+                        MsgBox.Show("已取消鎖班申請!");
                     }
                     catch (Exception ex)
                     {
                         MsgBox.Show($"取消申請發生錯誤! \n{ex.Message} \n {ex.StackTrace}");
                     }
                 }
+                _UDT_ClassLockDict = UDTTransfer.GetClassLockNameIDDict();
+                ClassLockField.Reload();
+                ClassLockCommentField.Reload();
+                ClassLockStudentCountField.Reload();
+                ClassLockSStudentCountField.Reload();
             };
         }
 

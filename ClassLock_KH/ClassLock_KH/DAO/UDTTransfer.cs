@@ -267,11 +267,7 @@ FROM
             string sql = $"UPDATE  $kh.automatic.class.lock  SET  lock_appling_status = NULL , comment = NULL WHERE class_id = '{classID}'  RETURNING *";
 
             qh.Select(sql);
-
         }
-
-
-
         /// <summary>
         /// 確認本班是否解鎖申請中 
         /// </summary>
