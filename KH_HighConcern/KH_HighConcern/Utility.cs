@@ -12,7 +12,12 @@ namespace KH_HighConcern
 {
     public class Utility
     {
-        public static string SendData(string action, string IDNumber, string StudentNumber, string StudentName, string ClassName, string SeatNo, string DocNo, string NumberReduce,string EDoc)
+        /// <summary>
+        /// *.變更特殊身分
+        /// *.取消特殊身分
+        /// </summary>
+        /// <returns></returns>
+        public static string SendData(string action, string IDNumber, string StudentNumber, string StudentName, string ClassName, string SeatNo, string DocNo, string NumberReduce, string EDoc)
         {
             string DSNS = FISCA.Authentication.DSAServices.AccessPoint;
 
@@ -30,7 +35,7 @@ namespace KH_HighConcern
 
             string errMsg = "";
             try
-            {                
+            {
                 {
                     XElement xmlRoot = new XElement("Request");
                     XElement s1 = new XElement("SchoolLog");
@@ -54,7 +59,7 @@ namespace KH_HighConcern
                     FISCA.DSAClient.Connection cn = new FISCA.DSAClient.Connection();
                     cn.Connect(AccessPoint, Contract, DSNS, DSNS);
                     Envelope rsp = cn.SendRequest(ServiceName, new Envelope(reqXML));
-                    XElement rspXML = XElement.Parse(rsp.XmlString);                
+                    XElement rspXML = XElement.Parse(rsp.XmlString);
                 }
                 //2017/6/7 穎驊新增 高雄項目 [03-01][03] 巨耀局端介接學生資料欄位 巨耀自動編班 更新Service                
                 try
@@ -81,15 +86,19 @@ namespace KH_HighConcern
                 {
 
                 }
-                
-               
+
+
             }
             catch (Exception ex) { errMsg = ex.Message; }
 
             return errMsg;
         }
 
-        public static string SendDataList(string action,List<logStud> logStudList)
+        /// <summary>
+        /// 匯入特殊身分使用
+        /// </summary>
+        /// <returns></returns>
+        public static string SendDataList(string action, List<logStud> logStudList)
         {
             string DSNS = FISCA.Authentication.DSAServices.AccessPoint;
 
@@ -99,7 +108,7 @@ namespace KH_HighConcern
             {
                 string accPoint = FISCA.RTContext.GetConstant("KH_AccessPoint");
                 if (!string.IsNullOrEmpty(accPoint))
-                 AccessPoint = accPoint;
+                    AccessPoint = accPoint;
             }
 
             string Contract = "log";
@@ -142,9 +151,9 @@ namespace KH_HighConcern
                     cn.Connect(AccessPoint, Contract, DSNS, DSNS);
                     Envelope rsp = cn.SendRequest(ServiceName, new Envelope(reqXML));
                     XElement rspXML = XElement.Parse(rsp.XmlString);
-                
+
                 }
-                
+
                 //2017/6/7 穎驊新增 高雄項目 [03-01][03] 巨耀局端介接學生資料欄位 巨耀自動編班 更新Service                
                 try
                 {
@@ -173,6 +182,48 @@ namespace KH_HighConcern
             }
             catch (Exception ex) { errMsg = ex.Message; }
 
+            return errMsg;
+        }
+
+        /// <summary>
+        /// 上傳檔案到局端 - 2020/7/30參考班級鎖定功能
+        /// </summary>
+        public static string UploadFile(string ID, string Data, string FileName)
+        {
+            string DSNS = FISCA.Authentication.DSAServices.AccessPoint;
+            string AccessPoint = @"j.kh.edu.tw";
+
+            if (FISCA.RTContext.IsDiagMode)
+            {
+                string accPoint = FISCA.RTContext.GetConstant("KH_AccessPoint");
+                if (!string.IsNullOrEmpty(accPoint))
+                    AccessPoint = accPoint;
+            }
+
+            string Contract = "log";
+            string ServiceName = "_.Upload";
+
+            string errMsg = "";
+            try
+            {
+                XElement xmlRoot = new XElement("Request");
+                xmlRoot.SetElementValue("ID", ID);
+                xmlRoot.SetElementValue("Data", Data);
+                xmlRoot.SetElementValue("FileName", FileName);
+                xmlRoot.SetElementValue("DSNS", DSNS);
+                xmlRoot.SetElementValue("Type", "student");
+                XmlHelper reqXML = new XmlHelper(xmlRoot.ToString());
+                FISCA.DSAClient.Connection cn = new FISCA.DSAClient.Connection();
+                cn.Connect(AccessPoint, Contract, DSNS, DSNS);
+                Envelope rsp = cn.SendRequest(ServiceName, new Envelope(reqXML));
+                XElement rspXML = XElement.Parse(rsp.XmlString);
+
+            }
+            catch (Exception ex)
+            {
+
+                errMsg = ex.Message;
+            }
             return errMsg;
         }
     }

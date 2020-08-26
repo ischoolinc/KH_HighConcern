@@ -35,6 +35,7 @@
             this.txtDocNo = new DevComponents.DotNetBar.Controls.TextBoxX();
             this.txtEDoc = new DevComponents.DotNetBar.Controls.TextBoxX();
             this.labelX3 = new DevComponents.DotNetBar.LabelX();
+            this.btnUploadFile = new DevComponents.DotNetBar.ButtonX();
             this.SuspendLayout();
             // 
             // labelX1
@@ -117,7 +118,7 @@
             this.txtEDoc.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.txtEDoc.Location = new System.Drawing.Point(144, 58);
             this.txtEDoc.Name = "txtEDoc";
-            this.txtEDoc.Size = new System.Drawing.Size(393, 25);
+            this.txtEDoc.Size = new System.Drawing.Size(311, 25);
             this.txtEDoc.TabIndex = 7;
             this.txtEDoc.TextChanged += new System.EventHandler(this.txtEDoc_TextChanged);
             // 
@@ -135,10 +136,25 @@
             this.labelX3.TabIndex = 6;
             this.labelX3.Text = "相關證明文件網址";
             // 
+            // btnUploadFile
+            // 
+            this.btnUploadFile.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
+            this.btnUploadFile.AutoSize = true;
+            this.btnUploadFile.BackColor = System.Drawing.Color.Transparent;
+            this.btnUploadFile.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
+            this.btnUploadFile.Location = new System.Drawing.Point(461, 58);
+            this.btnUploadFile.Name = "btnUploadFile";
+            this.btnUploadFile.Size = new System.Drawing.Size(75, 25);
+            this.btnUploadFile.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.btnUploadFile.TabIndex = 8;
+            this.btnUploadFile.Text = " 上傳檔案";
+            this.btnUploadFile.Click += new System.EventHandler(this.btnUploadFile_Click);
+            // 
             // HighConcernContent
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnUploadFile);
             this.Controls.Add(this.txtEDoc);
             this.Controls.Add(this.labelX3);
             this.Controls.Add(this.txtDocNo);
@@ -162,5 +178,6 @@
         private DevComponents.DotNetBar.Controls.TextBoxX txtDocNo;
         private DevComponents.DotNetBar.Controls.TextBoxX txtEDoc;
         private DevComponents.DotNetBar.LabelX labelX3;
+        private DevComponents.DotNetBar.ButtonX btnUploadFile;
     }
 }

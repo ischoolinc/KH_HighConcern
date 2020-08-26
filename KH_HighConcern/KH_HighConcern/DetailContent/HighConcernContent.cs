@@ -8,29 +8,30 @@ using System.Text;
 using System.Windows.Forms;
 using KH_HighConcern.DAO;
 using Campus.Windows;
+using System.IO;
 
 namespace KH_HighConcern.DetailContent
 {
-     [FISCA.Permission.FeatureCode("KH_HighConcern_HighConcernContent", "高關懷特殊身分")]
+    [FISCA.Permission.FeatureCode("KH_HighConcern_HighConcernContent", "高關懷特殊身分")]
     public partial class HighConcernContent : FISCA.Presentation.DetailContent
     {
         EventHandler eh;
         string EventCode = "KH_HighConcern_HighConcernContent";
 
-         Dictionary<string,UDT_HighConcern> _HighConcernDict;
-         List<string> sidList;
-         BackgroundWorker _bgWorker;
-         private ChangeListener _ChangeListener;
-         K12.Data.StudentRecord _StudRec;
-         bool _isBusy = false;
-         ErrorProvider _errorP;
+        Dictionary<string, UDT_HighConcern> _HighConcernDict;
+        List<string> sidList;
+        BackgroundWorker _bgWorker;
+        private ChangeListener _ChangeListener;
+        K12.Data.StudentRecord _StudRec;
+        bool _isBusy = false;
+        ErrorProvider _errorP;
         public HighConcernContent()
         {
             _HighConcernDict = new Dictionary<string, UDT_HighConcern>();
             _ChangeListener = new ChangeListener();
             sidList = new List<string>();
             _errorP = new ErrorProvider();
-            InitializeComponent();            
+            InitializeComponent();
             this.Group = "高關懷特殊身分";
             _bgWorker = new BackgroundWorker();
             _bgWorker.DoWork += _bgWorker_DoWork;
@@ -58,13 +59,13 @@ namespace KH_HighConcern.DetailContent
             {
                 _isBusy = false;
                 _bgWorker.RunWorkerAsync();
-                return;              
+                return;
             }
             LoadData();
         }
 
         void _bgWorker_DoWork(object sender, DoWorkEventArgs e)
-        {            
+        {
             _HighConcernDict = UDTTransfer.GetHighConcernDictByStudentIDList(sidList);
             _StudRec = K12.Data.Student.SelectByID(PrimaryKey);
         }
@@ -144,7 +145,7 @@ namespace KH_HighConcern.DetailContent
                 retVal = false;
             }
 
-            if(txtEDoc.Text.Trim()=="")
+            if (txtEDoc.Text.Trim() == "")
             {
                 _errorP.SetError(txtEDoc, "相關證明文件網址");
                 retVal = false;
@@ -173,7 +174,7 @@ namespace KH_HighConcern.DetailContent
                 DocNo = txtDocNo.Text;
                 EDoc = txtEDoc.Text;
 
-                if(chkHighConcern.Checked)
+                if (chkHighConcern.Checked)
                 {
                     #region 傳送變更特殊身分
                     MsgForm mf = new MsgForm();
@@ -239,7 +240,7 @@ namespace KH_HighConcern.DetailContent
                         // 取消清空畫面值與刪除該筆UDT
                         txtCount.Text = "";
                         txtDocNo.Text = "";
-                        txtEDoc.Text = "";                     
+                        txtEDoc.Text = "";
                         _HighConcernDict[PrimaryKey].Deleted = true;
                         _HighConcernDict[PrimaryKey].Save();
 
@@ -251,6 +252,15 @@ namespace KH_HighConcern.DetailContent
                     }
 
                     #endregion
+                }
+
+                //2020/7/31 - 增加上傳檔案功能
+                //此欄位若是沒有_base64Data
+                //就只是儲存URL位置
+                //有_base64Data,表示可上傳檔案
+                if (_FileName != "" && _base64Data != "")
+                {
+                    Utility.UploadFile(_StudRec.ID, _base64Data, _FileName);
                 }
 
                 this.CancelButtonVisible = false;
@@ -293,6 +303,37 @@ namespace KH_HighConcern.DetailContent
             _errorP.SetError(txtEDoc, "");
             //if (txtEDoc.Text != "")
             //    chkHighConcern.Checked = true;
+        }
+
+        //上傳檔案專用 - 2020/7/30
+        private string _base64Data = "";
+        private string _FileName = "";
+
+        private void btnUploadFile_Click(object sender, EventArgs e)
+        {
+            Guid g = Guid.NewGuid();
+
+            string DSNS = FISCA.Authentication.DSAServices.AccessPoint;
+
+            OpenFileDialog ofd = new OpenFileDialog();
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                // 取得檔案
+                _FileName = g.ToString() + ofd.SafeFileName;
+                txtEDoc.Text = "https://storage.googleapis.com/1campus-photo/j.kh.edu.tw/" + DSNS + "/upload_" + _FileName;
+                // 轉 Base64
+                try
+                {
+                    MemoryStream ms = new MemoryStream();
+                    ofd.OpenFile().CopyTo(ms);
+                    _base64Data = Convert.ToBase64String(ms.ToArray());
+
+                }
+                catch (Exception ex)
+                {
+                    FISCA.Presentation.Controls.MsgBox.Show("讀取上傳檔案失敗," + ex.Message);
+                }
+            }
         }
     }
 }
