@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>KH_HighConcern</RootNamespace>
     <AssemblyName>KH_HighConcern</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Aspose.Cells_201402, Version=7.7.1.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
@@ -45,9 +48,9 @@
       <HintPath>Library\Campus.DocumentValidator.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Campus.Import, Version=1.0.9.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Campus.Import2014, Version=1.0.9.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Library\Campus.Import.dll</HintPath>
+      <HintPath>Library\Campus.Import2014.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Campus.Report, Version=1.0.0.11, Culture=neutral, processorArchitecture=MSIL">
@@ -200,9 +203,8 @@
     <Content Include="Library\Campus.DocumentValidator.dll" />
     <Content Include="Library\Campus.DocumentValidator.pdb" />
     <Content Include="Library\Campus.DocumentValidator.xml" />
-    <Content Include="Library\Campus.Import.dll" />
-    <Content Include="Library\Campus.Import.pdb" />
-    <Content Include="Library\Campus.Import.xml" />
+    <Content Include="Library\Campus.Import2014.dll" />
+    <Content Include="Library\Campus.Import2014.pdb" />
     <Content Include="Library\Campus.pdb" />
     <Content Include="Library\Campus.Report.dll" />
     <Content Include="Library\Campus.Report.pdb" />
