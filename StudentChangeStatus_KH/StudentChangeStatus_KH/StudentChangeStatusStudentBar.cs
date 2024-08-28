@@ -17,7 +17,7 @@ namespace StudentChangeStatus_KH
 {
     public partial class StudentChangeStatusStudentBar : DescriptionPane, IDescriptionPaneBulider
     {
-         private BackgroundWorker TaggingWorker = new BackgroundWorker();
+        private BackgroundWorker TaggingWorker = new BackgroundWorker();
 
         private bool HasPadding = false;
 
@@ -48,7 +48,7 @@ namespace StudentChangeStatus_KH
             StatusList = new List<ButtonItem>();
 
             //依據設定動態建立功能表。
-            foreach (StatusItem each in  Tagging.Program.StatusList)
+            foreach (StatusItem each in Tagging.Program.StatusList)
             {
                 ButtonItem item = new ButtonItem();
 
@@ -58,6 +58,10 @@ namespace StudentChangeStatus_KH
                 item.OptionGroup = "status";
                 item.Text = each.Text;
                 item.Tag = each;
+
+
+
+
                 if (Permissions.變更學生狀態權限)
                 {
                     item.CheckedChanged += new System.EventHandler(this.StatusMenu_CheckedChanged);
@@ -67,8 +71,8 @@ namespace StudentChangeStatus_KH
                 {
                     item.Enabled = false;
                 }
-
-                StatusList.Add(item);
+                if (item.Text != "休學")
+                    StatusList.Add(item);
             }
 
             this.StatusContainer = new DevComponents.DotNetBar.ButtonItem();
@@ -446,90 +450,93 @@ namespace StudentChangeStatus_KH
                 if (studentRec != null)
                 {
                     if ((StatusItem)button.Tag != GetStatusItem(studentRec.Status).Value)
-                    {                      
-                            try
-                            {
-                                bool chkSendSpec = false;
+                    {
+                        try
+                        {
+                            bool chkSendSpec = false;
 
-                                string StudStatus=studentRec.StatusStr;
-                                string NewStudStatus=((StatusItem)button.Tag).Text;
+                            string StudStatus = studentRec.StatusStr;
+                            string NewStudStatus = ((StatusItem)button.Tag).Text;
 
-                                if ((StudStatus == "畢業或離校" || StudStatus == "休學" || StudStatus == "刪除") && NewStudStatus == "一般")
-                                    chkSendSpec = true;
-
-                                //string ShowMsg = "請問是否將 " + studentRec.Name + " 由" + StudStatus + " 調整成 " + NewStudStatus + "，按下「是」確認後，局端會留狀態變更紀錄。"; 
-
-                                //if (chkSendSpec)
-                                //{
-                                //    ShowMsg = "請問是否將 " + studentRec.Name + " 由" + StudStatus + " 調整成 " + NewStudStatus + "，按下「是」確認後，需報局備查。"; 
-                                //}
-
-                                sendMessage smg = new sendMessage(studentRec.Name, StudStatus, NewStudStatus, chkSendSpec);
-                                if(smg.ShowDialog()== DialogResult.Yes)
-                                {                                 
-                                    string log = "學生「" + studentRec.Name + "」狀態已";
-                                    log += "由「" + studentRec.StatusStr + "」變更為「" + ((StatusItem)button.Tag).Text + "」";
-
-                                    studentRec.Status = ((StatusItem)button.Tag).Status;
-
-                                    // 檢查同狀態要身分證或學號相同時，無法變更
-                                    List<string> checkIDNumber = new List<string>();
-                                    List<string> checkSnum = new List<string>();
-
-                                    foreach (StudentRecord studRec in K12.Data.Student.SelectAll())
-                                    {
-                                        if (studRec.Status == studentRec.Status)
-                                        {
-                                            if (!string.IsNullOrEmpty(studRec.StudentNumber))
-                                                checkSnum.Add(studRec.StudentNumber.Trim());
-                                            if (!string.IsNullOrEmpty(studRec.IDNumber))
-                                                checkIDNumber.Add(studRec.IDNumber.Trim());
-                                        }
-                                    }
-
-                                    if (checkSnum.Contains(studentRec.StudentNumber.Trim()))
-                                    {
-                                        MsgBox.Show("在" + studentRec.Status.ToString() + "狀態學號有重複無法變更.");
-                                        return;
-                                    }
-
-                                    if (checkIDNumber.Contains(studentRec.IDNumber.Trim()))
-                                    {
-                                        MsgBox.Show("在" + studentRec.Status.ToString() + "狀態身分證號有重複無法變更.");
-                                        return;
-                                    }
-
-
-                                    // 傳送到局端
-                                    string action = "一般狀態變更";
-
-                                    // 特殊狀態
-                                    if (chkSendSpec)
-                                        action = "特殊狀態變更";
-
-                                    string ClassName = "";
-                                    if (studentRec.Class != null)
-                                        ClassName = studentRec.Class.Name;
-                                    Utility.SendData(action, ClassName, studentRec.Name, studentRec.StudentNumber, studentRec.IDNumber, StudStatus, NewStudStatus,smg.GetMessage());
-
-                                    K12.Data.Student.Update(studentRec);
-                                    FISCA.LogAgent.ApplicationLog.Log("學生狀態", "變更", "student", studentRec.ID, log);
-
-                                    //註冊一個事件引發模組
-                                    EventHandler eh = FISCA.InteractionService.PublishEvent("KH_StudentChangeStatus");
-                                    eh(this, EventArgs.Empty);
-                                }
-                            }
-                            catch (ArgumentException)
-                            {
-                                MessageBox.Show("目前無法移到刪除");
-                            }
-                            catch
-                            {
-                                MotherForm.SetStatusBarMessage("變更狀態失敗，可能發生原因為學號或身分證號在" + button.Text + "學生中已經存在，請檢查學生資料。");
+                            if (NewStudStatus == "休學" || StudStatus == "休學")
                                 return;
+
+                            if ((StudStatus == "畢業或離校" || StudStatus == "刪除") && NewStudStatus == "一般")
+                                chkSendSpec = true;
+
+                            //string ShowMsg = "請問是否將 " + studentRec.Name + " 由" + StudStatus + " 調整成 " + NewStudStatus + "，按下「是」確認後，局端會留狀態變更紀錄。"; 
+
+                            //if (chkSendSpec)
+                            //{
+                            //    ShowMsg = "請問是否將 " + studentRec.Name + " 由" + StudStatus + " 調整成 " + NewStudStatus + "，按下「是」確認後，需報局備查。"; 
+                            //}
+
+                            sendMessage smg = new sendMessage(studentRec.Name, StudStatus, NewStudStatus, chkSendSpec);
+                            if (smg.ShowDialog() == DialogResult.Yes)
+                            {
+                                string log = "學生「" + studentRec.Name + "」狀態已";
+                                log += "由「" + studentRec.StatusStr + "」變更為「" + ((StatusItem)button.Tag).Text + "」";
+
+                                studentRec.Status = ((StatusItem)button.Tag).Status;
+
+                                // 檢查同狀態要身分證或學號相同時，無法變更
+                                List<string> checkIDNumber = new List<string>();
+                                List<string> checkSnum = new List<string>();
+
+                                foreach (StudentRecord studRec in K12.Data.Student.SelectAll())
+                                {
+                                    if (studRec.Status == studentRec.Status)
+                                    {
+                                        if (!string.IsNullOrEmpty(studRec.StudentNumber))
+                                            checkSnum.Add(studRec.StudentNumber.Trim());
+                                        if (!string.IsNullOrEmpty(studRec.IDNumber))
+                                            checkIDNumber.Add(studRec.IDNumber.Trim());
+                                    }
+                                }
+
+                                if (checkSnum.Contains(studentRec.StudentNumber.Trim()))
+                                {
+                                    MsgBox.Show("在" + studentRec.Status.ToString() + "狀態學號有重複無法變更.");
+                                    return;
+                                }
+
+                                if (checkIDNumber.Contains(studentRec.IDNumber.Trim()))
+                                {
+                                    MsgBox.Show("在" + studentRec.Status.ToString() + "狀態身分證號有重複無法變更.");
+                                    return;
+                                }
+
+
+                                // 傳送到局端
+                                string action = "一般狀態變更";
+
+                                // 特殊狀態
+                                if (chkSendSpec)
+                                    action = "特殊狀態變更";
+
+                                string ClassName = "";
+                                if (studentRec.Class != null)
+                                    ClassName = studentRec.Class.Name;
+                                Utility.SendData(action, ClassName, studentRec.Name, studentRec.StudentNumber, studentRec.IDNumber, StudStatus, NewStudStatus, smg.GetMessage());
+
+                                K12.Data.Student.Update(studentRec);
+                                FISCA.LogAgent.ApplicationLog.Log("學生狀態", "變更", "student", studentRec.ID, log);
+
+                                //註冊一個事件引發模組
+                                EventHandler eh = FISCA.InteractionService.PublishEvent("KH_StudentChangeStatus");
+                                eh(this, EventArgs.Empty);
                             }
-                        
+                        }
+                        catch (ArgumentException)
+                        {
+                            MessageBox.Show("目前無法移到刪除");
+                        }
+                        catch
+                        {
+                            MotherForm.SetStatusBarMessage("變更狀態失敗，可能發生原因為學號或身分證號在" + button.Text + "學生中已經存在，請檢查學生資料。");
+                            return;
+                        }
+
                     }
                 }
             }
@@ -537,7 +544,8 @@ namespace StudentChangeStatus_KH
 
         private void StatusPanel_Click(object sender, EventArgs e)
         {
-            StatusContainer.Popup(StatusPanel.PointToScreen(new Point(0, StatusPanel.Height)));
+            if (StatusPanel.Text != "休學")
+                StatusContainer.Popup(StatusPanel.PointToScreen(new Point(0, StatusPanel.Height)));
         }
 
         public DescriptionPane GetContent()
