@@ -5,7 +5,7 @@
 *.suo
 *.user
 *.sln.docstates
-
+*/.vs/*
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
@@ -172,3 +172,4 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
+ClassLock_KH/.vs/ClassLock_KH/FileContentIndex/596906f7-76ce-444a-b754-6ad3a124e00f.vsidx

@@ -19,6 +19,14 @@ namespace ClassLock_KH
     public class Program
     {
         static BackgroundWorker _bgLLoadUDT = new BackgroundWorker();
+        static Dictionary<string, UDT_ClassLock> _UDT_ClassLockDict = new Dictionary<string, UDT_ClassLock>();
+        static Dictionary<string, KH_HighConcernCalc.ClassStudent> _ClassStudentDict = new Dictionary<string, KH_HighConcernCalc.ClassStudent>();
+        static ListPaneField ClassLockStudentCountField;
+        static ListPaneField ClassLockField;
+        static ListPaneField ClassLockCommentField;
+        static ListPaneField ClassLockSStudentCountField;
+        static string LogID = "";
+        static Boolean IsShowDistNotification = false;
 
         [MainMethod()]
         public static void Main()
@@ -26,9 +34,6 @@ namespace ClassLock_KH
             _bgLLoadUDT.DoWork += _bgLLoadUDT_DoWork;
             _bgLLoadUDT.RunWorkerCompleted += _bgLLoadUDT_RunWorkerCompleted;
             _bgLLoadUDT.RunWorkerAsync();
-
-            Dictionary<string, UDT_ClassLock> _UDT_ClassLockDict = UDTTransfer.GetClassLockNameIDDict();
-            Dictionary<string, KH_HighConcernCalc.ClassStudent> _ClassStudentDict = KH_HighConcernCalc.Calc.GetClassStudentAllIDDict();
 
             Catalog catalog01 = RoleAclSource.Instance["班級"]["功能按鈕"];
             catalog01.Add(new RibbonFeature("KH_HighConcern_ClassLock", "班級鎖定/解鎖"));
@@ -38,16 +43,10 @@ namespace ClassLock_KH
 
 
 
-            //通知(局端解鎖)
-            string LogID = Utility.CheckDistrictUnlockCount();
-            Boolean IsShowDistNotification = !String.IsNullOrEmpty(LogID);
-            if (IsShowDistNotification)//如果有需要通知之項目
-            {
-                (new FrmDistrictNotification(LogID)).Show();
-            }
+            //通知(局端解鎖)移至背景執行
 
 
-            ListPaneField ClassLockStudentCountField = new ListPaneField("編班人數");
+            ClassLockStudentCountField = new ListPaneField("編班人數");
             ClassLockStudentCountField.GetVariable += delegate (object sender, GetVariableEventArgs e)
             {
                 if (_ClassStudentDict.ContainsKey(e.Key))
@@ -62,7 +61,7 @@ namespace ClassLock_KH
             K12.Presentation.NLDPanels.Class.AddListPaneField(ClassLockStudentCountField);
 
 
-            ListPaneField ClassLockField = new ListPaneField("班級鎖定");
+            ClassLockField = new ListPaneField("班級鎖定");
             ClassLockField.GetVariable += delegate (object sender, GetVariableEventArgs e)
             {
                 //if (_UDT_ClassLockDict.ContainsKey(e.Key))
@@ -124,7 +123,7 @@ namespace ClassLock_KH
 
             K12.Presentation.NLDPanels.Class.AddListPaneField(ClassLockField);
 
-          ListPaneField ClassLockCommentField = new ListPaneField("鎖定備註");
+          ClassLockCommentField = new ListPaneField("鎖定備註");
             ClassLockCommentField.GetVariable += delegate (object sender, GetVariableEventArgs e)
             {
                 // 只要有資料就顯示
@@ -169,7 +168,7 @@ namespace ClassLock_KH
 
 
 
-            ListPaneField ClassLockSStudentCountField = new ListPaneField("特殊生人數");
+            ClassLockSStudentCountField = new ListPaneField("特殊生人數");
             ClassLockSStudentCountField.GetVariable += delegate (object sender, GetVariableEventArgs e)
             {
                 if (_ClassStudentDict.ContainsKey(e.Key))
@@ -579,7 +578,15 @@ namespace ClassLock_KH
         }
         static void _bgLLoadUDT_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            if (ClassLockStudentCountField != null) ClassLockStudentCountField.Reload();
+            if (ClassLockField != null) ClassLockField.Reload();
+            if (ClassLockCommentField != null) ClassLockCommentField.Reload();
+            if (ClassLockSStudentCountField != null) ClassLockSStudentCountField.Reload();
 
+            if (IsShowDistNotification)//如果有需要通知之項目
+            {
+                (new FrmDistrictNotification(LogID)).Show();
+            }
         }
 
 
@@ -589,6 +596,10 @@ namespace ClassLock_KH
         static void _bgLLoadUDT_DoWork(object sender, DoWorkEventArgs e)
         {
             UDTTransfer.CreateUDTTable();
+            _UDT_ClassLockDict = UDTTransfer.GetClassLockNameIDDict();
+            _ClassStudentDict = KH_HighConcernCalc.Calc.GetClassStudentAllIDDict();
+            LogID = Utility.CheckDistrictUnlockCount();
+            IsShowDistNotification = !String.IsNullOrEmpty(LogID);
 
             //FISCA.ServerModule.AutoManaged("http://module.ischool.com.tw/module/137/KHCentralOffice/udm.xml");
 
