@@ -18,16 +18,24 @@ namespace KH_HighConcern
     public class Program
     {
            static BackgroundWorker _bgLLoadUDT = new BackgroundWorker();
+           static BackgroundWorker _bgLoadData = new BackgroundWorker();
+           static Dictionary<string, UDT_HighConcern> _HighConcernDict = new Dictionary<string, UDT_HighConcern>();
+           static ListPaneField HighConcernField;
+           static ListPaneField HighCountField;
+           static ListPaneField HighDocNoField;
+           static bool _isReloadingData = false;
+
            [MainMethod()]
            public static void Main()
            {
                _bgLLoadUDT.DoWork+=_bgLLoadUDT_DoWork;
                _bgLLoadUDT.RunWorkerCompleted += _bgLLoadUDT_RunWorkerCompleted;
                _bgLLoadUDT.RunWorkerAsync();
-               Dictionary<string, UDT_HighConcern> _HighConcernDict = new Dictionary<string, UDT_HighConcern>();
+               
+               _bgLoadData.DoWork += _bgLoadData_DoWork;
+               _bgLoadData.RunWorkerCompleted += _bgLoadData_RunWorkerCompleted;
 
-               _HighConcernDict = UDTTransfer.GetHighConcernDictAll();
-               ListPaneField HighConcernField = new ListPaneField("高關懷特殊身分");
+               HighConcernField = new ListPaneField("高關懷特殊身分");
                HighConcernField.GetVariable += delegate(object sender, GetVariableEventArgs e)
                {
                    if (_HighConcernDict.ContainsKey(e.Key))
@@ -37,7 +45,7 @@ namespace KH_HighConcern
                };
                K12.Presentation.NLDPanels.Student.AddListPaneField(HighConcernField);
 
-               ListPaneField HighCountField = new ListPaneField("高關懷減免人數");
+               HighCountField = new ListPaneField("高關懷減免人數");
                HighCountField.GetVariable += delegate(object sender, GetVariableEventArgs e)
                {
                    if (_HighConcernDict.ContainsKey(e.Key))
@@ -47,7 +55,7 @@ namespace KH_HighConcern
                };
                K12.Presentation.NLDPanels.Student.AddListPaneField(HighCountField);
 
-               ListPaneField HighDocNoField = new ListPaneField("高關懷文號");
+               HighDocNoField = new ListPaneField("高關懷文號");
                HighDocNoField.GetVariable += delegate(object sender, GetVariableEventArgs e)
                {
                    if (_HighConcernDict.ContainsKey(e.Key))
@@ -57,14 +65,45 @@ namespace KH_HighConcern
                };
                K12.Presentation.NLDPanels.Student.AddListPaneField(HighDocNoField);
 
+               _bgLoadData.RunWorkerAsync();
+
                // 當高關懷特殊身分有更新
                FISCA.InteractionService.SubscribeEvent("KH_HighConcern_HighConcernContent", (sender, args) =>
                {
-                   _HighConcernDict = UDTTransfer.GetHighConcernDictAll();
+                   if (!_bgLoadData.IsBusy)
+                   {
+                       _bgLoadData.RunWorkerAsync();
+                   }
+                   else
+                   {
+                       _isReloadingData = true;
+                   }
+               });
+           }
+
+           static void _bgLoadData_DoWork(object sender, DoWorkEventArgs e)
+           {
+               e.Result = UDTTransfer.GetHighConcernDictAll();
+           }
+
+           static void _bgLoadData_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+           {
+               if (e.Error == null && e.Result != null)
+               {
+                   _HighConcernDict = (Dictionary<string, UDT_HighConcern>)e.Result;
                    HighConcernField.Reload();
                    HighCountField.Reload();
                    HighDocNoField.Reload();
-               });
+               }
+
+               if (_isReloadingData)
+               {
+                   _isReloadingData = false;
+                   if (!_bgLoadData.IsBusy)
+                   {
+                       _bgLoadData.RunWorkerAsync();
+                   }
+               }
            }
 
            static void _bgLLoadUDT_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)

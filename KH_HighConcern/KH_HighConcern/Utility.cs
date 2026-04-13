@@ -226,5 +226,19 @@ namespace KH_HighConcern
             }
             return errMsg;
         }
+        public static System.Threading.Tasks.Task<string> SendDataAsync(string action, string IDNumber, string StudentNumber, string StudentName, string ClassName, string SeatNo, string DocNo, string NumberReduce, string EDoc)
+        {
+            return System.Threading.Tasks.Task.Run(() => SendData(action, IDNumber, StudentNumber, StudentName, ClassName, SeatNo, DocNo, NumberReduce, EDoc));
+        }
+
+        public static System.Threading.Tasks.Task<string> SendDataListAsync(string action, List<logStud> logStudList)
+        {
+            return System.Threading.Tasks.Task.Run(() => SendDataList(action, logStudList));
+        }
+
+        public static System.Threading.Tasks.Task<string> UploadFileAsync(string ID, string Data, string FileName)
+        {
+            return System.Threading.Tasks.Task.Run(() => UploadFile(ID, Data, FileName));
+        }
     }
 }

@@ -222,11 +222,13 @@ namespace KH_HighConcern.DetailContent
                             OnPrimaryKeyChanged(null);
                         }
                         // 傳送至局端
-                        string errMsg = Utility.SendData("變更特殊身分", IDNumber, StudentNumber, StudentName, ClassName, SeatNo, DocNo, NumberReduce, EDoc);
-                        if (errMsg != "")
+                        Utility.SendDataAsync("變更特殊身分", IDNumber, StudentNumber, StudentName, ClassName, SeatNo, DocNo, NumberReduce, EDoc).ContinueWith(t =>
                         {
-                            FISCA.Presentation.Controls.MsgBox.Show(errMsg);
-                        }
+                            if (t.Result != "")
+                            {
+                                this.Invoke((MethodInvoker)delegate { FISCA.Presentation.Controls.MsgBox.Show(t.Result); });
+                            }
+                        });
                     }
                     else
                         chkHighConcern.Checked = false;
@@ -244,11 +246,13 @@ namespace KH_HighConcern.DetailContent
                         _HighConcernDict[PrimaryKey].Deleted = true;
                         _HighConcernDict[PrimaryKey].Save();
 
-                        string errMsg = Utility.SendData("取消特殊身分", IDNumber, StudentNumber, StudentName, ClassName, SeatNo, DocNo, NumberReduce, EDoc);
-                        if (errMsg != "")
+                        Utility.SendDataAsync("取消特殊身分", IDNumber, StudentNumber, StudentName, ClassName, SeatNo, DocNo, NumberReduce, EDoc).ContinueWith(t =>
                         {
-                            FISCA.Presentation.Controls.MsgBox.Show(errMsg);
-                        }
+                            if (t.Result != "")
+                            {
+                                this.Invoke((MethodInvoker)delegate { FISCA.Presentation.Controls.MsgBox.Show(t.Result); });
+                            }
+                        });
                     }
 
                     #endregion
@@ -260,7 +264,7 @@ namespace KH_HighConcern.DetailContent
                 //有_base64Data,表示可上傳檔案
                 if (_FileName != "" && _base64Data != "")
                 {
-                    Utility.UploadFile(_StudRec.ID, _base64Data, _FileName);
+                    Utility.UploadFileAsync(_StudRec.ID, _base64Data, _FileName);
                 }
 
                 this.CancelButtonVisible = false;

@@ -62,6 +62,30 @@ namespace KH_HighConcern.ImportExport
             
             if (_Option.Action == ImportAction.InsertOrUpdate && run)
             {
+                // First pass: collect required student IDs to optimize loading
+                List<string> requiredStudentIDs = new List<string>();
+                foreach (IRowStream row in Rows)
+                {
+                    string sNum = row.GetValue("學號");
+                    if (!string.IsNullOrEmpty(sNum) && _StudentNumIDDict.ContainsKey(sNum))
+                    {
+                        string sid = _StudentNumIDDict[sNum];
+                        if (!requiredStudentIDs.Contains(sid))
+                            requiredStudentIDs.Add(sid);
+                    }
+                }
+
+                // Load only necessary student records
+                if (requiredStudentIDs.Count > 0)
+                {
+                    List<StudentRecord> recList = Student.SelectByIDs(requiredStudentIDs);
+                    foreach (StudentRecord rec in recList)
+                    {
+                        if (!_StudentRecDict.ContainsKey(rec.ID))
+                            _StudentRecDict.Add(rec.ID, rec);
+                    }
+                }
+
                 List<UDT_HighConcern> HighConcernList = new List<UDT_HighConcern>();
                 List<logStud> logStudList = new List<logStud>();
 
@@ -81,14 +105,17 @@ namespace KH_HighConcern.ImportExport
                     {
                         string sid = _StudentNumIDDict[StudentNumber];
 
-                        StudentRecord rec = _StudentRecDict[sid];
-                        IDNumber = rec.IDNumber;
-                        StudentName = rec.Name;
+                        if (_StudentRecDict.ContainsKey(sid))
+                        {
+                            StudentRecord rec = _StudentRecDict[sid];
+                            IDNumber = rec.IDNumber;
+                            StudentName = rec.Name;
 
-                        if (rec.SeatNo.HasValue)
-                            SeatNo = rec.SeatNo.Value.ToString();
-                        if (rec.Class != null)
-                            ClassName = rec.Class.Name;
+                            if (rec.SeatNo.HasValue)
+                                SeatNo = rec.SeatNo.Value.ToString();
+                            if (rec.Class != null)
+                                ClassName = rec.Class.Name;
+                        }
 
                         NumberReduce = hCount.ToString();
 
@@ -133,7 +160,7 @@ namespace KH_HighConcern.ImportExport
                 // save
                 if (logStudList.Count > 0)
                 {
-                    Utility.SendDataList("匯入特殊身分", logStudList);
+                    Utility.SendDataListAsync("匯入特殊身分", logStudList);
                 }
                 HighConcernList.SaveAll();
                 eh(this, EventArgs.Empty);                
@@ -150,12 +177,6 @@ namespace KH_HighConcern.ImportExport
             _Option = Option;
             _HighConcernDict = UDTTransfer.GetHighConcernDictAll();
             _StudentNumIDDict = UDTTransfer.GetStudentNumIDDictAll();
-            // 取得學生資料
-            List<string> studentIDList = _StudentNumIDDict.Values.ToList();
-            List<StudentRecord> recList = Student.SelectByIDs(studentIDList);
-            foreach (StudentRecord rec in recList)            
-                _StudentRecDict.Add(rec.ID, rec);
-            
         }
     }
 }
