@@ -28,9 +28,15 @@ namespace ClassLock_KH
         static string LogID = "";
         static Boolean IsShowDistNotification = false;
 
+        static Timer _debounceTimer = new Timer();
+        static bool _reloadPending = false;
+
         [MainMethod()]
         public static void Main()
         {
+            _debounceTimer.Interval = 500;
+            _debounceTimer.Tick += _debounceTimer_Tick;
+
             _bgLLoadUDT.DoWork += _bgLLoadUDT_DoWork;
             _bgLLoadUDT.RunWorkerCompleted += _bgLLoadUDT_RunWorkerCompleted;
             _bgLLoadUDT.RunWorkerAsync();
@@ -242,49 +248,37 @@ namespace ClassLock_KH
             // 當高關懷特殊身分有更新
             FISCA.InteractionService.SubscribeEvent("KH_HighConcern_HighConcernContent", (sender, args) =>
             {
-                _ClassStudentDict = KH_HighConcernCalc.Calc.GetClassStudentAllIDDict();
-                ClassLockStudentCountField.Reload();
-                ClassLockSStudentCountField.Reload();
+                TriggerReload();
             });
 
             // 當變更學生狀態
             FISCA.InteractionService.SubscribeEvent("KH_StudentChangeStatus", (sender, args) =>
             {
-                _ClassStudentDict = KH_HighConcernCalc.Calc.GetClassStudentAllIDDict();
-                ClassLockStudentCountField.Reload();
-                ClassLockSStudentCountField.Reload();
+                TriggerReload();
             });
 
             // 當變更學生班級
             FISCA.InteractionService.SubscribeEvent("KH_StudentClassItemContent", (sender, args) =>
             {
-                _ClassStudentDict = KH_HighConcernCalc.Calc.GetClassStudentAllIDDict();
-                ClassLockStudentCountField.Reload();
-                ClassLockSStudentCountField.Reload();
+                TriggerReload();
             });
 
             // 當變更學生轉入
             FISCA.InteractionService.SubscribeEvent("KH_StudentTransferStudentBriefItem", (sender, args) =>
             {
-                _ClassStudentDict = KH_HighConcernCalc.Calc.GetClassStudentAllIDDict();
-                ClassLockStudentCountField.Reload();
-                ClassLockSStudentCountField.Reload();
+                TriggerReload();
             });
 
             // 當變更學生匯入
             FISCA.InteractionService.SubscribeEvent("KH_StudentImportWizard", (sender, args) =>
             {
-                _ClassStudentDict = KH_HighConcernCalc.Calc.GetClassStudentAllIDDict();
-                ClassLockStudentCountField.Reload();
-                ClassLockSStudentCountField.Reload();
+                TriggerReload();
             });
 
             // 當變更學生-轉入
             FISCA.InteractionService.SubscribeEvent("KH_StudentTransStudBase", (sender, args) =>
             {
-                _ClassStudentDict = KH_HighConcernCalc.Calc.GetClassStudentAllIDDict();
-                ClassLockStudentCountField.Reload();
-                ClassLockSStudentCountField.Reload();
+                TriggerReload();
             });
 
             #endregion
@@ -587,6 +581,15 @@ namespace ClassLock_KH
             {
                 (new FrmDistrictNotification(LogID)).Show();
             }
+
+            if (_reloadPending)
+            {
+                _reloadPending = false;
+                if (!_bgLLoadUDT.IsBusy)
+                {
+                    _bgLLoadUDT.RunWorkerAsync();
+                }
+            }
         }
 
 
@@ -700,6 +703,25 @@ namespace ClassLock_KH
             //data.UnAutoUnlock = sdf.GetNUnLock();
             //data.isLock = true;
 
+        }
+
+        private static void TriggerReload()
+        {
+            _debounceTimer.Stop();
+            _debounceTimer.Start();
+        }
+
+        private static void _debounceTimer_Tick(object sender, EventArgs e)
+        {
+            _debounceTimer.Stop();
+            if (_bgLLoadUDT.IsBusy)
+            {
+                _reloadPending = true;
+            }
+            else
+            {
+                _bgLLoadUDT.RunWorkerAsync();
+            }
         }
     }
 }

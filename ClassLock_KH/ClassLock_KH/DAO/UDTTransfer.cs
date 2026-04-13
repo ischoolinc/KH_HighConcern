@@ -41,15 +41,21 @@ namespace ClassLock_KH.DAO
         }
 
 
+        private static bool _isSchemaSynced = false;
+
         /// <summary>
         /// 建立使用到的 UDT Table
         /// </summary>
         public static void CreateUDTTable()
         {
+            if (_isSchemaSynced) return;
+
             FISCA.UDT.SchemaManager Manager = new SchemaManager(new DSConnection(FISCA.Authentication.DSAServices.DefaultDataSource));
             Manager.SyncSchema(new UDT_ClassLock());
             Manager.SyncSchema(new UDT_ClassLock_Log());
             Manager.SyncSchema(new UDT_ClassSpecial());
+
+            _isSchemaSynced = true;
         }
 
         /// <summary>
