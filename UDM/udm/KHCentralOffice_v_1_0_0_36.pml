@@ -1,0 +1,799 @@
+﻿<Project Name="KHCentralOffice">
+	<Property Name="UDT">
+		<Release Version="1.0.0.10" URL="udm/UDT_1_0_0_10.tcmd" />
+		<Release Version="1.0.0.11" URL="udm/UDT_1_0_0_11.tcmd" />
+		<Release Version="1.0.0.12" URL="udm/UDT_1_0_0_12.tcmd" />
+		<Release Version="1.0.0.13" URL="udm/UDT_1_0_0_13.tcmd" />
+		<Release Version="1.0.0.36" URL="udm/UDT_1_0_0_36.tcmd"></Release>
+	</Property>
+	<Property Name="UDS">
+		<Contract Name="ischool.kh.central_office" Enabled="True">
+	<Definition>
+	<Authentication>
+		<Passport Enabled="True">
+			<IssuerList>
+				<Issuer Name="ischool.kh.central_office.user">
+					<CertificateProvider Type="HttpGet">
+						<![CDATA[http://dsns.1campus.net/j.kh.edu.tw/info/Public.GetPublicKey?parser=params&Contract=ischool.kh.central_office.user&rsptype=xmlcontent]]>
+					</CertificateProvider>
+				</Issuer>
+			</IssuerList>
+		</Passport>
+	</Authentication>
+</Definition>
+	<Package Name="_">
+		<Service Enabled="true" Name="GetClassStudentCount">
+			<Definition Type="dbhelper">
+	<Action>Select</Action>
+	<SQLTemplate>
+		<![CDATA[
+select 
+    @@FieldList 
+from 
+(
+    select 
+        class.id as g1cid
+        ,class.class_name as classname1
+        ,count(student.id) as studentcount 
+    from 
+        class 
+        inner join student 
+            on class.id=student.ref_class_id 
+    where 
+        student.status in (1,4,8)
+    group by 
+        g1cid,classname1
+) as g1	
+	inner join
+	(
+	    select
+	        class.id as g2cid
+            ,class.class_name as classname2
+	        ,(
+	            case when 
+	                $kh.automatic.class.lock.is_lock=true 
+	            then 
+	                '鎖定' 
+                else 
+                    '' 
+	            end
+	        ) as lock
+	        ,$kh.automatic.class.lock.comment 
+	        ,$kh.automatic.class.lock.doc_no 
+	    from 
+	        class 
+	        left join $kh.automatic.class.lock 
+	            on class.id=to_number($kh.automatic.class.lock.class_id,'999999999')
+	) as g2 
+	    on g1.g1cid=g2.g2cid 
+	inner join
+	(
+	    select 
+	        class.id as g3cid
+	        ,class.class_name as classname3
+	        ,sum(number_reduce) number_reduce_sum
+	        ,count($kh.automatic.placement.high.concern.ref_student_id) as number_reduce_count 
+	    from 
+	        $kh.automatic.placement.high.concern 
+	        right join student 
+	            on to_number($kh.automatic.placement.high.concern.ref_student_id,'999999999')=student.id 
+	        inner join class 
+	            on student.ref_class_id=class.id 
+	    where student.status in(1,4,8) group by g3cid,classname3
+	) as g3 
+	    on g1.g1cid=g3.g3cid 
+	inner join class 
+	    on g1.g1cid=class.id 
+	left join
+	(
+	    select
+	        class.id as g4cid
+	        ,class.ref_teacher_id as g4_ref_teacher_id
+	        ,(CASE WHEN (SELECT COUNT(*) FROM tag_class left outer join tag on tag_class.ref_tag_id = tag.id WHERE tag.prefix='班級分類' AND tag.name='普通班' AND tag_class.ref_class_id = class.id ) >0 THEN 'true' else '' END ) as normal_class
+	        ,(CASE WHEN (SELECT COUNT(*) FROM tag_class left outer join tag on tag_class.ref_tag_id = tag.id WHERE tag.prefix='班級分類' AND tag.name='體育班' AND tag_class.ref_class_id = class.id ) >0 THEN 'true' else '' END ) as sport_class
+	        ,(CASE WHEN (SELECT COUNT(*) FROM tag_class left outer join tag on tag_class.ref_tag_id = tag.id WHERE tag.prefix='班級分類' AND tag.name='美術班' AND tag_class.ref_class_id = class.id ) >0 THEN 'true' else '' END ) as art_class
+	        ,(CASE WHEN (SELECT COUNT(*) FROM tag_class left outer join tag on tag_class.ref_tag_id = tag.id WHERE tag.prefix='班級分類' AND tag.name='音樂班' AND tag_class.ref_class_id = class.id ) >0 THEN 'true' else '' END ) as music_class
+	        ,(CASE WHEN (SELECT COUNT(*) FROM tag_class left outer join tag on tag_class.ref_tag_id = tag.id WHERE tag.prefix='班級分類' AND tag.name='舞蹈班' AND tag_class.ref_class_id = class.id ) >0 THEN 'true' else '' END ) as dance_class
+	        ,(CASE WHEN (SELECT COUNT(*) FROM tag_class left outer join tag on tag_class.ref_tag_id = tag.id WHERE tag.prefix='班級分類' AND tag.name='資優班' AND tag_class.ref_class_id = class.id ) >0 THEN 'true' else '' END ) as gifted_class
+	        ,(CASE WHEN (SELECT COUNT(*) FROM tag_class left outer join tag on tag_class.ref_tag_id = tag.id WHERE tag.prefix='班級分類' AND tag.name='資源班' AND tag_class.ref_class_id = class.id ) >0 THEN 'true' else '' END ) as resource_class
+	        ,(CASE WHEN (SELECT COUNT(*) FROM tag_class left outer join tag on tag_class.ref_tag_id = tag.id WHERE tag.prefix='班級分類' AND tag.name='特教班' AND tag_class.ref_class_id = class.id ) >0 THEN 'true' else '' END ) as iep_class
+	        ,(CASE WHEN (SELECT COUNT(*) FROM tag_class left outer join tag on tag_class.ref_tag_id = tag.id WHERE tag.prefix='班級分類' AND tag.name='技藝專班' AND tag_class.ref_class_id = class.id ) >0 THEN 'true' else '' END ) as skill_class
+	        ,(CASE WHEN (SELECT COUNT(*) FROM tag_class left outer join tag on tag_class.ref_tag_id = tag.id WHERE tag.prefix='班級分類' AND tag.name='機構式非學校自學班' AND tag_class.ref_class_id = class.id ) >0 THEN 'true' else '' END ) as no_school_class
+	    from 
+	        class 
+	) as g4 
+	    on g1.g1cid=g4.g4cid 
+	left join
+	(
+	    select
+	        teacher.id as g5tid 
+	        ,teacher.teacher_name as teacher_name	
+	    from teacher 
+	) as g5 
+	    on g5.g5tid=g4.g4_ref_teacher_id 
+	    and class.grade_year is not null
+	INNER JOIN
+	(
+		SELECT
+			class.id AS g6cid
+			, class.class_name as classname6
+			, SUM
+			(
+				CASE 
+					WHEN
+						student.status = 4
+					THEN
+						1
+					ELSE
+						0
+				END
+			) AS suspension_student_count
+			, SUM
+			(
+				CASE
+					WHEN
+						student.status = 8
+					THEN
+						1
+					ELSE
+						0
+				END
+			) AS drop_out_student_count
+		FROM
+			class
+			INNER JOIN student
+				ON student.ref_class_id = class.id
+		GROUP BY
+			class.id
+			, class.class_name
+	) AS g6
+		ON g1.g1cid = g6.g6cid
+order by classname1
+]]>
+	</SQLTemplate>
+	<ResponseRecordElement>Response/Class</ResponseRecordElement>
+	<FieldList Name="FieldList" Source="Field">
+		<Field Alias="ClassName" Mandatory="True" Source="ClassName" Target="classname1" />
+		<Field Alias="TeacherName" Mandatory="True" Source="TeacherName" Target="teacher_name" />
+		<Field Alias="StudentCount" Mandatory="True" Source="StudentCount" Target="studentcount" />
+		<Field Alias="Lock" Mandatory="True" Source="Lock" Target="lock" />
+		<Field Alias="Comment" Mandatory="True" Source="Comment" Target="comment" />
+		<Field Alias="NumberReduceSum" Mandatory="True" Source="NumberReduceSum" Target="number_reduce_sum" />
+		<Field Alias="NumberReduceCount" Mandatory="True" Source="NumberReduceCount" Target="number_reduce_count" />
+		<Field Alias="ClassStudentCount" Mandatory="True" Source="ClassStudentCount" Target="(studentcount +(case when number_reduce_sum is null then 0 else number_reduce_sum end))" />
+		<Field Alias="GradeYear" Mandatory="True" Source="GradeYear" Target="grade_year" />
+		<Field Alias="DisplayOrder" Mandatory="True" Source="DisplayOrder" Target="display_order" />
+		<Field Alias="NormalClass" Mandatory="True" Source="NormalClass" Target="normal_class" />
+		<Field Alias="SportClass" Mandatory="True" Source="SportClass" Target="sport_class" />
+		<Field Alias="ArtClass" Mandatory="True" Source="ArtClass" Target="art_class" />
+		<Field Alias="MusicClass" Mandatory="True" Source="MusicClass" Target="music_class" />
+		<Field Alias="DanceClass" Mandatory="True" Source="DanceClass" Target="dance_class" />
+		<Field Alias="GiftedClass" Mandatory="True" Source="GiftedClass" Target="gifted_class" />
+		<Field Alias="ResourceClass" Mandatory="True" Source="ResourceClass" Target="resource_class" />
+		<Field Alias="IepClass" Mandatory="True" Source="IepClass" Target="iep_class" />
+		<Field Alias="SkillClass" Mandatory="True" Source="SkillClass" Target="skill_class" />
+		<Field Alias="NoSchoolClass" Mandatory="True" Source="NoSchoolClass" Target="no_school_class" />
+		<Field Alias="SuspensionStudentCount" Mandatory="True" Source="SuspensionStudentCount" Target="suspension_student_count" />
+		<Field Alias="DropOutStudentCount" Mandatory="True" Source="DropOutStudentCount" Target="drop_out_student_count" />
+	</FieldList>
+	<Conditions Name="Condition" Required="False" Source="Condition" />
+	<Orders Name="Order" Source="Order" />
+	<Pagination Allow="True" />
+</Definition>
+		</Service>
+		<Service Enabled="true" Name="GetClassStudSpecial">
+			<Definition Type="DBHelper">
+	<Action>Select</Action>
+	<SQLTemplate>
+		<![CDATA[SELECT @@FieldList FROM $kh.automatic.class.special inner join student on $kh.automatic.class.special.ref_student_id = student.id WHERE @@Condition @@Order]]>
+	</SQLTemplate>
+	<ResponseRecordElement>Response/Student</ResponseRecordElement>
+	<FieldList Name="FieldList" Source="Field">
+		<Field Alias="Uid" Mandatory="True" Source="Uid" Target="$kh.automatic.class.special.uid" />
+		<Field Alias="LastUpdate" Mandatory="True" Source="LastUpdate" Target="$kh.automatic.class.special.last_update" />
+		<Field Alias="ClassComment" Mandatory="True" Source="ClassComment" Target="$kh.automatic.class.special.class_comment" />
+		<Field Alias="ClassName" Mandatory="True" Source="ClassName" Target="$kh.automatic.class.special.class_name" />
+		<Field Alias="Content" Mandatory="True" OutputType="Xml" Source="Content" Target="$kh.automatic.class.special.content" />
+		<Field Alias="OldClassComment" Mandatory="True" Source="OldClassComment" Target="$kh.automatic.class.special.old_class_comment" />
+		<Field Alias="OldClassId" Mandatory="True" Source="OldClassId" Target="$kh.automatic.class.special.old_class_id" />
+		<Field Alias="OldClassName" Mandatory="True" Source="OldClassName" Target="$kh.automatic.class.special.old_class_name" />
+		<Field Alias="RefClassId" Mandatory="True" Source="RefClassId" Target="$kh.automatic.class.special.ref_class_id" />
+		<Field Alias="RefStudentId" Mandatory="True" Source="RefStudentId" Target="$kh.automatic.class.special.ref_student_id" />
+		<Field Alias="StudentName" Mandatory="True" Source="StudentName" Target="student.name" />
+	</FieldList>
+	<Conditions Name="Condition" Required="False" Source="Condition">
+		<Condition Source="Uid" Target="$kh.automatic.class.special.uid" />
+		<Condition Source="LastUpdate" Target="$kh.automatic.class.special.last_update" />
+		<Condition Source="ClassComment" Target="$kh.automatic.class.special.class_comment" />
+		<Condition Source="ClassName" Target="$kh.automatic.class.special.class_name" />
+		<Condition Source="Content" Target="$kh.automatic.class.special.content" />
+		<Condition Source="OldClassComment" Target="$kh.automatic.class.special.old_class_comment" />
+		<Condition Source="OldClassId" Target="$kh.automatic.class.special.old_class_id" />
+		<Condition Source="OldClassName" Target="$kh.automatic.class.special.old_class_name" />
+		<Condition Source="RefClassId" Target="$kh.automatic.class.special.ref_class_id" />
+		<Condition Source="RefStudentId" Target="$kh.automatic.class.special.ref_student_id" />
+	</Conditions>
+	<Orders Name="Order" Source="Order" />
+	<Pagination Allow="True" />
+</Definition>
+		</Service>
+		<Service Enabled="true" Name="GetStudentHighConcern">
+			<Definition Type="dbhelper">
+	<Action>Select</Action>
+	<SQLTemplate>
+		<![CDATA[SELECT @@FieldList FROM class inner join student on class.id=student.ref_class_id inner join $kh.automatic.placement.high.concern on student.id=to_number($kh.automatic.placement.high.concern.ref_student_id,'999999999') where student.status in(1,4,8) order by class.class_name,student.seat_no]]>
+	</SQLTemplate>
+	<ResponseRecordElement>Response/Student</ResponseRecordElement>
+	<FieldList Name="FieldList" Source="Field">
+		<Field Alias="StudentName" Mandatory="True" Source="StudentName" Target="student.name" />
+		<Field Alias="ClassName" Mandatory="True" Source="ClassName" Target="class.class_name" />
+		<Field Alias="SeatNo" Mandatory="True" Source="SeatNo" Target="student.seat_no" />
+		<Field Alias="HighConcern" Mandatory="True" Source="HighConcern" Target="$kh.automatic.placement.high.concern.high_concern" />
+		<Field Alias="NumberReduce" Mandatory="True" Source="NumberReduce" Target="$kh.automatic.placement.high.concern.number_reduce" />
+		<Field Alias="DocNo" Mandatory="True" Source="DocNo" Target="$kh.automatic.placement.high.concern.doc_no" />
+	</FieldList>
+	<Conditions Name="Condition" Required="False" Source="Condition">
+	</Conditions>
+	<Orders Name="Order" Source="Order" />
+	<Pagination Allow="True" />
+</Definition>
+		</Service>
+	</Package>
+</Contract>
+		<Contract Name="ischool.kh.CentralOffice" Enabled="True">
+	<Definition>
+	<Authentication>
+		<Passport Enabled="true">
+			<IssuerList>
+				<Issuer Name="greening.shared.user">
+					<CertificateProvider Type="HttpGet">https://auth.ischool.com.tw:8443/dsa/greening/info/Public.GetPublicKey?rsptype=xmlcontent</CertificateProvider>
+					<AccountLinking Type="mapping">
+						<TableName>$kh_central.office_system.user</TableName>
+						<UserNameField>userid</UserNameField>
+						<MappingField>userid</MappingField>
+						<Properties />
+					</AccountLinking>
+				</Issuer>
+			</IssuerList>
+		</Passport>
+	</Authentication>
+</Definition>
+	<Package Name="_">
+		<Service Enabled="true" Name="GetSchoolInfo">
+			<Definition Type="dbhelper">
+	<Action>Select</Action>
+	<SQLTemplate>
+		<![CDATA[SELECT @@FieldList FROM list WHERE name='學校資訊']]>
+	</SQLTemplate>
+	<ResponseRecordElement />
+	<FieldList Name="FieldList" Source="Field">
+		<Field Alias="Result" Mandatory="True" OutputType="Xml" Source="Content" Target="content" />
+	</FieldList>
+	<Pagination Allow="True" />
+</Definition>
+		</Service>
+		<Service Enabled="true" Name="GetSemester">
+			<Definition Type="dbhelper">
+				<Action>Select</Action>
+				<SQLTemplate><![CDATA[SELECT @@FieldList 
+FROM list 
+WHERE name='系統設定']]></SQLTemplate>
+				<ResponseRecordElement />
+				<FieldList Name="FieldList" Source="Field">
+					<Field Alias="Result" Mandatory="True" OutputType="Xml" Source="Content" Target="content" />
+				</FieldList>
+				<Pagination Allow="True" />
+			</Definition>
+		</Service>
+		<Service Enabled="true" Name="GetStudentReversion">
+			<Definition Type="dbhelper">
+	<Action>Select</Action>
+	<SQLTemplate>
+		<![CDATA[
+SELECT 
+	@@FieldList
+FROM 
+	(
+		SELECT 
+			MAX(id) AS id
+			, data_id
+		FROM 
+			student_reversion 
+		GROUP BY
+			data_id
+		ORDER BY 
+			id
+	) AS student_max_reversion
+	LEFT OUTER JOIN student_reversion ON  student_reversion.id = student_max_reversion.id
+	LEFT OUTER JOIN student ON student.id = student_reversion.data_id
+	LEFT OUTER JOIN (
+		SELECT 
+			id
+			, class_name
+			, grade_year
+			, display_order
+			, CASE grade_year WHEN 1 THEN 7 WHEN 2 THEN 8 WHEN 3 THEN 9 ELSE grade_year END::text||lpad(CASE display_order is null WHEN TRUE THEN (rank() over (PARTITION BY grade_year ORDER BY class_name)) ELSE display_order END::text, 2, '0') as class_No
+		FROM class
+		WHERE
+			class.id in (SELECT ref_class_id FROM student WHERE student.status = 1)
+		ORDER BY grade_year, display_order, class_name
+	) AS class ON class.id = student.ref_class_id	
+WHERE @@Condition
+		]]>
+	</SQLTemplate>
+	<ResponseRecordElement>Response/StudentReversion</ResponseRecordElement>
+	<FieldList Name="FieldList" Source="Field">
+		<Field Alias="StudentReversionID" Mandatory="True" Source="StudentReversionID" Target="student_reversion.id" />
+		<Field Alias="DataID" Mandatory="True" Source="DataId" Target="student_reversion.data_id" />
+		<Field Alias="Action" Mandatory="True" Source="Action" Target="student_reversion.action" />
+		<Field Alias="ActionTime" Mandatory="True" Source="ActionTime" Target="student_reversion.timestamp" />
+		<Field Alias="IDNumber" Mandatory="True" Source="IDNumber" Target="student.id_number" />
+		<Field Alias="Birthday" Mandatory="True" Source="Birthday" Target="student.birthdate::date" />
+		<Field Alias="Gender" Mandatory="True" Source="Gender" Target="CASE student.gender WHEN 1::bit THEN '男' ELSE '女' END" />
+		<Field Alias="Name" Mandatory="True" Source="Name" Target="student.name" />
+		<Field Alias="StudentNumber" Mandatory="True" Source="StudentNumber" Target="student.student_number" />
+		<Field Alias="ClassNo" Mandatory="True" Source="ClassNo" Target="class.class_no" />
+		<Field Alias="SeatNo" Mandatory="True" Source="SeatNo" Target="lpad(student.seat_no::text, 2, '0')" />
+		<Field Alias="StatusCode" Mandatory="True" Source="StatusCode" Target="student.status" />
+		<Field Alias="RefClassID" Mandatory="True" Source="RefClassID" Target="student.ref_class_id" />
+		<Field Alias="GradeYear" Mandatory="True" Source="GradeYear" Target="class.grade_year" />
+		<Field Alias="DisplayOrder" Mandatory="True" Source="DisplayOrder" Target="class.display_order" />
+		<Field Alias="ClassName" Mandatory="True" Source="ClassName" Target="class.class_name" />
+	</FieldList>
+	<Conditions Name="Condition" Required="False" Source="Condition">
+		<Condition Comparer="&gt;" Quote="false" Required="false" Source="StudentReversionID" Target="student_reversion.id" />
+	</Conditions>
+</Definition>
+		</Service>
+		<Service Enabled="true" Name="GetStudents">
+			<Definition Type="DBHelper">
+	<Action>Select</Action>
+	<SQLTemplate>
+		<![CDATA[
+SELECT @@FieldList 
+FROM student 
+	LEFT OUTER JOIN tag_student on student.id=tag_student.ref_student_id 
+	LEFT OUTER JOIN tag on tag.id=tag_student.ref_tag_id 
+	LEFT OUTER JOIN class on class.id=student.ref_class_id				
+	LEFT OUTER JOIN $kh_central.office_system.student_category_mapping on  (CASE WHEN tag.prefix='' THEN tag.name ELSE tag.prefix || ':' || tag.name  END)=$kh_central.office_system.student_category_mapping.student_category
+	LEFT OUTER JOIN $kh.automatic.placement.high.concern on student.id=to_number($kh.automatic.placement.high.concern.ref_student_id,'999999999') 
+	LEFT OUTER JOIN 
+	(
+		SELECT ct.ref_class_id, ct.name, ROW_NUMBER() OVER(PARTITION BY ct.ref_class_id ORDER BY ct.od) AS rk 
+		FROM 
+		(
+			SELECT tag_class.ref_class_id as ref_class_id, tag.name as name, tag.id as od
+			FROM tag
+			LEFT OUTER JOIN tag_class on tag_class.ref_tag_id = tag.id
+			WHERE prefix = '班級分類'
+			UNION ALL
+			SELECT class.id, '普通班', 2147483647
+			FROM class
+		) as ct
+	) as ctl on class.id=ctl.ref_class_id
+WHERE student.status=1 and ctl.rk=1
+	    ]]>
+	</SQLTemplate>
+	<ResponseRecordElement>Students</ResponseRecordElement>
+	<FieldList Name="FieldList" Source="Field">
+		<Field Alias="ID" Mandatory="False" Source="ID" Target="student.id" />
+		<Field Alias="Name" Mandatory="True" Source="Name" Target="student.name" />
+		<Field Alias="IdNumber" Mandatory="True" Source="IdNumber" Target="student.id_number" />
+		<Field Alias="birthDt" Mandatory="True" Source="birthDt" Target="student.birthdate" />
+		<Field Alias="SeatNo" Mandatory="True" Source="SeatNo" Target="student.seat_no" />
+		<Field Alias="StudentNumber" Mandatory="True" Source="StudentNumber" Target="student.student_number" />
+		<Field Alias="Gender" Mandatory="True" OutputConverter="BitToGender" Source="Gender" Target="student.gender" />
+		<Field Alias="Nationality" Mandatory="True" Source="Nationality" Target="(CASE WHEN student.nationality = '' OR student.nationality is null THEN '中華民國' ELSE student.nationality END )" />
+		<Field Alias="FatherNationality" Mandatory="True" Source="FatherNationality" Target="(CASE WHEN student.father_nationality = '' OR student.father_nationality is null THEN '中華民國' ELSE student.father_nationality END )" />
+		<Field Alias="MotherNationality" Mandatory="True" Source="MotherNationality" Target="(CASE WHEN student.mother_nationality = '' OR student.mother_nationality is null THEN '中華民國' ELSE student.mother_nationality END )" />
+		<Field Alias="CustodianNationality" Mandatory="True" Source="CustodianNationality" Target="(CASE WHEN student.custodian_nationality = '' OR student.custodian_nationality is null THEN '中華民國' ELSE student.custodian_nationality END )" />
+		<Field Alias="ClassName" Mandatory="True" Source="ClassName" Target="class.class_name" />
+		<Field Alias="GradeYear" Mandatory="True" Source="GradeYear" Target="class.grade_year" />
+		<Field Alias="CentralCategory" Mandatory="True" OutputType="Attribute" Source="CentralCategory" Target="central_category" />
+		<Field Alias="TagID" Mandatory="False" OutputType="Attribute" Source="TagID" Target="tag.id" />
+		<Field Alias="TagName" Mandatory="True" OutputType="Attribute" Source="TagName" Target="(CASE WHEN tag.prefix='' THEN tag.name ELSE tag.prefix || ':' || tag.name  END)" />
+		<Field Alias="HighConcern" Mandatory="True" Source="HighConcern" Target="(case when $kh.automatic.placement.high.concern.high_concern='t' then '是' else '' end)" />
+		<Field Alias="NumberReduce" Mandatory="True" Source="NumberReduce" Target="$kh.automatic.placement.high.concern.number_reduce" />
+		<Field Alias="DocNo" Mandatory="True" Source="DocNo" Target="$kh.automatic.placement.high.concern.doc_no" />
+		<Field Alias="class_No" Mandatory="True" Source="classNo" Target="CASE class.grade_year WHEN 1 THEN 7 WHEN 2 THEN 8 WHEN 3 THEN 9 ELSE class.grade_year END::text||lpad(CASE display_order is null WHEN TRUE THEN (dense_rank() over (PARTITION BY class.grade_year ORDER BY class.class_name)) ELSE display_order END::text, 2, '0')" />
+		<Field Alias="ClassTagName" Mandatory="True" Source="ClassTagName" Target="ctl.name" />
+	</FieldList>
+	<ExportStyle>
+		<Group Fields="ID,Name,IdNumber,birthDt,SeatNo,StudentNumber,Gender,ClassName,GradeYear,HighConcern,NumberReduce,DocNo,class_No,ClassTagName,Nationality,FatherNationality,MotherNationality,CustodianNationality" Name="Student">
+			<Group Name="Tags">
+				<Record Name="Tag">
+					<!--<Element Field="TagID"/>-->
+					<Element Field="TagName" Identity="True" />
+					<Element Field="CentralCategory" />
+				</Record>
+			</Group>
+		</Group>
+	</ExportStyle>
+	<Conditions Name="Condition" Required="False" Source="Condition" />
+	<Orders Name="Order" Source="Order" />
+	<Pagination Allow="True" />
+</Definition>
+		</Service>
+		<Service Enabled="true" Name="GetUnPass4Students">
+			<Definition Type="javascript">
+	<Code>var result = {};
+
+
+var sql = getResource('sqlstudentcount');
+var gradeObj = {};
+var stuObj = {};
+var rs = executeSql(sql);
+var appendStu = {};
+
+while (rs.next()) {
+    if (!result.GradeYear)
+        result.GradeYear = [];
+    var gyear = rs.get("grade_year");
+    if (!gradeObj[gyear]) {
+        var gobj = {
+            "@Grade": gyear,
+            "@Totle": 0,
+            "@UnPassCount": 0
+        };
+        gradeObj[gyear] = gobj;
+        result.GradeYear.push(gobj);
+    }
+    gradeObj[gyear]["@Totle"]++;
+
+    if (Number(rs.get("score")) &lt; 60) {
+        if (!stuObj[rs.get("id")]) {
+            var sObj = {
+                "@ClassName": rs.get("class_name")
+                , "@Name": rs.get("name")
+                , "@SeatNo": rs.get("seat_no")
+                , "@StudentNumber": rs.get("student_number")
+                , "Domain": []
+            };
+            stuObj[rs.get("id")] = sObj;
+        }
+        var sObj = stuObj[rs.get("id")];
+        sObj.Domain.push({
+            "@Domain": rs.get("domain")
+            , "@Score": rs.get("score")
+        });
+        if (!appendStu[rs.get("id")] &amp;&amp; sObj.Domain.length &gt;= 4) {
+            appendStu[rs.get("id")] = true;
+            gradeObj[gyear]["@UnPassCount"]++;
+            if (!gradeObj[gyear].UnPassStudent)
+                gradeObj[gyear].UnPassStudent = [];
+            gradeObj[gyear].UnPassStudent.push(sObj);
+        }
+    }
+}
+
+
+return result;
+
+	</Code>
+	<Resources>
+		<Resource Name="sqlstudentcount">
+			<![CDATA[
+SELECT 
+	CASE WHEN class.grade_year > 6 THEN class.grade_year - 6 ELSE class.grade_year END as grade_year
+	, class.class_name
+	, student.seat_no
+	, student.id
+	, student.name
+	, student.student_number
+	, domain
+	, score
+FROM 
+	student
+	LEFT OUTER JOIN class on class.id = student.ref_class_id
+	LEFT OUTER JOIN (
+		SELECT grade_year
+			, domain
+			, id
+			, avg(score) as score
+			, CASE domain 
+				WHEN '語文' THEN 0 
+				WHEN '數學' THEN 1 
+				WHEN '社會' THEN 2 
+				WHEN '自然與生活科技' THEN 3 
+				WHEN '藝術與人文' THEN 4 
+				WHEN '健康與體育' THEN 5 
+				WHEN '綜合活動' THEN 6
+				ELSE 10
+			END AS drank
+		FROM (
+			SELECT 	
+				grade_year,
+				id,
+				school_year,
+				semester,
+				'語文' as domain,
+				sum(powscore)/sum(credit) as score
+			FROM (
+				SELECT 
+					class.grade_year,
+					student.id,
+					sems_subj_score.school_year,
+					sems_subj_score.semester,
+					x.domain,
+					x.credit,
+					CAST( regexp_replace( x.score, '^$', '0') as decimal) * x.credit as powscore
+				FROM 
+					student
+					LEFT OUTER JOIN class on class.id = student.ref_class_id and student.status = 1 and class.grade_year is not null
+					LEFT OUTER JOIN (
+						SELECT student.id
+							, ''||g1.SchoolYear as schoolyear1
+							, ''||g2.SchoolYear as schoolyear2
+							, ''||g3.SchoolYear as schoolyear3
+							, ''||g4.SchoolYear as schoolyear4
+							, ''||g5.SchoolYear as schoolyear5
+							, ''||g6.SchoolYear as schoolyear6
+						FROM 
+						    student 
+						    left outer join (SELECT id, max(SchoolYear) as SchoolYear FROM xpath_table( 'id', '''<root>''||sems_history||''</root>''', 'student', '/root/History[ ( @GradeYear=''7'' or @GradeYear=''1'' ) and (@Semester=''1'')]/@SchoolYear', 'id IN ( select student.id from student LEFT OUTER JOIN class ON student.ref_class_id = class.id WHERE student.status=1 AND class.grade_year is not null )') AS tmp(id int, SchoolYear integer) group by id )as g1 on g1.id=student.id left outer join (SELECT id, max(SchoolYear) as SchoolYear FROM xpath_table( 'id', '''<root>''||sems_history||''</root>''', 'student', '/root/History[ ( @GradeYear=''7'' or @GradeYear=''1'' ) and (@Semester=''2'')]/@SchoolYear', 'id IN ( select student.id from student LEFT OUTER JOIN class ON student.ref_class_id = class.id WHERE student.status=1 AND class.grade_year is not null )') AS tmp(id int, SchoolYear integer) group by id )as g2 on g2.id=student.id left outer join (SELECT id, max(SchoolYear) as SchoolYear FROM xpath_table( 'id', '''<root>''||sems_history||''</root>''', 'student', '/root/History[ ( @GradeYear=''8'' or @GradeYear=''2'' ) and (@Semester=''1'')]/@SchoolYear', 'id IN ( select student.id from student LEFT OUTER JOIN class ON student.ref_class_id = class.id WHERE student.status=1 AND class.grade_year is not null )') AS tmp(id int, SchoolYear integer) group by id )as g3 on g3.id=student.id left outer join (SELECT id, max(SchoolYear) as SchoolYear FROM xpath_table( 'id', '''<root>''||sems_history||''</root>''', 'student', '/root/History[ ( @GradeYear=''8'' or @GradeYear=''2'' ) and (@Semester=''2'')]/@SchoolYear', 'id IN ( select student.id from student LEFT OUTER JOIN class ON student.ref_class_id = class.id WHERE student.status=1 AND class.grade_year is not null )') AS tmp(id int, SchoolYear integer) group by id )as g4 on g4.id=student.id left outer join (SELECT id, max(SchoolYear) as SchoolYear FROM xpath_table( 'id', '''<root>''||sems_history||''</root>''', 'student', '/root/History[ ( @GradeYear=''9'' or @GradeYear=''3'' ) and (@Semester=''1'')]/@SchoolYear', 'id IN ( select student.id from student LEFT OUTER JOIN class ON student.ref_class_id = class.id WHERE student.status=1 AND class.grade_year is not null )') AS tmp(id int, SchoolYear integer) group by id )as g5 on g5.id=student.id left outer join (SELECT id, max(SchoolYear) as SchoolYear FROM xpath_table( 'id', '''<root>''||sems_history||''</root>''', 'student', '/root/History[ ( @GradeYear=''9'' or @GradeYear=''3'' ) and (@Semester=''2'')]/@SchoolYear', 'id IN ( select student.id from student LEFT OUTER JOIN class ON student.ref_class_id = class.id WHERE student.status=1 AND class.grade_year is not null )') AS tmp(id int, SchoolYear integer) group by id )as g6 on g6.id=student.id LEFT OUTER JOIN class ON student.ref_class_id = class.id WHERE student.status=1 AND class.grade_year is not null
+					)shistory on student.id=shistory.id
+					LEFT OUTER JOIN sems_subj_score on sems_subj_score.ref_student_id = student.id 
+						and (
+						    (''||sems_subj_score.school_year=shistory.schoolyear1 and sems_subj_score.semester= 1)
+						    or (''||sems_subj_score.school_year=shistory.schoolyear2 and sems_subj_score.semester= 2)
+						    or (''||sems_subj_score.school_year=shistory.schoolyear3 and sems_subj_score.semester= 1)
+						    or (''||sems_subj_score.school_year=shistory.schoolyear4 and sems_subj_score.semester= 2)
+						    or (''||sems_subj_score.school_year=shistory.schoolyear5 and sems_subj_score.semester= 1)
+						    or (''||sems_subj_score.school_year=shistory.schoolyear6 and sems_subj_score.semester= 2)
+						)
+					LEFT OUTER JOIN xpath_table( 
+						'id'
+						, '''<root>''||score_info||''</root>'''
+						, 'sems_subj_score'
+						, '/root/SemesterSubjectScoreInfo/Subject[@領域=''國語文'' or @領域=''英語'']/@領域|/root/SemesterSubjectScoreInfo/Subject[@領域=''國語文'' or @領域=''英語'']/@成績|/root/SemesterSubjectScoreInfo/Subject[@領域=''國語文'' or @領域=''英語'']/@權數'
+						, 'ref_student_id in (
+							SELECT student.id 
+							FROM
+								student
+								LEFT OUTER JOIN class on class.id = student.ref_class_id 
+							WHERE
+								student.status = 1 and class.grade_year is not null
+						)'
+					) AS x (id int, domain character varying, score character varying, credit decimal) on sems_subj_score.id = x.id
+				WHERE 
+					x.score is not null and x.score <> '' and x.credit is not null
+			)as v
+			GROUP BY
+				grade_year,
+				id,
+				school_year,
+				semester
+
+			UNION ALL
+
+			SELECT 
+				class.grade_year,
+				student.id,
+				sems_subj_score.school_year,
+				sems_subj_score.semester,
+				x.domain,
+				CAST( regexp_replace( x.score, '^$', '0') as decimal) as score
+			FROM 
+				student
+				LEFT OUTER JOIN class on class.id = student.ref_class_id and student.status = 1 and class.grade_year is not null
+				LEFT OUTER JOIN (
+					SELECT student.id
+						, ''||g1.SchoolYear as schoolyear1
+						, ''||g2.SchoolYear as schoolyear2
+						, ''||g3.SchoolYear as schoolyear3
+						, ''||g4.SchoolYear as schoolyear4
+						, ''||g5.SchoolYear as schoolyear5
+						, ''||g6.SchoolYear as schoolyear6
+					FROM 
+					    student 
+					    left outer join (SELECT id, max(SchoolYear) as SchoolYear FROM xpath_table( 'id', '''<root>''||sems_history||''</root>''', 'student', '/root/History[ ( @GradeYear=''7'' or @GradeYear=''1'' ) and (@Semester=''1'')]/@SchoolYear', 'id IN ( select student.id from student LEFT OUTER JOIN class ON student.ref_class_id = class.id WHERE student.status=1 AND class.grade_year is not null )') AS tmp(id int, SchoolYear integer) group by id )as g1 on g1.id=student.id left outer join (SELECT id, max(SchoolYear) as SchoolYear FROM xpath_table( 'id', '''<root>''||sems_history||''</root>''', 'student', '/root/History[ ( @GradeYear=''7'' or @GradeYear=''1'' ) and (@Semester=''2'')]/@SchoolYear', 'id IN ( select student.id from student LEFT OUTER JOIN class ON student.ref_class_id = class.id WHERE student.status=1 AND class.grade_year is not null )') AS tmp(id int, SchoolYear integer) group by id )as g2 on g2.id=student.id left outer join (SELECT id, max(SchoolYear) as SchoolYear FROM xpath_table( 'id', '''<root>''||sems_history||''</root>''', 'student', '/root/History[ ( @GradeYear=''8'' or @GradeYear=''2'' ) and (@Semester=''1'')]/@SchoolYear', 'id IN ( select student.id from student LEFT OUTER JOIN class ON student.ref_class_id = class.id WHERE student.status=1 AND class.grade_year is not null )') AS tmp(id int, SchoolYear integer) group by id )as g3 on g3.id=student.id left outer join (SELECT id, max(SchoolYear) as SchoolYear FROM xpath_table( 'id', '''<root>''||sems_history||''</root>''', 'student', '/root/History[ ( @GradeYear=''8'' or @GradeYear=''2'' ) and (@Semester=''2'')]/@SchoolYear', 'id IN ( select student.id from student LEFT OUTER JOIN class ON student.ref_class_id = class.id WHERE student.status=1 AND class.grade_year is not null )') AS tmp(id int, SchoolYear integer) group by id )as g4 on g4.id=student.id left outer join (SELECT id, max(SchoolYear) as SchoolYear FROM xpath_table( 'id', '''<root>''||sems_history||''</root>''', 'student', '/root/History[ ( @GradeYear=''9'' or @GradeYear=''3'' ) and (@Semester=''1'')]/@SchoolYear', 'id IN ( select student.id from student LEFT OUTER JOIN class ON student.ref_class_id = class.id WHERE student.status=1 AND class.grade_year is not null )') AS tmp(id int, SchoolYear integer) group by id )as g5 on g5.id=student.id left outer join (SELECT id, max(SchoolYear) as SchoolYear FROM xpath_table( 'id', '''<root>''||sems_history||''</root>''', 'student', '/root/History[ ( @GradeYear=''9'' or @GradeYear=''3'' ) and (@Semester=''2'')]/@SchoolYear', 'id IN ( select student.id from student LEFT OUTER JOIN class ON student.ref_class_id = class.id WHERE student.status=1 AND class.grade_year is not null )') AS tmp(id int, SchoolYear integer) group by id )as g6 on g6.id=student.id LEFT OUTER JOIN class ON student.ref_class_id = class.id WHERE student.status=1 AND class.grade_year  is not null
+				)shistory on student.id=shistory.id
+				LEFT OUTER JOIN sems_subj_score on sems_subj_score.ref_student_id = student.id 
+					and (
+					    (''||sems_subj_score.school_year=shistory.schoolyear1 and sems_subj_score.semester= 1)
+					    or (''||sems_subj_score.school_year=shistory.schoolyear2 and sems_subj_score.semester= 2)
+					    or (''||sems_subj_score.school_year=shistory.schoolyear3 and sems_subj_score.semester= 1)
+					    or (''||sems_subj_score.school_year=shistory.schoolyear4 and sems_subj_score.semester= 2)
+					    or (''||sems_subj_score.school_year=shistory.schoolyear5 and sems_subj_score.semester= 1)
+					    or (''||sems_subj_score.school_year=shistory.schoolyear6 and sems_subj_score.semester= 2)
+					)
+				LEFT OUTER JOIN xpath_table( 
+					'id'
+					, '''<root>''||score_info||''</root>'''
+					, 'sems_subj_score'
+					, '/root/Domains/Domain/@領域|/root/Domains/Domain/@成績'
+					, 'ref_student_id in (
+						SELECT student.id 
+						FROM
+							student
+							LEFT OUTER JOIN class on class.id = student.ref_class_id 
+						WHERE
+							student.status = 1 and class.grade_year is not null
+					)'
+				) AS x (id int, domain character varying, score character varying) on sems_subj_score.id = x.id
+			WHERE 
+				x.score is not null and x.score <> '' and domain <> '國語文' and domain <> '英語'
+		)as val
+		GROUP BY grade_year, domain, id
+		ORDER BY id, domain
+	) as gradeScore on gradeScore.id = student.id
+WHERE student.status = 1 and class.grade_year is not null
+ORDER BY class.grade_year, class.display_order, class.class_name, student.seat_no, student.id, drank
+			]]>
+		</Resource>
+	</Resources>
+</Definition>
+		</Service>
+		<Service Enabled="true" Name="GetUnPassStudents">
+			<Definition Type="javascript">
+	<Code>
+
+		var _request = getRequest();
+
+		if (_request["Request"]) _request = _request["Request"];
+
+		var result = {};
+
+		var sql = getResource('sqlstudentcount');
+		sql = sql.replace(/@@SchoolYear/g, _request["SchoolYear"]).replace(/@@Semester/g, _request["Semester"]);
+		//result.request=_request;
+		//result.sql=sql;
+		var gradeObj = {};
+		var rs = executeSql(sql);
+		while (rs.next()) {
+		if (!result.GradeYear)
+		result.GradeYear = [];
+		var gobj = { "@Grade": rs.get("gradeyear"), "@Totle": rs.get("totle") };
+		gradeObj[gobj["@Grade"]] = gobj;
+		result.GradeYear.push(gobj);
+		}
+
+		sql = getResource('sqlunpassstudent');
+		sql = sql.replace(/@@SchoolYear/g, _request["SchoolYear"]).replace(/@@Semester/g, _request["Semester"]);
+		var gdomainObj = {};
+		var rs = executeSql(sql);
+		while (rs.next()) {
+		if (!result.GradeYear)
+		result.GradeYear = [];
+		var gdomainKey = rs.get("gradeyear") + "^^^^" + rs.get("domain");
+		if (!gdomainObj[gdomainKey]) {
+		var gobj = gradeObj[rs.get("gradeyear")];
+		gdobj = { "@Domain": rs.get("domain"), "@Count": 0 };
+		gdomainObj[gdomainKey] = gdobj;
+		if (!gobj.Domain)
+		gobj.Domain = [];
+		gobj.Domain.push(gdobj);
+		}
+		gdomainObj[gdomainKey]["@Count"]++;
+		if (!gdomainObj[gdomainKey].UnPassStudent)
+		gdomainObj[gdomainKey].UnPassStudent = [];
+		gdomainObj[gdomainKey].UnPassStudent.push({
+		"@ClassName": rs.get("class_name"),
+		"@SeatNo": rs.get("seat_no"),
+		"@StudentNumber": rs.get("student_number"),
+		"@Name": rs.get("name"),
+		"@Score": rs.get("score")
+		});
+		}
+		return result;
+
+	</Code>
+	<Resources>
+		<Resource Name="sqlstudentcount">
+			<![CDATA[
+SELECT gradeyear, count(distinct ref_student_id) as totle
+FROM (
+	SELECT 
+		sems_subj_score.ref_student_id, sh.gradeyear, sems_subj_score.school_year, sems_subj_score.semester,domain, CAST(score as decimal) as score
+	FROM 
+		xpath_table( 
+			'id'
+			, '''<root>''||score_info||''</root>'''
+			, 'sems_subj_score'
+			, '/root/Domains/Domain/@領域|/root/Domains/Domain/@成績'
+			, 'school_year = @@SchoolYear and semester = @@Semester'
+		) AS s1 (id int, domain character varying, score character varying) 
+		LEFT OUTER JOIN sems_subj_score on sems_subj_score.id = s1.id
+		LEFT OUTER JOIN xpath_table( 
+			'id'
+			, '''<root>''||sems_history||''</root>'''
+			, 'student'
+			, '/root/History[ ( @SchoolYear=''@@SchoolYear'' ) and (@Semester=''@@Semester'')]/@GradeYear'
+			, 'true'
+		) AS sh(id int, gradeyear integer) on sh.id = sems_subj_score.ref_student_id
+	WHERE 
+		score <> '' and gradeyear is not null
+) as student_domain_score_table
+GROUP BY gradeyear
+		]]>
+		</Resource>
+		<Resource Name="sqlunpassstudent">
+			<![CDATA[
+SELECT CASE WHEN gradeyear > 6 THEN gradeyear - 6 ELSE gradeyear END as gradeyear, student.id, class.class_name, student.seat_no, student.student_number, student.name, domain, score
+FROM 
+	(
+		SELECT 	
+			id as ref_student_id,
+			gradeyear,
+			school_year,
+			semester,
+			'語文' as domain,
+			sum(powscore)/sum(credit) as score
+		FROM (
+			SELECT 
+				sems_subj_score.ref_student_id as id,
+				sh.gradeyear, 
+				sems_subj_score.school_year,
+				sems_subj_score.semester,
+				x.domain,
+				x.credit,
+				CAST( regexp_replace( x.score, '^$', '0') as decimal) * x.credit as powscore
+			FROM 
+				xpath_table( 
+					'id'
+					, '''<root>''||score_info||''</root>'''
+					, 'sems_subj_score'
+					, '/root/SemesterSubjectScoreInfo/Subject[@領域=''國語文'' or @領域=''英語'']/@領域|/root/SemesterSubjectScoreInfo/Subject[@領域=''國語文'' or @領域=''英語'']/@成績|/root/SemesterSubjectScoreInfo/Subject[@領域=''國語文'' or @領域=''英語'']/@權數'
+					, 'school_year = @@SchoolYear and semester = @@Semester'
+				) AS x (id int, domain character varying, score character varying, credit decimal) 
+				LEFT OUTER JOIN	sems_subj_score on sems_subj_score.id = x.id
+				LEFT OUTER JOIN xpath_table( 
+					'id'
+					, '''<root>''||sems_history||''</root>'''
+					, 'student'
+					, '/root/History[ ( @SchoolYear=''@@SchoolYear'' ) and (@Semester=''@@Semester'')]/@GradeYear'
+					, 'true'
+				) AS sh(id int, gradeyear integer) on sh.id = sems_subj_score.ref_student_id
+			WHERE 
+				x.score is not null and x.score <> '' and x.credit is not null
+				AND gradeyear is not null
+		) as lengdomain
+		GROUP BY
+			id,
+			gradeyear,
+			school_year,
+			semester
+		HAVING sum(powscore)/sum(credit) < 60
+		
+		UNION ALL	
+		
+	
+		SELECT 
+			sems_subj_score.ref_student_id, 
+			sh.gradeyear, 
+			sems_subj_score.school_year, 
+			sems_subj_score.semester,
+			domain, 
+			CAST(score as decimal) as score
+		FROM 
+			xpath_table( 
+				'id'
+				, '''<root>''||score_info||''</root>'''
+				, 'sems_subj_score'
+				, '/root/Domains/Domain/@領域|/root/Domains/Domain/@成績'
+				, 'school_year = @@SchoolYear and semester = @@Semester'
+			) AS s1 (id int, domain character varying, score character varying) 
+			LEFT OUTER JOIN sems_subj_score on sems_subj_score.id = s1.id
+			LEFT OUTER JOIN xpath_table( 
+				'id'
+				, '''<root>''||sems_history||''</root>'''
+				, 'student'
+				, '/root/History[ ( @SchoolYear=''@@SchoolYear'' ) and (@Semester=''@@Semester'')]/@GradeYear'
+				, 'true'
+			) AS sh(id int, gradeyear integer) on sh.id = sems_subj_score.ref_student_id
+		WHERE 
+			score <> '' 
+			AND gradeyear is not null
+			AND CAST(score as decimal) < 60
+	) as student_domain_score_table
+	left outer join student on student_domain_score_table.ref_student_id = student.id
+	left outer join class on student.ref_class_id = class.id
+		]]>
+		</Resource>
+	</Resources>
+</Definition>
+		</Service>
+	</Package>
+</Contract>
+	</Property>
+</Project>

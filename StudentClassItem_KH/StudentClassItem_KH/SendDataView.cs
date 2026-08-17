@@ -232,9 +232,11 @@ DateTime:日期時間。
             actionStrList.Add("鎖定班級");
             actionStrList.Add("解除鎖定班級");
             actionStrList.Add("變更特殊身分");
+            
+            actionStrList.Add("調整班級導師");
 
             // 只支援單筆修改
-            if(dgData.SelectedRows.Count==1)
+            if (dgData.SelectedRows.Count==1)
             {
                 RspMsg rm = dgData.SelectedRows[0].Tag as RspMsg;
 
@@ -242,7 +244,7 @@ DateTime:日期時間。
                 {
                     bool chkReloadData = false;
                     
-                    if(actionStrList.Contains(rm.Action))
+                    if(actionStrList.Contains(rm.Action.Trim()))
                     {
                         // 只有審核是空白或是不通過才能修改
                         if (rm.Verify == "" || rm.Verify == "待修正")

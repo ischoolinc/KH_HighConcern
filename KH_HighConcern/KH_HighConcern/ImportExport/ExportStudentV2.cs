@@ -5,7 +5,6 @@ using System.Drawing;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
-using Aspose.Cells;
 using DevComponents.DotNetBar;
 using DevComponents.DotNetBar.Rendering;
 using K12.Data;
@@ -14,6 +13,7 @@ using SmartSchool.API.PlugIn.Export;
 using FISCA.Presentation.Controls;
 using Framework;
 using System.Linq;
+using Aspose.Cells;
 
 namespace KH_HighConcern.ImportExport
 {
@@ -388,8 +388,8 @@ namespace KH_HighConcern.ImportExport
         {
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
             saveFileDialog1.Title = "另存新檔";
-            saveFileDialog1.FileName = "" + _Title + ".xls";
-            saveFileDialog1.Filter = "Excel (*.xls)|*.xls|所有檔案 (*.*)|*.*";
+            saveFileDialog1.FileName = "" + _Title + ".xlsx";
+            saveFileDialog1.Filter = "Excel (*.xlsx)|*.xlsx|所有檔案 (*.*)|*.*";
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 List<string> idlist = new List<string>();
@@ -602,8 +602,8 @@ namespace KH_HighConcern.ImportExport
                 {
                     SaveFileDialog sd = new SaveFileDialog();
                     sd.Title = "另存新檔";
-                    sd.FileName = Path.GetFileNameWithoutExtension(path) + ".xls";
-                    sd.Filter = "Excel檔案 (*.xls)|*.xls|所有檔案 (*.*)|*.*";
+                    sd.FileName = Path.GetFileNameWithoutExtension(path) + ".xlsx";
+                    sd.Filter = "Excel檔案 (*.xlsx)|*.xlsx|所有檔案 (*.*)|*.*";
                     if (sd.ShowDialog() == DialogResult.OK)
                     {
                         try
@@ -618,7 +618,7 @@ namespace KH_HighConcern.ImportExport
                         }
                     }
                 }
-                report.Save(path, FileFormatType.Excel97To2003);
+                report.Save(path);
                 #endregion
                 SmartSchool.Customization.PlugIn.Global.SetStatusBarMessage(_Title + "完成。");
                 if (overLimit)
