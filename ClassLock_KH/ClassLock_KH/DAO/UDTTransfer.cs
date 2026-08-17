@@ -208,8 +208,13 @@ namespace ClassLock_KH.DAO
         /// 是否自己鎖班之後會超過1/2
         /// </summary>
         /// <returns></returns>
-        public static Boolean CheckIfOneHalf(string classID)
+        public static Boolean CheckIfOneHalf(string classID,bool isNotAutoUnlock)
         {
+            if (isNotAutoUnlock) 
+            {
+                return false;
+            }
+
             Boolean result = false;
             QueryHelper qh = new QueryHelper();
             List<string> list = new List<string>();
@@ -235,7 +240,7 @@ WITH   class_lock AS (
 	    AND class_lock.unauto_unlock = false 
 	    AND class_lock.is_lock= true 
 )SELECT 
-((gradeYear_molecule.count)+1) ::Decimal  /(gradeYear_matrix.count)
+((gradeYear_molecule.count+1)) ::Decimal  /(gradeYear_matrix.count)
 FROM 
 		gradeYear_molecule 
 	CROSS JOIN 
@@ -250,7 +255,7 @@ FROM
 
             double lockCountRate;
             Double.TryParse(count, out lockCountRate);
-            if (lockCountRate > 0.5)
+            if (lockCountRate >0.5)
             {
                 result = true;
             }

@@ -397,7 +397,7 @@ namespace ClassLock_KH
                         if (sendDataForm.ShowDialog() == System.Windows.Forms.DialogResult.Yes) //當按下確定時
                         {
                             //todo
-                            if (UDTTransfer.CheckIfOneHalf(cid)) //204班  當(鎖班數超過1/2)
+                            if (UDTTransfer.CheckIfOneHalf(cid, sendDataForm.GetNUnLock())) //204班  當(鎖班數超過1/2)
                             {
                                 FrmApplyLock frmApplyLock = new FrmApplyLock(); //1.詢問是否提出申請
 
@@ -422,7 +422,7 @@ namespace ClassLock_KH
                                     data.DateStr = strDate;
                                     data.EDoc = strEDoc;
                                     data.UnAutoUnlock = sendDataForm.GetNUnLock();
-                                    //data.isLock = true; ======>>依據後面判斷是否超過1/2鎖班
+                       
                                     #endregion
 
                                     // data.LockAppling = true;   已經有status 識別 可以不用
